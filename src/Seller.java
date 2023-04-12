@@ -7,10 +7,12 @@ import java.util.*;
 public class Seller {
     private ArrayList<Bike> inventory = new ArrayList<>();  //stores the inventory of a specific seller
     private String username; //stores the username of this seller
+    private double revenue; //stores the revenue of this seller
 
     //Constructor
     public Seller(String username, ArrayList<Bike> inventory) {
         this.username = username;
+        this.revenue = revenue;
         //if the initial seller inventory is null, then set the arraylist to empty
         if (inventory == null) {
             this.inventory = new ArrayList<>(0);
