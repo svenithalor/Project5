@@ -78,6 +78,7 @@ public class TestClassLogin {
         Login login = new Login();
         login.userLogin(scanner, userType);
         login.userLogout(userType);
+        System.out.println("I am ready to start!");
 
 
     }
