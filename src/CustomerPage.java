@@ -289,17 +289,20 @@ public class CustomerPage {
      */
 
     public void removeBike(int id) {
-        int amountRemoved = 0;
+        PurchasedBike bikeToRemove = null;
         for (PurchasedBike bike: shoppingCart) {
             if(bike.getId() == id) {
                 shoppingCart.remove(bike);
+                bikeToRemove = bike;
                 System.out.println("Bike removed!");
-                amountRemoved++;
                 break;
             }
         }
-        if (amountRemoved == 0) {
+        if (bikeToRemove == null) {
             System.out.println("No bike found!");
+        } else {
+            Bike bike = new Bike(bikeToRemove);
+            bikes.add(bike);
         }
     }
 

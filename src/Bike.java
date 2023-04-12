@@ -39,6 +39,18 @@ public class Bike {
         this.id = b.getId();
     }
 
+    public Bike(PurchasedBike b) {
+        this.color = b.getColor();
+        this.wheelSize = b.getWheelSize();
+        this.price = b.getPrice();
+        this.modelName = b.getModelName();
+        this.used = b.isUsed();
+        this.description = b.getDescription();
+        this.sellerName = b.getSellerName();
+        this.quantity = b.getQuantity();
+        this.id = b.getId();
+    }
+
     /******
      * returns the color of this bike
      * @return the color of this bike
