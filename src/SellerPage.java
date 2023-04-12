@@ -30,8 +30,14 @@ public class SellerPage {
         int option;
         boolean repeat = true;
         do {
-            System.out.println("Please select an option\n1. View current bikes\n2. Add new bike\n3. Remove Bike\n" +
-            "4. Search Bike\n5. Delete Account\n6. View Customer Shopping Carts\n7. Exit");
+            System.out.println("Please select an option.");
+            System.out.println("1. View current bikes");
+                System.out.println("1. Add new bikes");
+                System.out.println("2. Remove bikes");
+                System.out.println("3. Search bike");
+            System.out.println("2.Delete account");
+            System.out.println("3. View customer shopping carts");
+            System.out.println("4. Exit");
             option = s.nextInt();
             s.nextLine();
 
