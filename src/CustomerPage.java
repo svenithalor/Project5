@@ -49,7 +49,7 @@ public class CustomerPage {
             System.out.println("7. Search products");
             System.out.println("8. Checkout");
             System.out.println("9. Get purchase history");
-            System.out.println("10. Exit");
+            System.out.println("10. Logout");
             System.out.println("11. Delete account");
             int choice = scanner.nextInt();
             scanner.nextLine();

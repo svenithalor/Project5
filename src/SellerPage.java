@@ -37,7 +37,7 @@ public class SellerPage {
                 System.out.println("3. Search bike");
             System.out.println("2.Delete account");
             System.out.println("3. View customer shopping carts");
-            System.out.println("4. Exit");
+            System.out.println("4. Logout");
             option = s.nextInt();
             s.nextLine();
 
