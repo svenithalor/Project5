@@ -278,6 +278,7 @@ public class CustomerPage {
             for (PurchasedBike pb : shoppingCart) {
                 if (pb.getId() == b.getId()) {
                     b.setQuantity(b.getQuantity() - pb.getQuantity());
+                    System.out.println("hello world");
                 }
             }
         }
