@@ -34,7 +34,7 @@ public class ControlFlowMenu {
             if(userType == 1) {
                 Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
                 CustomerPage cp = new CustomerPage(bikes, thisBuyer);
-                bikes = cp.open(thisBuyer);
+                cp.open(thisBuyer);
             } else if (userType == 2) {
                 Seller thisSeller = UserInfo.getSellers().get(userIndex);
                 SellerPage sp = new SellerPage(thisSeller.getUsername(), thisSeller.getInventory());

@@ -279,18 +279,6 @@ public class CustomerPage {
                 if (pb.getId() == b.getId()) {
                     b.setQuantity(b.getQuantity() - pb.getQuantity());
                 }
-                purchasedBikes.add(pb);
-            }
-        }
-        
-        // adjusting the quantities of seller inventories based on what the buyer bought
-        for (Seller se : UserInfo.getSellers()) {
-            for (Bike bi : se.getInventory()) {
-                for (PurchasedBike pb : shoppingCart) {
-                    if (pb.getId() == bi.getId()) {
-                        bi.setQuantity(bi.getQuantity() - pb.getQuantity());
-                    }
-                }
             }
         }
         // dumping everything from shopping cart to purchased bikes
