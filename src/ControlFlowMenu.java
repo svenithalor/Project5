@@ -1,15 +1,12 @@
 import java.util.*;
 import java.io.*;
 /***************
- *The ControlFlowMenu class allows the user to navigate to the buyer or seller pages on the Boilermaker Bikes website
+ *The ControlFlowMenu class allows the user to navigate to the buyer or seller pages on the Boilermaker Bikes site
  *
  * @author Christina Joslin, lab sec 4427
  * @version 4/7/2023
  */
 public class ControlFlowMenu {
-
-    private static ArrayList<Bike> bikes = new ArrayList<>(); //stores the bikes that are going to be included on
-    // the listing page
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -31,7 +28,7 @@ public class ControlFlowMenu {
         } while (!validInput);
         //takes the user to the login class
         int userIndex = login.userLogin(scanner, userType);
-        bikes = UserInfo.getBikes();
+        ArrayList<Bike> bikes = UserInfo.getBikes();
         // System.out.println("Bikes from login: " + bikes);
         if (userIndex != -1) {
             if(userType == 1) {
@@ -50,11 +47,4 @@ public class ControlFlowMenu {
         login.userLogout(1);
     }
 
-    public static void setBikes(ArrayList<Bike> bikes) {
-        ControlFlowMenu.bikes = bikes;
-    }
-
-    public static ArrayList<Bike> getBikes() {
-        return bikes;
-    }
 }

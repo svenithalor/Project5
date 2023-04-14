@@ -11,6 +11,7 @@ public class Login {
 
     //Constructor
     public Login() {
+        //initializes the values that are currently in the database
         this.sellers = UserInfo.getSellers();
         this.buyers = UserInfo.getBuyers();
         this.bikes = UserInfo.getBikes();

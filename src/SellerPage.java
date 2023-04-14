@@ -134,7 +134,7 @@ public class SellerPage {
                     sp.viewCustomerCarts("buyer.csv");
                     break;
                 case 7:
-                    sp.viewAnalytics()
+                    sp.viewAnalytics();
                 case 7: 
                     // System.out.println("Logging out...");
 
