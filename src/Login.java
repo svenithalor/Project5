@@ -22,6 +22,7 @@ public class Login {
      * @param userType the type of user logging in (a buyer or seller)
      */
     public int userLogin(Scanner scanner, int userType) {
+        UserInfo.readUsers();
         int userIndex = -1;
         switch (userType) {
             //Buyer login
@@ -147,24 +148,8 @@ public class Login {
      * @param userType the user that is logging our whether a buyer or seller
      */
     public void userLogout(int userType) {
-        //Writes each buyer or seller object back into a file
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("buyer.csv", false));
-            for (Buyer buyer : buyers) {
-                writer.write(buyer.toString() + "=" + "\n");
-                writer.flush();
-            }
-            writer.close();
+        UserInfo.writeUsers();
 
-            BufferedWriter bwriter = new BufferedWriter(new FileWriter("seller.csv", false));
-            for (Seller seller : sellers) {
-                bwriter.write(seller.toString() + "=" + "\n");
-                bwriter.flush();
-            }
-            bwriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 

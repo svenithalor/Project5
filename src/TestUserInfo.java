@@ -11,8 +11,7 @@ public class TestUserInfo {
      * need to do this later on...
      * ******/
     public static void main(String[] args) {
-        UserInfo database = new UserInfo();
-        database.readUsers();
-        database.writeUsers();
+        UserInfo.readUsers();
+        UserInfo.writeUsers();
     }
 }

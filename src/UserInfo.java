@@ -25,21 +25,6 @@ public class UserInfo {
     private static ArrayList<Bike> bikes = new ArrayList<Bike>();
 
 
-    //Constructors
-
-    //Empty constructor for reading in previous users
-    public UserInfo() {
-
-    }
-
-    //constructor to initialize the current buyers and seller for writing users into files
-    public UserInfo(ArrayList<Buyer> buyers, ArrayList<Seller> sellers,ArrayList<Bike>bikes) {
-        this.buyers = buyers;
-        this.sellers = sellers;
-        this.bikes = bikes;
-
-    }
-
     //Methods
 
     /*********
@@ -189,10 +174,12 @@ public class UserInfo {
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * [insert name1].revenue revenue
          * **********
          * username: [insert name2]
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * [insert name2].revenue revenue
          * **********
          *
          * *****/
