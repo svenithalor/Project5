@@ -149,7 +149,7 @@ public class SellerPage {
                     ArrayList<Bike> bikes = ControlFlowMenu.getBikes();
                     ArrayList<Bike> toAdd = new ArrayList<>();
 
-                    ArrayList<Seller> sellers = Login.getSellers();
+                    ArrayList<Seller> sellers = UserInfo.getSellers();
 
                     int sellerLen = sellers.size();
                     for (int i = 0; i < sellerLen; i++) {
@@ -175,7 +175,7 @@ public class SellerPage {
                     }
                     
                     ControlFlowMenu.setBikes(bikes);
-                    Login.setSellers(sellers);
+                    UserInfo.setSellers(sellers);
 
                     break;
                     
@@ -292,7 +292,7 @@ public class SellerPage {
      * @param user
      */
     public void deleteAccount(String user) {
-        ArrayList<Seller> sellers = Login.getSellers();
+        ArrayList<Seller> sellers = UserInfo.getSellers();
         for (Seller seller : sellers) {
             if(seller.getUsername().equalsIgnoreCase(user)) {
                 sellers.remove(seller);
