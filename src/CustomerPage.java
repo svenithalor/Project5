@@ -34,7 +34,7 @@ public class CustomerPage {
      *
      * @return Updated arraylist of available bikes
      */
-    public ArrayList<Bike> open(Buyer buyer) {
+    public void open(Buyer buyer) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Boilermaker Bikes!");
         boolean repeat = true;
@@ -110,8 +110,10 @@ public class CustomerPage {
         buyer.setShoppingCart(shoppingCart);
         buyer.setPurchaseHistory(purchasedBikes);
         int index = UserInfo.getBuyers().indexOf(buyer);
-        UserInfo.getBuyers().set(index, buyer);
-        return bikes;
+        ArrayList<Buyer> updatedBuyers = UserInfo.getBuyers();
+        updatedBuyers.set(index, buyer);
+        UserInfo.setBuyers(updatedBuyers);
+        UserInfo.setBikes(bikes);
     }
 
     /*****
