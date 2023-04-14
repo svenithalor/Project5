@@ -67,6 +67,14 @@ public class UserInfo {
         return bikes;
     }
 
+    /*********
+     * Updates the available bikes for sale
+     * @param bikes available for sale
+     */
+    public static void setBikes(ArrayList<Bike> bikes) {
+        UserInfo.bikes = bikes;
+    }
+
     /********
      * This method reads past user information and stores each user into either the buyer arraylist or the
      * seller arraylist. If the user is a seller, then the bikes associated with their account will be put into the

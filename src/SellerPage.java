@@ -142,7 +142,7 @@ public class SellerPage {
 
                     
                     seller.setInventory(inventory);
-                    ArrayList<Bike> bikes = ControlFlowMenu.getBikes();
+                    ArrayList<Bike> bikes = UserInfo.getBikes();
                     ArrayList<Bike> toAdd = new ArrayList<>();
 
                     ArrayList<Seller> sellers = UserInfo.getSellers();
@@ -170,7 +170,7 @@ public class SellerPage {
                         bikes.add(i);
                     }
                     
-                    ControlFlowMenu.setBikes(bikes);
+                    UserInfo.setBikes(bikes);
                     UserInfo.setSellers(sellers);
 
                     break;
