@@ -1,10 +1,6 @@
-import java.io.*;
 import java.util.*;
-
 /*********
- * The Login class restores the previous information regarding past buyers and sellers when each session starts and
- * allows the user to save their information when they are logging out. This information is accessed via either the
- * buyer.txt file or the seller.txt file.
+ * The Login class allows the user to log in and log out of the Boilermaker Bikes site
  * @author Christina Joslin, lab sec 4427
  * @version 4/9/2023
  */
