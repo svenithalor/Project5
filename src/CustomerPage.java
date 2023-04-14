@@ -282,6 +282,13 @@ public class CustomerPage {
                 }
             }
         }
+        for (Seller se: UserInfo.getSellers()) {
+            for (Bike b : se.getInventory()) {
+                for (PurchasedBike pb : shoppingCart) {
+                    b.setQuantity(b.getQuantity() - pb.getQuantity());
+                }
+            }
+        }
         // dumping everything from shopping cart to purchased bikes
         int len = shoppingCart.size();
         for (int i = 0; i < len; i++) {
