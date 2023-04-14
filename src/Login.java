@@ -153,7 +153,6 @@ public class Login {
      */
     public void userLogout(int userType) {
         UserInfo.writeUsers();
-
     }
 
 }

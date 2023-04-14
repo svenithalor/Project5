@@ -31,15 +31,15 @@ public class ControlFlowMenu {
         } while (!validInput);
         //takes the user to the login class
         int userIndex = login.userLogin(scanner, userType);
-        bikes = login.getBikes();
+        bikes = UserInfo.getBikes();
         // System.out.println("Bikes from login: " + bikes);
         if (userIndex != -1) {
             if(userType == 1) {
-                Buyer thisBuyer = login.getBuyers().get(userIndex);
+                Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
                 CustomerPage cp = new CustomerPage(bikes, thisBuyer);
                 bikes = cp.open(thisBuyer);
             } else if (userType == 2) {
-                Seller thisSeller = login.getSellers().get(userIndex);
+                Seller thisSeller = UserInfo.getSellers().get(userIndex);
                 SellerPage sp = new SellerPage(thisSeller.getUsername(), thisSeller.getInventory());
                 sp.runSellerPage(thisSeller);
             }

@@ -1,9 +1,7 @@
 username: Bob
 Bob.inventory blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,10,78
 Bob.inventory black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,BikesAreCool,20,81
-Bob.revenue 200.00
 **********
 username: BikesAreCool
 BikesAreCool.inventory red,25,329.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,2,80
-BikesAreCool.revenue 550.25
 **********

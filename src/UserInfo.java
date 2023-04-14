@@ -212,13 +212,9 @@ public class UserInfo {
                     // System.out.println("Bike added to bikes!");
                     // System.out.println(b.toString());
                 }
-                if (line.startsWith(String.format("%s.revenue",username))) {
-                    String part = line.substring(line.indexOf(" ") + 1);
-                    revenue = Double.parseDouble(part);
-                }
                 if (line.startsWith("*")) {
                     //creates the seller object to add to the database
-                    Seller seller = new Seller(username, inventory,revenue);
+                    Seller seller = new Seller(username, inventory, revenue);
                     sellers.add(seller);
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }

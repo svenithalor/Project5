@@ -72,7 +72,6 @@ public class Seller {
             message.append(String.format("%s.inventory ",getUsername()));
             message.append(bike.toString()).append("\n");
         }
-        message.append(String.format("%s.revenue %.2f%n",getUsername(),getRevenue()));
         return message.toString();
     }
 }
