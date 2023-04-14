@@ -144,7 +144,6 @@ public class CustomerPage {
      *
      */
     public void sortByPrice() {
-        System.out.println("Hello world");
         ArrayList<Bike> sorted = new ArrayList(bikes.size());
         for (int i = 0; i < bikes.size(); i++) {
             sorted.add(bikes.get(i));
