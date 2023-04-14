@@ -9,11 +9,19 @@ import java.util.*;
  * @version 4/9/2023
  */
 public class Login {
-    private static ArrayList<Buyer> buyers = new ArrayList<Buyer>(); //keeps track of all the buyers on the bicycle
-    // website
-    private static ArrayList<Seller> sellers = new ArrayList<Seller>(); //keeps track of all the sellers on the bicycle
-    // website
-    private static ArrayList<Bike> bikes = new ArrayList<Bike>();
+    private ArrayList<Buyer> buyers = new ArrayList<>(); //keeps track of all buyers from UserInfo
+    private ArrayList<Seller> sellers = new ArrayList<Seller>(); //keeps track of all the sellers from UserInfo
+    private ArrayList<Bike> bikes = new ArrayList<Bike>(); //keeps track of all bikes for sale from Userinfo
+
+    //Constructor
+    public Login() {
+        this.sellers = UserInfo.getSellers();
+        this.buyers = UserInfo.getBuyers();
+        this.bikes = UserInfo.getBikes();
+    }
+
+
+    //Methods
 
 
     /********
@@ -126,7 +134,7 @@ public class Login {
                             } while (!success);
 
                             //Creates the new seller's account and stores it in the seller database
-                            Seller newSeller = new Seller(sellerName, null,0.0);
+                            Seller newSeller = new Seller(sellerName, null, 0.0);
                             sellers.add(newSeller);
                             System.out.println("Account successfully created!");
                             userIndex = sellers.indexOf(newSeller);
@@ -152,24 +160,4 @@ public class Login {
 
     }
 
-
-    public static void setBuyers(ArrayList<Buyer> buyers) {
-        Login.buyers = buyers;
-    }
-
-    public static ArrayList<Buyer> getBuyers() {
-        return buyers;
-    }
-
-    public static void setSellers(ArrayList<Seller> sellers) {
-        Login.sellers = sellers;
-    }
-
-    public static ArrayList<Seller> getSellers() {
-        return sellers;
-    }
-
-    public static ArrayList<Bike> getBikes() {
-        return bikes;
-    }
 }
