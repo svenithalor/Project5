@@ -182,12 +182,10 @@ public class UserInfo {
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
-         * [insert name1].revenue revenue
          * **********
          * username: [insert name2]
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
-         * [insert name2].revenue revenue
          * **********
          *
          * *****/
