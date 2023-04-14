@@ -197,7 +197,8 @@ public class UserInfo {
          *
          * *****/
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("seller.csv"))) {
-            inventory = new ArrayList<>(); //saves the inventory of the current user
+            inventory = new ArrayList<>(); //reads the inventory of the a user
+            double revenue = 0.0; //reads the revenue of a user
             while ((line = bufferedReader.readLine()) != null) {
                 // reads the username
                 if (line.startsWith("username:")) {
@@ -224,9 +225,13 @@ public class UserInfo {
                     // System.out.println("Bike added to bikes!");
                     // System.out.println(b.toString());
                 }
+                if (line.startsWith(String.format("%s.revenue",username))) {
+                    String part = line.substring(line.indexOf(" ") + 1);
+                    revenue = Double.parseDouble(part);
+                }
                 if (line.startsWith("*")) {
                     //creates the seller object to add to the database
-                    Seller seller = new Seller(username, inventory);
+                    Seller seller = new Seller(username, inventory,revenue);
                     sellers.add(seller);
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }

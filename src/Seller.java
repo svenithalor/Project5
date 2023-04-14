@@ -10,7 +10,7 @@ public class Seller {
     private double revenue; //stores the revenue of this seller
 
     //Constructor
-    public Seller(String username, ArrayList<Bike> inventory) {
+    public Seller(String username, ArrayList<Bike> inventory,double revenue) {
         this.username = username;
         this.revenue = revenue;
         //if the initial seller inventory is null, then set the arraylist to empty
@@ -46,6 +46,22 @@ public class Seller {
         this.inventory = inventory;
     }
 
+    /*******
+     * returns the revenue of this Seller
+     * @return revenue of this Seller
+     */
+    public double getRevenue() {
+        return revenue;
+    }
+
+    /**********
+     * updates the revenue of this Seller
+     * @param revenue of this Seller
+     */
+    public void setRevenue(double revenue) {
+        this.revenue = revenue;
+    }
+
     @Override
     /********
      * This method is used to import/export seller information in log in and log out the seller
@@ -56,6 +72,7 @@ public class Seller {
             message.append(String.format("%s.inventory ",getUsername()));
             message.append(bike.toString()).append("\n");
         }
+        message.append(String.format("%s.revenue %.2f%n",getUsername(),getRevenue()));
         return message.toString();
     }
 }

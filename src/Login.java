@@ -15,139 +15,6 @@ public class Login {
     // website
     private static ArrayList<Bike> bikes = new ArrayList<Bike>();
 
-    /*********
-     * This method iterates through a file containing all buyer or seller information and stores it into the
-     * buyer and seller arraylists.
-     ******/
-    public static void initialSetup() {
-        String line = "";
-        String username = ""; //saves the username of each buyer
-        ArrayList<PurchasedBike> shoppingCart; //saves the previous shopping cart of each buyer
-        ArrayList<PurchasedBike> purchaseHistory; //saves the previous purchasing history of each buyer
-        ArrayList<Bike> inventory; //saves the inventory of each seller
-
-        //Readers through the buyer.txt file
-        /********
-         * Format
-         *
-         * username: [insert name]
-         *[insert name].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,
-         * quantity,insured,id
-         *[insert name].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,
-         * quantity,insured,id
-         * *****/
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("buyer.csv"))) {
-            shoppingCart = new ArrayList<>();
-            purchaseHistory = new ArrayList();
-            while ((line = bufferedReader.readLine()) != null) {
-                // reads the username
-                if (line.startsWith("username:")) {
-                    String parts[] = line.split(" ");
-                    username = parts[1];
-                }
-                //reads through the shopping cart
-                if (line.startsWith(String.format("%s.shoppingcart", username))) {
-                    String part = line.substring(line.indexOf(" ") + 1);
-                    String[] bikeElements = part.split(",");
-                    String color = bikeElements[0];
-                    int wheelSize = Integer.parseInt(bikeElements[1]);
-                    double price = Double.parseDouble(bikeElements[2]);
-                    double finalPrice = Double.parseDouble(bikeElements[3]);
-                    String modelName = bikeElements[4];
-                    Boolean used = Boolean.parseBoolean(bikeElements[5]);
-                    String description = bikeElements[6];
-                    String sellerName = bikeElements[7];
-                    int quantity = Integer.parseInt(bikeElements[8]);
-                    boolean insured = Boolean.parseBoolean(bikeElements[9]);
-                    int id = Integer.parseInt(bikeElements[10]);
-                    shoppingCart.add(new PurchasedBike(color, wheelSize, price, finalPrice, modelName, used,
-                            description, sellerName, quantity, insured, id));
-
-                }
-                //reads through the purchase history
-                if (line.startsWith(String.format("%s.purchasehistory", username))) {
-                    String part = line.substring(line.indexOf(" ") + 1);
-                    String[] bikeElements = part.split(",");
-                    String color = bikeElements[0];
-                    int wheelSize = Integer.parseInt(bikeElements[1]);
-                    double price = Double.parseDouble(bikeElements[2]);
-                    double finalPrice = Double.parseDouble(bikeElements[3]);
-                    String modelName = bikeElements[4];
-                    Boolean used = Boolean.parseBoolean(bikeElements[5]);
-                    String description = bikeElements[6];
-                    String sellerName = bikeElements[7];
-                    int quantity = Integer.parseInt(bikeElements[8]);
-                    boolean insured = Boolean.parseBoolean(bikeElements[9]);
-                    int id = Integer.parseInt(bikeElements[10]);
-                    purchaseHistory.add(new PurchasedBike(color, wheelSize, price, finalPrice, modelName, used,
-                            description, sellerName, quantity, insured, id));
-
-                }
-                if (line.startsWith("=")) {
-                    //creates a buyer object to add to the database
-                    Buyer buyer = new Buyer(username, shoppingCart, purchaseHistory);
-                    buyers.add(buyer);
-                    shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user
-                    purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user
-
-                }
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Reads through the seller.txt file
-        /********
-         * Format
-         *
-         * username: [insert name]
-         *[insert name].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
-         * *****/
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("seller.csv"))) {
-            inventory = new ArrayList<>(); //saves the inventory of the current user
-            while ((line = bufferedReader.readLine()) != null) {
-                // reads the username
-                if (line.startsWith("username:")) {
-                    String parts[] = line.split(" ");
-                    username = parts[1];
-                }
-                //reads through the inventory
-                if (line.startsWith(String.format("%s.inventory", username))) {
-                    String part = line.substring(line.indexOf(" ") + 1);
-                    String[] bikeElements = part.split(",");
-                    String color = bikeElements[0];
-                    int wheelSize = Integer.parseInt(bikeElements[1]);
-                    double price = Double.parseDouble(bikeElements[2]);
-                    String modelName = bikeElements[3];
-                    Boolean used = Boolean.parseBoolean(bikeElements[4]);
-                    String description = bikeElements[5];
-                    String sellerName = bikeElements[6];
-                    int quantity = Integer.parseInt(bikeElements[7]);
-                    int id = Integer.parseInt(bikeElements[8]);
-                    Bike b = new Bike(color, wheelSize, price, modelName, used, description, sellerName, quantity,
-                            id);
-                    inventory.add(b);  //adds a bike to the inventory
-                    bikes.add(b);
-                    // System.out.println("Bike added to bikes!");
-                    // System.out.println(b.toString());
-                }
-                if (line.startsWith("=")) {
-                    //creates the seller object to add to the database
-                    Seller seller = new Seller(username, inventory);
-                    sellers.add(seller);
-                    inventory = new ArrayList<>(); //clears the inventory of the current user
-                }
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 
     /********
      *This method logs the user into the Boiler Bikes website and or has them create a new account
@@ -156,7 +23,6 @@ public class Login {
      */
     public int userLogin(Scanner scanner, int userType) {
         int userIndex = -1;
-        initialSetup();
         switch (userType) {
             //Buyer login
             case 1:
@@ -259,7 +125,7 @@ public class Login {
                             } while (!success);
 
                             //Creates the new seller's account and stores it in the seller database
-                            Seller newSeller = new Seller(sellerName, null);
+                            Seller newSeller = new Seller(sellerName, null,0.0);
                             sellers.add(newSeller);
                             System.out.println("Account successfully created!");
                             userIndex = sellers.indexOf(newSeller);
