@@ -5,7 +5,8 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 /*********
- * This class stores user information reads past user information and writes current user information into buyer.csv and seller.csv
+ * This class stores user information reads past user information and writes current user information
+ * into buyer.csv and seller.csv
  * @author Christina Joslin, lab sec 4427
  * @version 4/14/2023
  */
@@ -32,14 +33,54 @@ public class UserInfo {
     }
 
     //constructor to initialize the current buyers and seller for writing users into files
-    public UserInfo(ArrayList<Buyer> buyers, ArrayList<Seller> sellers) {
+    public UserInfo(ArrayList<Buyer> buyers, ArrayList<Seller> sellers,ArrayList<Bike>bikes) {
         this.buyers = buyers;
         this.sellers = sellers;
+        this.bikes = bikes;
 
     }
 
-
     //Methods
+
+    /*********
+     * Updates the buyers database
+     * @param buyers of Boilermaker Bikes
+     */
+    public static void setBuyers(ArrayList<Buyer> buyers) {
+        UserInfo.buyers = buyers;
+    }
+
+    /*********
+     * Returns the buyers database
+     * @return buyers of Boilermaker Bikes
+     */
+    public static ArrayList<Buyer> getBuyers() {
+        return buyers;
+    }
+
+    /********
+     * Updates the sellers database
+     * @param sellers of Boilermaker Bikes
+     */
+    public static void setSellers(ArrayList<Seller> sellers) {
+        UserInfo.sellers = sellers;
+    }
+
+    /***********
+     * Returns the seller database
+     * @return seller of Boilermaker Bikes
+     */
+    public static ArrayList<Seller> getSellers() {
+        return sellers;
+    }
+
+    /*********
+     * Returns all the available bikes for sale
+     * @return the available bikes for sale
+     */
+    public static ArrayList<Bike> getBikes() {
+        return bikes;
+    }
 
     /********
      * This method reads past user information and stores each user into either the buyer arraylist or the
