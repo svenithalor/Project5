@@ -93,11 +93,24 @@ public class UserInfo {
 
         /******
          * Part One: Reads through the buyer information
-         * Format
          *
-         *username: [insert name]
-         *[insert name].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
-         *[insert name].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * Format (each line represents a bike in the buyer's shopping cart or in their purchase history)
+         *
+         * username: [insert name1]
+         * [insert name1].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name1].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name1].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name1].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * **********
+         * username: [insert name2]
+         * [insert name2].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name2].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name2].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name2].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name2].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * [insert name2].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
+         * **********
+         *
          *
          *******/
         String username = ""; //saves the username of each buyer
@@ -156,8 +169,8 @@ public class UserInfo {
                     //creates a buyer object to add to the database
                     Buyer buyer = new Buyer(username, shoppingCart, purchaseHistory);
                     buyers.add(buyer);
-                    shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user
-                    purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user
+                    shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user to read in a new user
+                    purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user to read in a new user
 
                 }
 
@@ -170,10 +183,18 @@ public class UserInfo {
         /********
          * Part 2: Reads through the seller information
          *
-         * Format
-         * username: [insert name]
-         *[insert name].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
-         * ***********
+         * Format (each line represents a bike in a seller' inventory)
+         *
+         * username: [insert name1]
+         * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * **********
+         * username: [insert name2]
+         * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
+         * **********
+         *
          * *****/
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("seller.csv"))) {
             inventory = new ArrayList<>(); //saves the inventory of the current user
@@ -199,7 +220,7 @@ public class UserInfo {
                     Bike b = new Bike(color, wheelSize, price, modelName, used, description, sellerName, quantity,
                             id);
                     inventory.add(b);  //adds a bike to the inventory
-                    bikes.add(b);
+                    bikes.add(b); //adds a bike to list of bikes for sale
                     // System.out.println("Bike added to bikes!");
                     // System.out.println(b.toString());
                 }
@@ -207,7 +228,7 @@ public class UserInfo {
                     //creates the seller object to add to the database
                     Seller seller = new Seller(username, inventory);
                     sellers.add(seller);
-                    inventory = new ArrayList<>(); //clears the inventory of the current user
+                    inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }
             }
 
@@ -232,10 +253,10 @@ public class UserInfo {
             }
             writer.close();
 
-            //Writes each buyer back into seller.csv using the same format
+            //Writes each seller back into seller.csv using the same format
             BufferedWriter bwriter = new BufferedWriter(new FileWriter("seller.csv", false));
             for (Seller seller : sellers) {
-                bwriter.write(seller.toString() + "***********" + "\n");
+                bwriter.write(seller.toString() + "**********" + "\n");
                 bwriter.flush();
             }
             bwriter.close();
