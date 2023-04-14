@@ -20,7 +20,7 @@ public class CustomerPage {
 
     //Constructs the customer page and initializes an arraylist of bike
     public CustomerPage(ArrayList<Bike> bikes, Buyer buyer) {
-        this.bikes = Login.getBikes();
+        this.bikes = UserInfo.getBikes();
         // System.out.println("Bikes in customer page: " + bikes);
         this.buyer = buyer;
         this.shoppingCart = buyer.getShoppingCart();
@@ -109,8 +109,8 @@ public class CustomerPage {
         } while (repeat);
         buyer.setShoppingCart(shoppingCart);
         buyer.setPurchaseHistory(purchasedBikes);
-        int index = Login.getBuyers().indexOf(buyer);
-        Login.getBuyers().set(index, buyer);
+        int index = UserInfo.getBuyers().indexOf(buyer);
+        UserInfo.getBuyers().set(index, buyer);
         return bikes;
     }
 
@@ -259,7 +259,7 @@ public class CustomerPage {
         }
         
         // adjusting the quantities of seller inventories based on what the buyer bought
-        for (Seller se : Login.getSellers()) {
+        for (Seller se : UserInfo.getSellers()) {
             for (Bike bi : se.getInventory()) {
                 for (PurchasedBike pb : shoppingCart) {
                     if (pb.getId() == bi.getId()) {
@@ -332,11 +332,11 @@ public class CustomerPage {
      * @param user username of account to delete
      */
     public void deleteAccount(String user) {
-        ArrayList<Buyer> buyers = Login.getBuyers();
+        ArrayList<Buyer> buyers = UserInfo.getBuyers();
         for (Buyer buyer : buyers) {
             if(buyer.getUsername().equalsIgnoreCase(user)) {
                 buyers.remove(buyer);
-                Login.setBuyers(buyers);
+                UserInfo.setBuyers(buyers);
                 System.out.println("Account deleted.");
             }
         }
