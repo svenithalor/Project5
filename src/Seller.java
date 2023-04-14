@@ -44,22 +44,6 @@ public class Seller {
         this.inventory = inventory;
     }
 
-    /*******
-     * returns the revenue of this Seller
-     * @return revenue of this Seller
-     */
-    public double getRevenue() {
-        return revenue;
-    }
-
-    /**********
-     * updates the revenue of this Seller
-     * @param revenue of this Seller
-     */
-    public void setRevenue(double revenue) {
-        this.revenue = revenue;
-    }
-
     @Override
     /********
      * This method is used to import/export seller information in log in and log out the seller
