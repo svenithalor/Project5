@@ -144,16 +144,28 @@ public class CustomerPage {
      *
      */
     public void sortByPrice() {
-        ArrayList<Bike> sorted = new ArrayList<Bike>(bikes.size());
+        ArrayList<Bike> sorted = new ArrayList(bikes.size());
+        for (int i = 0; i < bikes.size(); i++) {
+            sorted.add(bikes.get(i));
+        }
         for (int i = 0; i < bikes.size() - 1; i++) {
-            double lowestPrice = bikes.get(i).getPrice();
+            Bike thisBike = sorted.get(i);
+            Bike lowestBike = thisBike;
+            int lowestIndex = i;
+            double lowestPrice = lowestBike.getPrice();
             for (int j = i + 1; j < bikes.size(); j++) {
-                double price = bikes.get(j).getPrice();
+                Bike otherBike = sorted.get(j);
+                double price = otherBike.getPrice();
                 if (price < lowestPrice) {
-                    sorted.set(i, bikes.get(j));
+                    lowestBike = otherBike;
+                    lowestPrice = price;
+                    lowestIndex = j;
                 }
             }
+            sorted.set(i, lowestBike);
+            sorted.set(lowestIndex, thisBike);
         }
+
         for (Bike bike : sorted) {
             System.out.println(bike.toString());
         }
@@ -164,15 +176,26 @@ public class CustomerPage {
      * sorted array.
      */
     public void sortByQuantity() {
-        ArrayList<Bike> sorted = new ArrayList<Bike>(bikes.size());
+        ArrayList<Bike> sorted = new ArrayList(bikes.size());
+        for (int i = 0; i < bikes.size(); i++) {
+            sorted.add(bikes.get(i));
+        }
         for (int i = 0; i < bikes.size() - 1; i++) {
-            double lowestQuantity = bikes.get(i).getQuantity();
+            Bike thisBike = sorted.get(i);
+            Bike lowestBike = thisBike;
+            int lowestIndex = i;
+            double lowestQuantity = lowestBike.getQuantity();
             for (int j = i + 1; j < bikes.size(); j++) {
-                double quantity = bikes.get(j).getQuantity();
+                Bike otherBike = sorted.get(j);
+                double quantity = otherBike.getQuantity();
                 if (quantity < lowestQuantity) {
-                    sorted.set(i, bikes.get(j));
+                    lowestBike = otherBike;
+                    lowestQuantity = quantity;
+                    lowestIndex = j;
                 }
             }
+            sorted.set(i, lowestBike);
+            sorted.set(lowestIndex, thisBike);
         }
 
         for (Bike bike : sorted) {
