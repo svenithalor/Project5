@@ -30,14 +30,8 @@ public class SellerPage {
         int option;
         boolean repeat = true;
         do {
-            System.out.println("Please select an option.");
-            System.out.println("1. View current bikes");
-                System.out.println("1. Add new bikes");
-                System.out.println("2. Remove bikes");
-                System.out.println("3. Search bike");
-            System.out.println("2.Delete account");
-            System.out.println("3. View customer shopping carts");
-            System.out.println("4. Logout");
+            System.out.println("Please select an option\n1. View current bikes\n2. Add new bike\n3. Remove Bike\n" +
+            "4. Search Bike\n5. Delete Account\n6. View Customer Shopping Carts\n7. View analytics\n8. Exit");
             option = s.nextInt();
             s.nextLine();
 
@@ -139,6 +133,8 @@ public class SellerPage {
                 case 6:
                     sp.viewCustomerCarts("buyer.csv");
                     break;
+                case 7:
+                    sp.viewAnalytics()
                 case 7: 
                     // System.out.println("Logging out...");
 
@@ -301,13 +297,60 @@ public class SellerPage {
         }
     }
 
+    public void viewAnalytics(String filename) {
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader(filename));
+            ArrayList<PurchasedBike> carts = new ArrayList<>();
+
+            String line = bfr.readLine();
+
+            while (line != null) {
+                if (line.startsWith(String.format("%s.purchasehistory", name))) {
+                    String part = line.substring(line.indexOf(" ") + 1);
+                    String[] bikeElements = part.split(",");
+                    String color = bikeElements[0];
+                    int wheelSize = Integer.parseInt(bikeElements[1]);
+                    double price = Double.parseDouble(bikeElements[2]);
+                    double finalPrice = Double.parseDouble(bikeElements[3]);
+                    String modelName = bikeElements[4];
+                    Boolean used = Boolean.parseBoolean(bikeElements[5]);
+                    String description = bikeElements[6];
+                    String sellerName = bikeElements[7];
+                    int quantity = Integer.parseInt(bikeElements[8]);
+                    boolean insured = Boolean.parseBoolean(bikeElements[9]);
+                    int id = Integer.parseInt(bikeElements[10]);
+                    carts.add(new PurchasedBike(color, wheelSize, price, finalPrice, modelName, used, description, 
+                        sellerName, quantity, insured, id));
+                }
+
+                line = bfr.readLine();
+            }
+
+            int totalItems = 0;
+            System.out.println("Customer Cart Information:");
+            if (carts.size() == 0) {
+                System.out.println("No information found");
+            } else {
+                for (PurchasedBike p : carts) {
+                    System.out.printf(p.toString() + "| Revenue: $%.2f",(p.getPrice() * p.getQuantity()));
+                    totalItems += p.getQuantity();
+
+                }
+                System.out.printf("There are %d items currently in customer carts.\n", totalItems);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Something went wrong...");
+        }
+    }
+
     /*****
      * Able to view all the shopping cart information of all the buyers.
      * @param filename
      */
     public void viewCustomerCarts(String filename) {
         try {
-             BufferedReader bfr = new BufferedReader(new FileReader(filename));
+            BufferedReader bfr = new BufferedReader(new FileReader(filename));
             ArrayList<PurchasedBike> carts = new ArrayList<>();
 
             String line = bfr.readLine();
