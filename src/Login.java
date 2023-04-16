@@ -5,9 +5,9 @@ import java.util.*;
  * @version 4/9/2023
  */
 public class Login {
-    private ArrayList<Buyer> buyers = new ArrayList<>(); //keeps track of all buyers from UserInfo
-    private ArrayList<Seller> sellers = new ArrayList<Seller>(); //keeps track of all the sellers from UserInfo
-    private ArrayList<Bike> bikes = new ArrayList<Bike>(); //keeps track of all bikes for sale from Userinfo
+    private ArrayList<Buyer> buyers; //keeps track of all buyers from UserInfo
+    private ArrayList<Seller> sellers; //keeps track of all the sellers from UserInfo
+    private ArrayList<Bike> bikes; //keeps track of all bikes for sale from Userinfo
 
     //Constructor
     public Login() {
