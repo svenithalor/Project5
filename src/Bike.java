@@ -13,7 +13,7 @@ public class Bike {
     private String description; //the description of this bike
     private String sellerName; //the seller username associated with this bike
     private int quantity; //the quantity of this bike
-    private int id; //the id of this bike
+    private int id; //the 4 digit unique id of this bike
 
     public Bike(String color, int wheelSize, double price, String modelName, boolean used, String description, String sellerName, int quantity,int id) {
         this.color = color;

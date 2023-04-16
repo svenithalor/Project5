@@ -28,12 +28,11 @@ public class ControlFlowMenu {
         } while (!validInput);
         //takes the user to the login class
         int userIndex = login.userLogin(scanner, userType);
-        ArrayList<Bike> bikes = UserInfo.getBikes();
         // System.out.println("Bikes from login: " + bikes);
         if (userIndex != -1) {
             if(userType == 1) {
                 Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
-                CustomerPage cp = new CustomerPage(bikes, thisBuyer);
+                CustomerPage cp = new CustomerPage(UserInfo.getBikes(), thisBuyer);
                 cp.open(thisBuyer);
             } else if (userType == 2) {
                 Seller thisSeller = UserInfo.getSellers().get(userIndex);

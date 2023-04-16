@@ -54,11 +54,14 @@ public class CustomerPage {
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
-                case 1: viewAvailableBikes();
+                case 1:
+                    viewAvailableBikes();
                     break;
-                case 2: sortByQuantity();
+                case 2:
+                    sortByQuantity();
                     break;
-                case 3: sortByPrice();
+                case 3:
+                    sortByPrice();
                     break;
                 case 4:
                     System.out.println("Enter the ID number of the bike you would like to add.");
@@ -72,7 +75,8 @@ public class CustomerPage {
                     scanner.nextLine();
                     addToCart(id, quantity, insurance);
                     break;
-                case 5: viewCart();
+                case 5:
+                    viewCart();
                     break;
                 case 6:
                     System.out.println("Enter ID of bike you would like to remove");
@@ -85,14 +89,16 @@ public class CustomerPage {
                     String query = scanner.nextLine();
                     search(query);
                     break;
-                case 8: checkout();
+                case 8:
+                    checkout();
                     break;
                 case 9:
                     System.out.println("Enter name of file to export data to");
                     String fileName = scanner.nextLine();
                     getPurchaseHistory(fileName);
                     break;
-                case 10: repeat = false;
+                case 10:
+                    repeat = false;
                     break;
                 case 11:
                     System.out.println("Enter username to confirm account deletion or enter 1 to cancel");
@@ -234,7 +240,7 @@ public class CustomerPage {
                 alreadyInCart = true;
             }
         }
-        if (! alreadyInCart) {
+        if (!alreadyInCart) {
             Bike bikeToAdd = null;
             for (Bike bike : bikes) {
                 if (bike.getId() == id) {
@@ -268,6 +274,7 @@ public class CustomerPage {
             System.out.println(bike.toString());
         }
     }
+
     /*****
      * This method iterates through the shopping cart and adds all of them to purchased bikes. It also updates the list
      * of available bikes by searching for the corresponding bike based on id and reducing the quantity by the amount
@@ -296,10 +303,6 @@ public class CustomerPage {
             shoppingCart.remove(0);
         }
 
-        
-        
-        
-
         System.out.println("Checked out successfully.");
     }
 
@@ -311,8 +314,8 @@ public class CustomerPage {
 
     public void removeBike(int id) {
         PurchasedBike bikeToRemove = null;
-        for (PurchasedBike bike: shoppingCart) {
-            if(bike.getId() == id) {
+        for (PurchasedBike bike : shoppingCart) {
+            if (bike.getId() == id) {
                 shoppingCart.remove(bike);
                 bikeToRemove = bike;
                 System.out.println("Bike removed!");
@@ -355,7 +358,7 @@ public class CustomerPage {
     public void deleteAccount(String user) {
         ArrayList<Buyer> buyers = UserInfo.getBuyers();
         for (Buyer buyer : buyers) {
-            if(buyer.getUsername().equalsIgnoreCase(user)) {
+            if (buyer.getUsername().equalsIgnoreCase(user)) {
                 buyers.remove(buyer);
                 UserInfo.setBuyers(buyers);
                 System.out.println("Account deleted.");

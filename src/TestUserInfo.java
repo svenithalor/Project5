@@ -8,7 +8,7 @@ public class TestUserInfo {
      * Test Class for UserInfo
      *
      * Build a test arraylist and then compare it to the current arraylist
-     * need to do this later on...
+     * need to fill this in later on...
      * ******/
     public static void main(String[] args) {
         UserInfo.readUsers();

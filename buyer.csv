@@ -1,16 +1,9 @@
 username: haileyS
 haileyS.shoppingcart green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,Bob,1,false,1090
 haileyS.shoppingcart pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,Bob,2,false,1101
-haileyS.purchasehistory green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,1102
+haileyS.purchasehistory green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102
 ***********
 username: cJoslin
-cJoslin.shoppingcart orange,25,129.99,129.99,PanAme Mountain,false,Suitable for a variety of people,Bob,3,false,2110
+cJoslin.shoppingcart orange,25,129.99,129.99,PanAme Mountain,false,Suitable for a variety of people,Bob,3,false,1110
 cJoslin.purchasehistory purple,20,249.99,249.99,Joystar Mountain Bike,false,This bike is designed for kids seven to thirteen,BikesAreCool,1,false,2117
-***********
-username: buyer1
-buyer1.purchasehistory black,24,329.99,1369.96,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,BikesAreCool,4,true,81
-buyer1.purchasehistory black,24,329.99,1369.96,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,BikesAreCool,4,true,81
-buyer1.purchasehistory black,24,329.99,1369.96,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,BikesAreCool,4,true,81
-buyer1.purchasehistory black,24,329.99,1369.96,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,BikesAreCool,4,true,81
-buyer1.purchasehistory blue,26,299.99,649.98,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,2,true,78
 ***********
