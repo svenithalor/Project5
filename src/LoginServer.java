@@ -38,6 +38,8 @@ public class LoginServer {
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
 
+
+
         switch (userType) {
             case "buyer":
                 /*********
@@ -49,9 +51,12 @@ public class LoginServer {
                     if (buyer.getUsername().equals(userName)) {
                         found = true;
                         userIndex = buyers.indexOf(buyer);
-                        writer.write(found + "");
-                        writer.println();
-                        writer.flush();
+                        if (reader.readLine().equals("ready")) {
+                            writer.write(found + "");
+                            writer.println();
+                            writer.flush();
+                        }
+
                         return userIndex;
                     }
                 }

@@ -22,7 +22,9 @@ public class LoginClient {
     public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
             boolean userNameFound = false; //determines whether or not the username already exists
             try {
-                System.out.println("Hello World");
+                writer.write("ready");
+                writer.println();
+                writer.flush();
                 userNameFound = Boolean.parseBoolean(reader.readLine());
 
             } catch (IOException e) {
@@ -70,7 +72,9 @@ public class LoginClient {
                     writer.flush();
 
                     //if the username matches up with an existing one, then have the user try again.
-                    success = Boolean.parseBoolean(reader.readLine());
+                    String input = reader.readLine();
+                    System.out.printf("Succesfully Created an Account: %s%n",input);
+                    success = Boolean.parseBoolean(input);
                     if (!success) {
                         JOptionPane.showConfirmDialog(null,"Error, this username is already " +
                                 "taken. Try again.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,
