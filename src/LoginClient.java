@@ -7,7 +7,9 @@ import java.awt.*;
 import java.net.Socket;
 
 /*********
- * This class displays GUI for the login and sends the user input to the server.
+ * This class displays GUI for the login and sends the user input to the server. It also generates appropriate
+ * error/prompt messages as the user logins in and or creates an account.
+ *
  * @author Christina Joslin, lab sec 4427
  * @version 4/17/2023
  */

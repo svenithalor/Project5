@@ -5,9 +5,11 @@ import java.io.*;
 
 /***********
  * This class handles all the data processing for the login by receiving user input from the client and sending it
- * back to be displayed to the user.
+ * back to be displayed to the user. This class also searches the buyer and seller databases to check if the user can
+ * log in to their existing account or needs to create a new account.
+ *
  *@author Christina Joslin, lab sec 4427
- *@version 4/14/2023
+ *@version 4/17/2023
  */
 public class LoginServer {
     private ArrayList<Buyer> buyers; //keeps track of all buyers from UserInfo
@@ -169,7 +171,6 @@ public class LoginServer {
         } while (true);
     }
 
-
     public static void main(String[] args) {
         //sets up the server connection
         try {
@@ -187,7 +188,6 @@ public class LoginServer {
                 userType = "seller";
                 //System.out.printf("Received from the Client: %s%n", userType);
             }
-
             //creates a login server object and goes to the login method
             LoginServer login = new LoginServer();
 
