@@ -20,15 +20,18 @@ public class LoginClient {
      * @param userType the type of user (buyer or seller)
      */
     public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
-            boolean userNameFound = false; //determines whether or not the username already exists
+            boolean userNameFound; //determines whether or not the username already exists
             try {
                 writer.write("ready");
                 writer.println();
                 writer.flush();
-                userNameFound = Boolean.parseBoolean(reader.readLine());
+                System.out.println("Ready sent to the server");
+                String input = reader.readLine();
+                userNameFound = Boolean.parseBoolean(input);
 
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
             /********
              * If the username is found, then print a success message and leave this method. Otherwise,
@@ -124,8 +127,10 @@ public class LoginClient {
                 //saves the user type selected
                 if (dropdown.getSelectedIndex() == 0) {
                     userType = "buyer";
+                    System.out.printf("Sent to the server: %s%n",userType);
                 } else if (dropdown.getSelectedIndex() == 1) {
                     userType = "seller";
+                    System.out.printf("Sent to the server: %s%n",userType);
                 }
 
             } else {
@@ -153,7 +158,6 @@ public class LoginClient {
             LoginClient login = new LoginClient();
 
             login.userLogin(reader, writer,userType);
-
 
         } catch (IOException e) {
             //prints an error message and exits the program

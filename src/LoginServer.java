@@ -38,7 +38,8 @@ public class LoginServer {
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
 
-
+        String ready = reader.readLine();
+        System.out.println("Ready received from the client");
 
         switch (userType) {
             case "buyer":
@@ -48,16 +49,28 @@ public class LoginServer {
                  * then send false to the client which will prompt them to create a new account wiht their own unique username
                  */
                 for (Buyer buyer : buyers) {
+                    System.out.println("Hello World");
+                    System.out.println(userName);
                     if (buyer.getUsername().equals(userName)) {
                         found = true;
                         userIndex = buyers.indexOf(buyer);
-                        if (reader.readLine().equals("ready")) {
-                            writer.write(found + "");
-                            writer.println();
-                            writer.flush();
-                        }
-
+                        break;
+                    }
+                }
+                if (found) {
+                    if (ready.equals("ready")) {
+                        System.out.println("Hello world! True");
+                        writer.write("true");
+                        writer.println();
+                        writer.flush();
                         return userIndex;
+                    }
+                } else if (!found) {
+                    if (ready.equals("ready")) {
+                        System.out.println("Hello world! False");
+                        writer.write("false");
+                        writer.println();
+                        writer.flush();
                     }
                 }
 
@@ -127,8 +140,10 @@ public class LoginServer {
             String userType = reader.readLine();
             if (userType.equals("0")) {
                 userType = "buyer";
+                System.out.printf("Received from the Client: %s%n",userType);
             } else if (userType.equals("1")) {
                 userType = "seller";
+                System.out.printf("Received from the Client: %s%n",userType);
             }
 
             //reads the username entered by the user
