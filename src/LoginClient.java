@@ -20,6 +20,7 @@ public class LoginClient {
      * @param userType the type of user (buyer or seller)
      */
     public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
+        do {
             boolean userNameFound; //determines whether or not the username already exists
             try {
                 writer.write("ready");
@@ -47,7 +48,7 @@ public class LoginClient {
 
                 if (newAccount == JOptionPane.NO_OPTION || newAccount == JOptionPane.CLOSED_OPTION) {
                     JOptionPane.showMessageDialog(null, "Thank you for visiting Boilermaker " +
-                                    "Bikes!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+                            "Bikes!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
                     //lets the server know that the user is exiting the program
                     writer.write("yes");
                     writer.println();
@@ -83,24 +84,15 @@ public class LoginClient {
                     success = Boolean.parseBoolean(input);
                     if (!success) {
                         JOptionPane.showConfirmDialog(null,"Error, this username is already " +
-                                "taken. Try again.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,
+                                        "taken. Try again.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } while (!success);
 
                 JOptionPane.showMessageDialog(null,"Account successfully created!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
-
             }
-        switch(userType) {
-            case "buyer":
-                //TODO
-                break;
-            case "seller":
 
-                //TODO
-                break;
-        }
-
+        } while (true);
 
     }
     public static void main(String[] args) {
