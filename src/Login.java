@@ -131,7 +131,7 @@ public class Login {
                             } while (!success);
 
                             //Creates the new seller's account and stores it in the seller database
-                            Seller newSeller = new Seller(sellerName, null, 0.0);
+                            Seller newSeller = new Seller(sellerName, null);
                             sellers.add(newSeller);
                             System.out.println("Account successfully created!");
                             userIndex = sellers.indexOf(newSeller);

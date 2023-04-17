@@ -37,120 +37,136 @@ public class LoginServer {
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
         int attempt = 1; //keeps track of the number of attempts made by the user to login
-        String ready = ""; //used to trigger the client enterred username being read through the database
+        String ready = ""; //used to trigger the client entered username being read through the database
 
-        switch (userType) {
-            /*********
-             * Iterates through the entire database of buyers and checks if the username already exists.
-             * If it does exist, then send true to the client and exit this method. If it does not exist,
-             * then send false to the client which will prompt them to create a new account wiht their own unique username
-             */
-            case "buyer":
-                do {
-                    System.out.printf("Attempt #%d%n",attempt);
-                    //reads the username entered by the user
-                    String userName = reader.readLine();
-                    if (attempt == 1) {
-                        ready = reader.readLine();
-                        System.out.println("Ready received from the client");
-                    }
+        /*********
+         * Iterates through the entire database of buyers or sellers and checks if the username already exists.
+         * If it does exist, then send true to the client and exit this method. If it does not exist,
+         * then send false to the client which will prompt them to create a new account wiht their own unique username
+         */
+        do {
+            //reads the username entered by the user
+            String userName = reader.readLine();
+            if (attempt == 1) {
+                ready = reader.readLine();
+            }
+            switch (userType) {
+                case "buyer":
                     for (Buyer buyer : buyers) {
-                        System.out.println("Hello World");
-                        System.out.println(userName);
+                        //System.out.println("Hello World");
+                        //System.out.println(userName);
                         if (buyer.getUsername().equals(userName)) {
                             found = true;
                             userIndex = buyers.indexOf(buyer);
                             break;
                         }
                     }
-                    if (found) {
+                    break;
+                case "seller":
+                    for (Seller seller : sellers) {
+                        //System.out.println("Hello World");
+                        //System.out.println(userName);
+                        if (seller.getUsername().equals(userName)) {
+                            found = true;
+                            userIndex = sellers.indexOf(seller);
+                            break;
+                        }
+                    }
+                    break;
+            }
+
+            if (found) {
+                if (ready.equals("ready")) {
+                    // System.out.println("Hello world! True");
+                    writer.write("true");
+                    writer.println();
+                    writer.flush();
+                    return userIndex;
+                }
+            } else if (!found) {
+                if (ready.equals("ready")) {
+                    //System.out.println("Hello world! False");
+                    writer.write("false");
+                    writer.println();
+                    writer.flush();
+                }
+            }
+            //from the client determines if the user is going to create a new account or not
+            String userExited = reader.readLine();
+            //System.out.printf("%s received from the client%n", userExited);
+
+            if (userExited.equals("yes")) {
+                writer.close();
+                reader.close();
+                return userIndex;
+
+            } else if (userExited.equals("no")) {
+                //set up a new account for the user
+                boolean success = false; //keeps track of if the buyer or seller successfully created a new account
+                String newUserName = ""; //keeps track of the new username entered to create an account
+                do {
+                    newUserName = reader.readLine();
+                    //System.out.printf("New username %s received from the server", newUserName);
+                    success = true;
+                    //checks if that buyer or seller name already exists
+                    switch (userType) {
+                        case "buyer":
+                            for (Buyer buyer : buyers) {
+                                //System.out.println("Hello World");
+                                //System.out.println(userName);
+                                if (buyer.getUsername().equals(newUserName)) {
+                                    success = false;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "seller":
+                            for (Seller seller : sellers) {
+                                //System.out.println("Hello World");
+                                //System.out.println(userName);
+                                if (seller.getUsername().equals(newUserName)) {
+                                    success = false;
+                                    break;
+                                }
+                            }
+                            break;
+                    }
+
+                    if (success) {
                         if (ready.equals("ready")) {
-                            System.out.println("Hello world! True");
+                            // System.out.println("Hello world Again! True");
                             writer.write("true");
                             writer.println();
                             writer.flush();
-                            return userIndex;
                         }
-                    } else if (!found) {
+                    } else if (!success) {
                         if (ready.equals("ready")) {
-                            System.out.println("Hello world! False");
+                            //System.out.println("Hello world Again! False");
                             writer.write("false");
                             writer.println();
                             writer.flush();
                         }
                     }
+                } while (!success);
 
-                    //from the client determines if the user is going to create a new account or not
-                    String userExited = reader.readLine();
-                    System.out.printf("%s received from the client%n", userExited);
 
-                    if (userExited.equals("yes")) {
-                        writer.close();
-                        reader.close();
-
-                    } else if (userExited.equals("no")) {
-                        //set up a new account for the user
-                        boolean success = false; //keeps track of if the buyer successfully created a new account
-                        String newUserName = ""; //keeps track of the new username entered to create an account
-                        do {
-                            newUserName = reader.readLine();
-                            System.out.printf("New username %s received from the server", newUserName);
-                            success = true;
-                            //checks if that buyer name already exists
-                            for (Buyer buyer : buyers) {
-                                System.out.println("Hello World");
-                                System.out.println(userName);
-                                if (buyer.getUsername().equals(userName)) {
-                                    success = true;
-                                    userIndex = buyers.indexOf(buyer);
-                                    break;
-                                }
-                            }
-                            if (success) {
-                                if (ready.equals("ready")) {
-                                    System.out.println("Hello world Again! True");
-                                    writer.write("true");
-                                    writer.println();
-                                    writer.flush();
-                                }
-                            } else if (!success) {
-                                if (ready.equals("ready")) {
-                                    System.out.println("Hello world Again! False");
-                                    writer.write("false");
-                                    writer.println();
-                                    writer.flush();
-                                }
-                            }
-                        } while (!success);
+                switch (userType) {
+                    case "buyer":
                         //Creates the new buyer's account and stores it in the buyer database
                         Buyer newBuyer = new Buyer(newUserName, null, null);
                         buyers.add(newBuyer);
-                    }
-                    attempt++;
-                    System.out.println("Attempt " + attempt);
-                } while (true);
-
-
-            case "seller":
-
-                //TODO
-                String userName = "";
-                /**********
-                 * Iterates through the entire database of sellers and checks if the username already exists
-                 ***********/
-                for (Seller seller : sellers) {
-                    if (seller.getUsername().equals(userName)) {
-                        found = true;
-                        userIndex = sellers.indexOf(seller);
+                        userIndex = buyers.indexOf(newBuyer);
                         break;
-                    }
+                    case "seller":
+                        //Creates the new seller's account and stores it in the seller database
+                        Seller newSeller = new Seller(userName, null);
+                        sellers.add(newSeller);
+                        userIndex = sellers.indexOf(newSeller);
+                        break;
                 }
-
-
-                break;
-        }
-
-        return userIndex;
+            }
+            attempt++; //increments the number of attempts made to login
+        } while (true);
     }
 
 
@@ -166,17 +182,19 @@ public class LoginServer {
             String userType = reader.readLine();
             if (userType.equals("0")) {
                 userType = "buyer";
-                System.out.printf("Received from the Client: %s%n", userType);
+                //System.out.printf("Received from the Client: %s%n", userType);
             } else if (userType.equals("1")) {
                 userType = "seller";
-                System.out.printf("Received from the Client: %s%n", userType);
+                //System.out.printf("Received from the Client: %s%n", userType);
             }
 
             //creates a login server object and goes to the login method
             LoginServer login = new LoginServer();
 
-            login.userLogin(userType, reader, writer);
-
+            //Stores the userIndex
+            int userIndex = login.userLogin(userType, reader, writer);
+            System.out.println(userIndex);
+            //Need to figure out how to lead the user to the next class/method
 
         } catch (IOException e) {
             e.printStackTrace();

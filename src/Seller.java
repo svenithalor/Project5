@@ -9,7 +9,7 @@ public class Seller {
     private String username; //stores the username of this seller
 
     //Constructor
-    public Seller(String username, ArrayList<Bike> inventory,double revenue) {
+    public Seller(String username, ArrayList<Bike> inventory) {
         this.username = username;
         //if the initial seller inventory is null, then set the arraylist to empty
         if (inventory == null) {

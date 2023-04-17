@@ -13,17 +13,17 @@ import java.net.Socket;
  */
 public class LoginClient {
     /********
-     * This method display the appropriate prompts to the user depending on if the username is already found or if
-     * a new account needs to be created
+     * This method display the appropriate prompts to the user depending on if the user is accessing their existing
+     * account or needs to create a new one
      * @param reader reads the server output that determines if the user
-     * @param writer
-     * @param userType the type of user (buyer or seller)
+     * @param writer writes the user input to the server to check if they are in the database
+     * @throws IOException to be handled in the main method with an error message
      */
-    public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
+    public void userLogin(BufferedReader reader, PrintWriter writer) throws IOException {
         boolean userNameFound; //determines whether or not the username already exists
         int attempt = 1; //keeps track of the number of attempts made by the user to log in
         do {
-            System.out.printf("Attempt #%d%n",attempt);
+            //System.out.printf("Attempt #%d%n",attempt);
             try {
                 //Asks the user to enter their username
                 String username = JOptionPane.showInputDialog(null, "Please enter your username:",
@@ -38,12 +38,12 @@ public class LoginClient {
                 writer.write(username);
                 writer.println();
                 writer.flush();
-                System.out.printf("%s sent to the server%n", username);
+                //System.out.printf("%s sent to the server%n", username);
                 if (attempt == 1) {
                     writer.write("ready");
                     writer.println();
                     writer.flush();
-                    System.out.println("Ready sent to the server");
+                    //System.out.println("Ready sent to the server");
                 }
                 String input = reader.readLine();
                 userNameFound = Boolean.parseBoolean(input);
@@ -72,14 +72,14 @@ public class LoginClient {
                     writer.write("yes");
                     writer.println();
                     writer.flush();
-                    System.out.println("'yes' the user wants to exit the program is sent to the server");
+                    //System.out.println("'yes' the user wants to exit the program is sent to the server");
                     writer.close();
                     reader.close();
                     return;
                 } else {
                     //lets the server know that the user is continuing through the program
                     writer.write("no");
-                    System.out.println("'no' the user wants to continue the program is sent to the server");
+                    //System.out.println("'no' the user wants to continue the program is sent to the server");
                     writer.println();
                     writer.flush();
                 }
@@ -95,11 +95,11 @@ public class LoginClient {
                     writer.write(newUsername);
                     writer.println();
                     writer.flush();
-                    System.out.printf("New username %s sent to the server%n", newUsername);
+                    //System.out.printf("New username %s sent to the server%n", newUsername);
 
                     //if the username matches up with an existing one, then have the user try again.
                     String input = reader.readLine();
-                    System.out.printf("Successfully Created an Account: %s%n", input);
+                    //System.out.printf("Successfully Created an Account: %s%n", input);
                     success = Boolean.parseBoolean(input);
                     if (!success) {
                         JOptionPane.showConfirmDialog(null, "Error, this username is already " +
@@ -108,7 +108,7 @@ public class LoginClient {
                     }
                 } while (!success);
                 JOptionPane.showMessageDialog(null, "Account successfully created!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
-                attempt++;
+                attempt++; //increments of the number of attempts made by the user to login
             }
         } while (true);
 
@@ -124,7 +124,6 @@ public class LoginClient {
             String userType = ""; //saves the usertype selected by this user
             //welcomes the user
             //TODO
-
 
             //Asks if they are a buyer or a seller via a dropdown box
             JPanel panel = new JPanel();
@@ -155,8 +154,7 @@ public class LoginClient {
 
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
-
-            login.userLogin(reader, writer, userType);
+            login.userLogin(reader, writer);
 
         } catch (IOException e) {
             //prints an error message and exits the program

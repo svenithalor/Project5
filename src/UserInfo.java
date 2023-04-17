@@ -220,7 +220,7 @@ public class UserInfo {
                 }
                 if (line.startsWith("*")) {
                     //creates the seller object to add to the database
-                    Seller seller = new Seller(username, inventory, revenue);
+                    Seller seller = new Seller(username, inventory);
                     sellers.add(seller);
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }
