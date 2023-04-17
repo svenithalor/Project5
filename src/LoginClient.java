@@ -52,12 +52,14 @@ public class LoginClient {
                     writer.write("yes");
                     writer.println();
                     writer.flush();
+                    System.out.println("'yes' the user wants to exit the program is sent to the server");
                     writer.close();
                     reader.close();
                     return;
                 } else {
                     //lets the server know that the user is continuing through the program
                     writer.write("no");
+                    System.out.println("'no' the user wants to continue the program is sent to the server");
                     writer.println();
                     writer.flush();
                 }
@@ -73,10 +75,11 @@ public class LoginClient {
                     writer.write(newUsername);
                     writer.println();
                     writer.flush();
+                    System.out.printf("New username %s sent to the server%n",newUsername);
 
                     //if the username matches up with an existing one, then have the user try again.
                     String input = reader.readLine();
-                    System.out.printf("Succesfully Created an Account: %s%n",input);
+                    System.out.printf("Successfully Created an Account: %s%n",input);
                     success = Boolean.parseBoolean(input);
                     if (!success) {
                         JOptionPane.showConfirmDialog(null,"Error, this username is already " +

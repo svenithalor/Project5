@@ -74,8 +74,9 @@ public class LoginServer {
                     }
                 }
 
-                String userExited = ""; //from the client determines if the user is going to create a new account or not
-                userExited = reader.readLine();
+                //from the client determines if the user is going to create a new account or not
+                String userExited = reader.readLine();
+                System.out.printf("%s received from the client%n", userExited);
 
                 if (userExited.equals("yes")) {
                     writer.close();
@@ -87,17 +88,36 @@ public class LoginServer {
                     String newUserName = ""; //keeps track of the new username entered to create an account
                     do {
                         newUserName = reader.readLine();
+                        System.out.printf("New username %s received from the server", newUserName);
                         success = true;
                         //checks if that buyer name already exists
                         for (Buyer buyer : buyers) {
-                            if (buyer.getUsername().equals(newUserName)) {
-                                success = false;
-                                writer.write(success + "");
-                                writer.println();
-                                writer.flush();
+                            System.out.println("Hello World");
+                            System.out.println(userName);
+                            if (buyer.getUsername().equals(userName)) {
+                                success = true;
+                                userIndex = buyers.indexOf(buyer);
                                 break;
                             }
                         }
+                        if (success) {
+                            if (ready.equals("ready")) {
+                                System.out.println("Hello world Again! True");
+                                writer.write("true");
+                                writer.println();
+                                writer.flush();
+                                return userIndex;
+                            }
+                        } else if (!success) {
+                            if (ready.equals("ready")) {
+                                System.out.println("Hello world Again! False");
+                                writer.write("false");
+                                writer.println();
+                                writer.flush();
+                            }
+                        }
+
+
                     } while (!success);
                     //Creates the new buyer's account and stores it in the buyer database
                     Buyer newBuyer = new Buyer(newUserName, null, null);
@@ -140,10 +160,10 @@ public class LoginServer {
             String userType = reader.readLine();
             if (userType.equals("0")) {
                 userType = "buyer";
-                System.out.printf("Received from the Client: %s%n",userType);
+                System.out.printf("Received from the Client: %s%n", userType);
             } else if (userType.equals("1")) {
                 userType = "seller";
-                System.out.printf("Received from the Client: %s%n",userType);
+                System.out.printf("Received from the Client: %s%n", userType);
             }
 
             //reads the username entered by the user
