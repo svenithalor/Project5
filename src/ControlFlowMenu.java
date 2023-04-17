@@ -3,6 +3,7 @@ import java.io.*;
 /***************
  *The ControlFlowMenu class allows the user to navigate to the buyer or seller pages on the Boilermaker Bikes site
  *
+ * THIS CLASS needs ot be reorganized...please take a look at LoginClient and LoginServer
  * @author Christina Joslin, lab sec 4427
  * @version 4/7/2023
  */
@@ -30,8 +31,8 @@ public class ControlFlowMenu {
         }
         System.out.println("Thanks for shopping at Boilermaker Bikes!");
 
-        login.userLogout(2);
-        login.userLogout(1);
+        UserInfo.userLogout();
+        UserInfo.userLogout();
     }
 
 }
