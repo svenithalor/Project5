@@ -13,19 +13,7 @@ public class ControlFlowMenu {
         Login login = new Login(); //initializes the login object
         boolean validInput = true;
         int userType = 0;
-        //Welcome message
-        do {
-            System.out.println("Welcome to Boilermaker Bike Shop!");
-            //Asks for the user type and stores it
-            System.out.println("Are you a buyer or a seller?");
-            System.out.println("1. Buyer\n2. Seller");
-            userType = scanner.nextInt();  //keeps track of the user type
-            scanner.nextLine();
-            if (userType != 1 && userType != 2) {
-                System.out.println("Invalid input!");
-                validInput = false;
-            }
-        } while (!validInput);
+
         //takes the user to the login class
         int userIndex = login.userLogin(scanner, userType);
         // System.out.println("Bikes from login: " + bikes);
