@@ -20,13 +20,25 @@ public class LoginClient {
      * @param userType the type of user (buyer or seller)
      */
     public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
-            boolean userNameFound; //determines whether or not the username already exists
-            int attempt = 1; //keeps track of the number of attempts made by the user to login
-        //if the user has already attempt to login, then ask them for a username again
-        if (attempt > 1) {
+        boolean userNameFound; //determines whether or not the username already exists
+        int attempt = 1; //keeps track of the number of attempts made by the user to log in
+        do {
+            try {
+                //Asks the user to enter their username
+                String username = JOptionPane.showInputDialog(null, "Please enter your username:",
+                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
 
-        }
-        try {
+                //allows the user to use the exit button
+                if (username == null) {
+                    return;
+                }
+
+                //sends the username to the server
+                writer.write(username);
+                writer.println();
+                writer.flush();
+                System.out.printf("%s sent to the server%n", username);
+
                 writer.write("ready");
                 writer.println();
                 writer.flush();
@@ -44,12 +56,12 @@ public class LoginClient {
              * prompt the user to create an account
              */
             if (userNameFound) {
-                JOptionPane.showMessageDialog(null,"Successful Login!","Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "Successful Login!", "Boilermaker Bikes",
                         JOptionPane.INFORMATION_MESSAGE);
                 return;
             } else {
-                int newAccount = JOptionPane.showConfirmDialog(null,"User not found. Would you" +
-                        " like to create a new account?","Boilermaker Bikes",JOptionPane.YES_NO_OPTION);
+                int newAccount = JOptionPane.showConfirmDialog(null, "User not found. Would you" +
+                        " like to create a new account?", "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
 
                 if (newAccount == JOptionPane.NO_OPTION || newAccount == JOptionPane.CLOSED_OPTION) {
                     JOptionPane.showMessageDialog(null, "Thank you for visiting Boilermaker " +
@@ -76,34 +88,34 @@ public class LoginClient {
 
                 do {
                     //sends the new username to the server to check if it does not match up with an existing username
-                    String newUsername = JOptionPane.showInputDialog(null,"Please enter a username:",
-                            "Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                    String newUsername = JOptionPane.showInputDialog(null, "Please enter a username:",
+                            "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     writer.write(newUsername);
                     writer.println();
                     writer.flush();
-                    System.out.printf("New username %s sent to the server%n",newUsername);
+                    System.out.printf("New username %s sent to the server%n", newUsername);
 
                     //if the username matches up with an existing one, then have the user try again.
                     String input = reader.readLine();
-                    System.out.printf("Successfully Created an Account: %s%n",input);
+                    System.out.printf("Successfully Created an Account: %s%n", input);
                     success = Boolean.parseBoolean(input);
                     if (!success) {
-                        JOptionPane.showConfirmDialog(null,"Error, this username is already " +
-                                        "taken. Try again.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.showConfirmDialog(null, "Error, this username is already " +
+                                        "taken. Try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } while (!success);
-                JOptionPane.showMessageDialog(null,"Account successfully created!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
-                attempt++;
+                JOptionPane.showMessageDialog(null, "Account successfully created!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
             }
-
+        } while (true);
 
     }
+
     public static void main(String[] args) {
 
         //sets up the output stream for the user to use
         try {
-            Socket socket = new Socket("localhost",4242);
+            Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             String userType = ""; //saves the usertype selected by this user
@@ -117,8 +129,8 @@ public class LoginClient {
             panel.add(label1);
             JComboBox dropdown = new JComboBox(new String[]{"buyer", "seller"});
             panel.add(dropdown);
-            int choice = JOptionPane.showConfirmDialog(null,panel,"Boilermaker Bikes",
-                    JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+            int choice = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (choice == JOptionPane.OK_OPTION) {
                 writer.write("" + dropdown.getSelectedIndex());
                 writer.println();
@@ -126,10 +138,10 @@ public class LoginClient {
                 //saves the user type selected
                 if (dropdown.getSelectedIndex() == 0) {
                     userType = "buyer";
-                    System.out.printf("Sent to the server: %s%n",userType);
+                    System.out.printf("Sent to the server: %s%n", userType);
                 } else if (dropdown.getSelectedIndex() == 1) {
                     userType = "seller";
-                    System.out.printf("Sent to the server: %s%n",userType);
+                    System.out.printf("Sent to the server: %s%n", userType);
                 }
 
             } else {
@@ -138,25 +150,10 @@ public class LoginClient {
                 return;
             }
 
-            //Asks the user to enter their username
-            String username = JOptionPane.showInputDialog(null,"Please enter your username:",
-                    "Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-
-            //allows the user to use the exit button
-            if (username == null) {
-                return;
-            }
-
-            //sends the username to the server
-            writer.write(username);
-            writer.println();
-            writer.flush();
-            System.out.printf("%s sent to the server%n",username);
-
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
 
-            login.userLogin(reader, writer,userType);
+            login.userLogin(reader, writer, userType);
 
         } catch (IOException e) {
             //prints an error message and exits the program
@@ -165,8 +162,6 @@ public class LoginClient {
             e.printStackTrace();
             return;
         }
-
-
 
 
     }

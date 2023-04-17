@@ -27,111 +27,108 @@ public class LoginServer {
     /*********
      * This method checks if a user's account already exists and has them either log in or create a new account
      * @param userType the type of user logging in (buyer of seller)
-     * @param userName the username of this user
      * @param reader reads in the username and user type entered on the client side
      * @param writer writes back to the client if the username already exists
      * @return the index of the user in the database arraylist
      */
-    public int userLogin(String userType, String userName, BufferedReader reader, PrintWriter writer) throws IOException {
+    public int userLogin(String userType, BufferedReader reader, PrintWriter writer) throws IOException {
         //reads the initial user information
         UserInfo.readUsers();
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
-        int attempt = 1; //keeps track of the number of attempts made by the user to login
-        String ready = reader.readLine();
-        System.out.println("Ready received from the client");
-
-        //if the user has already attempted to login, read the new username they entered
-        if (attempt > 1) {
-            String updatedUserName = reader.readLine();
-            userName = updatedUserName;
-        }
 
         switch (userType) {
+            /*********
+             * Iterates through the entire database of buyers and checks if the username already exists.
+             * If it does exist, then send true to the client and exit this method. If it does not exist,
+             * then send false to the client which will prompt them to create a new account wiht their own unique username
+             */
             case "buyer":
-                /*********
-                 * Iterates through the entire database of buyers and checks if the username already exists.
-                 * If it does exist, then send true to the client and exit this method. If it does not exist,
-                 * then send false to the client which will prompt them to create a new account wiht their own unique username
-                 */
-                for (Buyer buyer : buyers) {
-                    System.out.println("Hello World");
-                    System.out.println(userName);
-                    if (buyer.getUsername().equals(userName)) {
-                        found = true;
-                        userIndex = buyers.indexOf(buyer);
-                        break;
-                    }
-                }
-                if (found) {
-                    if (ready.equals("ready")) {
-                        System.out.println("Hello world! True");
-                        writer.write("true");
-                        writer.println();
-                        writer.flush();
-                        return userIndex;
-                    }
-                } else if (!found) {
-                    if (ready.equals("ready")) {
-                        System.out.println("Hello world! False");
-                        writer.write("false");
-                        writer.println();
-                        writer.flush();
-                    }
-                }
-
-                //from the client determines if the user is going to create a new account or not
-                String userExited = reader.readLine();
-                System.out.printf("%s received from the client%n", userExited);
-
-                if (userExited.equals("yes")) {
-                    writer.close();
-                    reader.close();
-
-                } else if (userExited.equals("no")) {
-                    //set up a new account for the user
-                    boolean success = false; //keeps track of if the buyer successfully created a new account
-                    String newUserName = ""; //keeps track of the new username entered to create an account
-                    do {
-                        newUserName = reader.readLine();
-                        System.out.printf("New username %s received from the server", newUserName);
-                        success = true;
-                        //checks if that buyer name already exists
-                        for (Buyer buyer : buyers) {
-                            System.out.println("Hello World");
-                            System.out.println(userName);
-                            if (buyer.getUsername().equals(userName)) {
-                                success = true;
-                                userIndex = buyers.indexOf(buyer);
-                                break;
-                            }
+                do {
+                    //reads the username entered by the user
+                    String userName = reader.readLine();
+                    String ready = reader.readLine();
+                    System.out.println("Ready received from the client");
+                    for (Buyer buyer : buyers) {
+                        System.out.println("Hello World");
+                        System.out.println(userName);
+                        if (buyer.getUsername().equals(userName)) {
+                            found = true;
+                            userIndex = buyers.indexOf(buyer);
+                            break;
                         }
-                        if (success) {
-                            if (ready.equals("ready")) {
-                                System.out.println("Hello world Again! True");
-                                writer.write("true");
-                                writer.println();
-                                writer.flush();
-                                return userIndex;
-                            }
-                        } else if (!success) {
-                            if (ready.equals("ready")) {
-                                System.out.println("Hello world Again! False");
-                                writer.write("false");
-                                writer.println();
-                                writer.flush();
-                            }
+                    }
+                    if (found) {
+                        if (ready.equals("ready")) {
+                            System.out.println("Hello world! True");
+                            writer.write("true");
+                            writer.println();
+                            writer.flush();
+                            return userIndex;
                         }
-                    } while (!success);
-                    //Creates the new buyer's account and stores it in the buyer database
-                    Buyer newBuyer = new Buyer(newUserName, null, null);
-                    buyers.add(newBuyer);
-                    attempt++;
-                }
+                    } else if (!found) {
+                        if (ready.equals("ready")) {
+                            System.out.println("Hello world! False");
+                            writer.write("false");
+                            writer.println();
+                            writer.flush();
+                        }
+                    }
+
+                    //from the client determines if the user is going to create a new account or not
+                    String userExited = reader.readLine();
+                    System.out.printf("%s received from the client%n", userExited);
+
+                    if (userExited.equals("yes")) {
+                        writer.close();
+                        reader.close();
+
+                    } else if (userExited.equals("no")) {
+                        //set up a new account for the user
+                        boolean success = false; //keeps track of if the buyer successfully created a new account
+                        String newUserName = ""; //keeps track of the new username entered to create an account
+                        do {
+                            newUserName = reader.readLine();
+                            System.out.printf("New username %s received from the server", newUserName);
+                            success = true;
+                            //checks if that buyer name already exists
+                            for (Buyer buyer : buyers) {
+                                System.out.println("Hello World");
+                                System.out.println(userName);
+                                if (buyer.getUsername().equals(userName)) {
+                                    success = true;
+                                    userIndex = buyers.indexOf(buyer);
+                                    break;
+                                }
+                            }
+                            if (success) {
+                                if (ready.equals("ready")) {
+                                    System.out.println("Hello world Again! True");
+                                    writer.write("true");
+                                    writer.println();
+                                    writer.flush();
+                                    return userIndex;
+                                }
+                            } else if (!success) {
+                                if (ready.equals("ready")) {
+                                    System.out.println("Hello world Again! False");
+                                    writer.write("false");
+                                    writer.println();
+                                    writer.flush();
+                                }
+                            }
+                        } while (!success);
+                        //Creates the new buyer's account and stores it in the buyer database
+                        Buyer newBuyer = new Buyer(newUserName, null, null);
+                        buyers.add(newBuyer);
+                    }
+                } while (true);
+
+
             case "seller":
 
                 //TODO
-
+                String userName = "";
                 /**********
                  * Iterates through the entire database of sellers and checks if the username already exists
                  ***********/
@@ -169,13 +166,10 @@ public class LoginServer {
                 System.out.printf("Received from the Client: %s%n", userType);
             }
 
-            //reads the username entered by the user
-            String username = reader.readLine();
-
             //creates a login server object and goes to the login method
             LoginServer login = new LoginServer();
 
-            login.userLogin(userType, username, reader, writer);
+            login.userLogin(userType, reader, writer);
 
 
         } catch (IOException e) {
