@@ -20,9 +20,13 @@ public class LoginClient {
      * @param userType the type of user (buyer or seller)
      */
     public void userLogin(BufferedReader reader, PrintWriter writer, String userType) throws IOException {
-        do {
             boolean userNameFound; //determines whether or not the username already exists
-            try {
+            int attempt = 1; //keeps track of the number of attempts made by the user to login
+        //if the user has already attempt to login, then ask them for a username again
+        if (attempt > 1) {
+
+        }
+        try {
                 writer.write("ready");
                 writer.println();
                 writer.flush();
@@ -34,6 +38,7 @@ public class LoginClient {
                 e.printStackTrace();
                 return;
             }
+
             /********
              * If the username is found, then print a success message and leave this method. Otherwise,
              * prompt the user to create an account
@@ -88,11 +93,10 @@ public class LoginClient {
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } while (!success);
-
                 JOptionPane.showMessageDialog(null,"Account successfully created!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
+                attempt++;
             }
 
-        } while (true);
 
     }
     public static void main(String[] args) {
