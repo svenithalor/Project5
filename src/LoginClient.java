@@ -23,6 +23,7 @@ public class LoginClient {
         boolean userNameFound; //determines whether or not the username already exists
         int attempt = 1; //keeps track of the number of attempts made by the user to log in
         do {
+            System.out.printf("Attempt #%d%n",attempt);
             try {
                 //Asks the user to enter their username
                 String username = JOptionPane.showInputDialog(null, "Please enter your username:",
@@ -38,11 +39,12 @@ public class LoginClient {
                 writer.println();
                 writer.flush();
                 System.out.printf("%s sent to the server%n", username);
-
-                writer.write("ready");
-                writer.println();
-                writer.flush();
-                System.out.println("Ready sent to the server");
+                if (attempt == 1) {
+                    writer.write("ready");
+                    writer.println();
+                    writer.flush();
+                    System.out.println("Ready sent to the server");
+                }
                 String input = reader.readLine();
                 userNameFound = Boolean.parseBoolean(input);
 
@@ -106,6 +108,7 @@ public class LoginClient {
                     }
                 } while (!success);
                 JOptionPane.showMessageDialog(null, "Account successfully created!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+                attempt++;
             }
         } while (true);
 

@@ -36,6 +36,8 @@ public class LoginServer {
         UserInfo.readUsers();
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
+        int attempt = 1; //keeps track of the number of attempts made by the user to login
+        String ready = ""; //used to trigger the client enterred username being read through the database
 
         switch (userType) {
             /*********
@@ -45,10 +47,13 @@ public class LoginServer {
              */
             case "buyer":
                 do {
+                    System.out.printf("Attempt #%d%n",attempt);
                     //reads the username entered by the user
                     String userName = reader.readLine();
-                    String ready = reader.readLine();
-                    System.out.println("Ready received from the client");
+                    if (attempt == 1) {
+                        ready = reader.readLine();
+                        System.out.println("Ready received from the client");
+                    }
                     for (Buyer buyer : buyers) {
                         System.out.println("Hello World");
                         System.out.println(userName);
@@ -107,7 +112,6 @@ public class LoginServer {
                                     writer.write("true");
                                     writer.println();
                                     writer.flush();
-                                    return userIndex;
                                 }
                             } else if (!success) {
                                 if (ready.equals("ready")) {
@@ -122,6 +126,8 @@ public class LoginServer {
                         Buyer newBuyer = new Buyer(newUserName, null, null);
                         buyers.add(newBuyer);
                     }
+                    attempt++;
+                    System.out.println("Attempt " + attempt);
                 } while (true);
 
 
