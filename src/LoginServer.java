@@ -32,40 +32,65 @@ public class LoginServer {
      * @param writer writes back to the client if the username already exists
      * @return the index of the user in the database arraylist
      */
-    public int userLogin(String userType, String userName, BufferedReader reader, PrintWriter writer) {
+    public int userLogin(String userType, String userName, BufferedReader reader, PrintWriter writer) throws IOException {
         //reads the initial user information
-        //UserInfo.readUsers();
+        UserInfo.readUsers();
         boolean found = false; //whether or not the username already exists
         int userIndex = -1; //index of the new or existing user in the buyer or seller arraylist
 
         switch (userType) {
             case "buyer":
                 /*********
-                 * Iterates through the entire database of buyers and checks if the username already exists
+                 * Iterates through the entire database of buyers and checks if the username already exists.
+                 * If it does exist, then send true to the client and exit this method. If it does not exist,
+                 * then send false to the client which will prompt them to create a new account wiht their own unique username
                  */
                 for (Buyer buyer : buyers) {
                     if (buyer.getUsername().equals(userName)) {
                         found = true;
                         userIndex = buyers.indexOf(buyer);
-                        break;
+                        writer.write(found + "");
+                        writer.println();
+                        writer.flush();
+                        return userIndex;
                     }
                 }
-                /***********
-                 * If the username is found, then exit this method, return the user's index on the arraylist of buyers,
-                 * and write "true" to the client
-                 * If the user is not found, then have them
-                 * create a new account with their own unique username
-                 */
-                if (found) {
-                    System.out.println("Successful login!");
-                    writer.write("true");
-                    writer.println();
-                    writer.flush();
-                    return userIndex;
-                }
 
+                String userExited = ""; //from the client determines if the user is going to create a new account or not
+                userExited = reader.readLine();
+
+                if (userExited.equals("yes")) {
+                    writer.close();
+                    reader.close();
+
+                } else if (userExited.equals("no")) {
+                    //set up a new account for the user
+                    boolean success = false; //keeps track of if the buyer successfully created a new account
+                    String newUserName = ""; //keeps track of the new username entered to create an account
+                    do {
+                        newUserName = reader.readLine();
+                        success = true;
+                        //checks if that buyer name already exists
+                        for (Buyer buyer : buyers) {
+                            if (buyer.getUsername().equals(newUserName)) {
+                                success = false;
+                                writer.write(success + "");
+                                writer.println();
+                                writer.flush();
+                                break;
+                            }
+                        }
+                    } while (!success);
+                    //Creates the new buyer's account and stores it in the buyer database
+                    Buyer newBuyer = new Buyer(newUserName, null, null);
+                    buyers.add(newBuyer);
+                }
                 break;
+
             case "seller":
+
+                //TODO
+
                 /**********
                  * Iterates through the entire database of sellers and checks if the username already exists
                  ***********/
@@ -84,6 +109,7 @@ public class LoginServer {
         return userIndex;
     }
 
+
     public static void main(String[] args) {
         //sets up the server connection
         try {
@@ -96,10 +122,8 @@ public class LoginServer {
             String userType = reader.readLine();
             if (userType.equals("0")) {
                 userType = "buyer";
-                System.out.println(userType);
             } else if (userType.equals("1")) {
                 userType = "seller";
-                System.out.println(userType);
             }
 
             //reads the username entered by the user
@@ -109,8 +133,6 @@ public class LoginServer {
             LoginServer login = new LoginServer();
 
             login.userLogin(userType, username, reader, writer);
-
-            //if the username is not found in the database, then return false, if it is found, then return true
 
 
         } catch (IOException e) {

@@ -261,4 +261,12 @@ public class UserInfo {
 
     }
 
+    /************
+     * This method logs the user out of the application and saves their information to a file
+     */
+    public static void userLogout() {
+        UserInfo.writeUsers();
+    }
+
+
 }
