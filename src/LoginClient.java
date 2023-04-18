@@ -9,7 +9,7 @@ import java.net.Socket;
  * This class displays GUI for the login and sends the user input to the server. It also generates appropriate
  * error/prompt messages as the user logins in and or creates an account.
  *
- * @author Christina Joslin, lab sec 4427
+ * @author Christina Joslin & Duoli Chen, lab sec 4427
  * @version 4/17/2023
  */
 public class LoginClient {
@@ -124,16 +124,9 @@ public class LoginClient {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             String userType = ""; //saves the usertype selected by this user
-            //welcomes the user
-            //TODO
 
-            /********
-             * Duoli you can fill this in with the welcome message and the dropdown (I just put in a temporary
-             * dropdown below but you are welcome to modify it accordingly I just needed something to start
-             * with so I would begin connecting everything together.
-             */
             // welcome message
-            JOptionPane.showMessageDialog(null, "Welcome to Boilermaker Bikes Shop!",
+            JOptionPane.showMessageDialog(null, "Welcome to the Boilermaker Bikes Shop!",
                     "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
 
             //Asks if they are a buyer or a seller via a dropdown box
