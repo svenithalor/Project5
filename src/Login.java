@@ -16,14 +16,13 @@ public class Login {
         this.buyers = UserInfo.getBuyers();
         this.bikes = UserInfo.getBikes();
     }
-
-
+    
     //Methods
 
 
     /********
      *This method logs the user into the Boiler Bikes website and or has them create a new account
-     * @param scanner the username to be enterred by the user
+     * @param scanner the username to be entered by the user
      * @param userType the type of user logging in (a buyer or seller)
      */
     public int userLogin(Scanner scanner, int userType) {

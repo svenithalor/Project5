@@ -132,6 +132,9 @@ public class LoginClient {
              * dropdown below but you are welcome to modify it accordingly I just needed something to start
              * with so I would begin connecting everything together.
              */
+            // welcome message
+            JOptionPane.showMessageDialog(null, "Welcome to Boilermaker Bikes Shop!",
+                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
 
             //Asks if they are a buyer or a seller via a dropdown box
             JPanel panel = new JPanel();
