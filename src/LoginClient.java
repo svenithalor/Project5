@@ -9,7 +9,7 @@ import java.net.Socket;
  * This class displays GUI for the login and sends the user input to the server. It also generates appropriate
  * error/prompt messages as the user logins in and or creates an account.
  *
- * @author Christina Joslin & Duoli Chen, lab sec 4427
+ * @author Christina Joslin (userLogin Client Server and main Client/Server) & Duoli Chen (userLogout and main Client/Server) lab sec 4427
  * @version 4/17/2023
  */
 public class LoginClient {
@@ -114,6 +114,26 @@ public class LoginClient {
             }
         } while (true);
 
+    }
+
+    /************
+     * This method logs the user out of the application and saves their information to a file
+     * @param userType the user that is logging our whether a buyer or seller
+     */
+    public void userLogout(int userType) {
+        JPanel panel = new JPanel();
+        JLabel label1 = new JLabel("Do you want to logout?");
+        panel.add(label1);
+        JComboBox dropdown = new JComboBox(new String[]{"yes", "no"});
+        panel.add(dropdown);
+        int choice = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (choice == JOptionPane.OK_OPTION) {
+            if (dropdown.getSelectedIndex() == 0) {
+                UserInfo.writeUsers();
+            }
+        }
     }
 
     public static void main(String[] args) {
