@@ -14,14 +14,12 @@ import java.io.*;
 public class LoginServer {
     private ArrayList<Buyer> buyers; //keeps track of all buyers from UserInfo
     private ArrayList<Seller> sellers; //keeps track of all the sellers from UserInfo
-    private ArrayList<Bike> bikes; //keeps track of all bikes for sale from Userinfo
 
     //Constructor
     public LoginServer() {
-        //initializes the values that are currently in the database
+        //initializes the buyer and seller databases
         this.sellers = UserInfo.getSellers();
         this.buyers = UserInfo.getBuyers();
-        this.bikes = UserInfo.getBikes();
     }
 
     //Methods
@@ -43,8 +41,8 @@ public class LoginServer {
 
         /*********
          * Iterates through the entire database of buyers or sellers and checks if the username already exists.
-         * If it does exist, then send true to the client and exit this method. If it does not exist,
-         * then send false to the client which will prompt them to create a new account wiht their own unique username
+         * If it DOES exist, then send true to the client and exit this method. If it DOES NOT exist,
+         * then send false to the client which will prompt them to create a new account with a unique username
          */
         do {
             //reads the username entered by the user

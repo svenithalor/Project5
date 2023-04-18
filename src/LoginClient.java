@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.awt.*;
 import java.net.Socket;
 
 /*********
@@ -109,7 +108,8 @@ public class LoginClient {
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } while (!success);
-                JOptionPane.showMessageDialog(null, "Account successfully created!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Account successfully created!",
+                        "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
                 attempt++; //increments of the number of attempts made by the user to login
             }
         } while (true);
@@ -126,6 +126,12 @@ public class LoginClient {
             String userType = ""; //saves the usertype selected by this user
             //welcomes the user
             //TODO
+
+            /********
+             * Duoli you can fill this in with the welcome message and the dropdown (I just put in a temporary
+             * dropdown below but you are welcome to modify it accordingly I just needed something to start
+             * with so I would begin connecting everything together.
+             */
 
             //Asks if they are a buyer or a seller via a dropdown box
             JPanel panel = new JPanel();
