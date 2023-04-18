@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.*;
 /*********
  * The Login class allows the user to log in and log out of the Boilermaker Bikes site
@@ -152,7 +153,20 @@ public class Login {
      * @param userType the user that is logging our whether a buyer or seller
      */
     public void userLogout(int userType) {
-        UserInfo.writeUsers();
+        JPanel panel = new JPanel();
+        JLabel label1 = new JLabel("Do you want to logout?");
+        panel.add(label1);
+        JComboBox dropdown = new JComboBox(new String[]{"yes", "no"});
+        panel.add(dropdown);
+        int choice = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (choice == JOptionPane.OK_OPTION) {
+            if (dropdown.getSelectedIndex() == 0) {
+                UserInfo.writeUsers();
+            }
+        }
     }
+
 
 }
