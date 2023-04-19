@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.net.Socket;
 import java.util.*;
 import java.io.*;
 /***************
@@ -10,6 +12,7 @@ import java.io.*;
 public class ControlFlowMenu {
 
     public static void main(String[] args) {
+        //Construction Zone
         Scanner scanner = new Scanner(System.in);
         Login login = new Login(); //initializes the login object
         boolean validInput = true;
@@ -19,7 +22,7 @@ public class ControlFlowMenu {
         int userIndex = login.userLogin(scanner, userType);
         // System.out.println("Bikes from login: " + bikes);
         if (userIndex != -1) {
-            if(userType == 1) {
+            if (userType == 1) {
                 Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
                 CustomerPage cp = new CustomerPage(UserInfo.getBikes(), thisBuyer);
                 cp.open(thisBuyer);
@@ -29,8 +32,6 @@ public class ControlFlowMenu {
                 sp.runSellerPage(thisSeller);
             }
         }
-        System.out.println("Thanks for shopping at Boilermaker Bikes!");
-
         UserInfo.userLogout();
         UserInfo.userLogout();
     }

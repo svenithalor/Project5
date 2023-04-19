@@ -63,6 +63,7 @@ public class CustomerPageClient {
                                 int cart = Integer.parseInt(scanner.nextLine());
                                 if (cart == 1) {
                                     // TODO: add to cart implementation
+
                                 }
                                 break;
                             case 4: break;
@@ -94,7 +95,8 @@ public class CustomerPageClient {
                         break;
                     case 4:
                         repeat = 0;
-                        break; // TODO: implement logout
+                        LoginClient.userLogout();
+                        break;
                     case 5:
                         System.out.println("Enter username to confirm account deletion or enter 1 to cancel");
                         String confirm = scanner.nextLine();
