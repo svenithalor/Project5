@@ -2,20 +2,24 @@ import java.io.File;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+
 public class CustomerPageServer {
 
+    //Methods
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(1234);
+            ServerSocket serverSocket = new ServerSocket(4242);
             while (true) {
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
                 int repeat = 1;
                 while (repeat == 1) {
-                    int choice = Integer.parseInt(reader.readLine());
+                    String input = reader.readLine();
+                    int choice = Integer.parseInt(input);
+                    UserInfo.readUsers(); //this is just a temporary value for reading new bikes in without using the login
                     ArrayList<Bike> bikes = UserInfo.getBikes();
-                    switch(choice) {
+                    switch (choice) {
                         case 1: // main menu switch case 1: view available bikes
                             for (Bike bike : bikes) {
                                 writer.println(bike.toString());
@@ -25,14 +29,14 @@ public class CustomerPageServer {
                             switch (choice1) {
                                 case 1: // sort by quantity
                                     ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
-                                    for (Bike bike: quantitySorted) {
+                                    for (Bike bike : quantitySorted) {
                                         writer.println(bike.toString());
                                         writer.flush();
                                     }
                                     break;
                                 case 2: // sort by price
                                     ArrayList<Bike> priceSorted = sortByPrice(bikes);
-                                    for (Bike bike: priceSorted) {
+                                    for (Bike bike : priceSorted) {
                                         writer.println(bike.toString());
                                         writer.flush();
                                     }
@@ -54,7 +58,8 @@ public class CustomerPageServer {
                                         writer.flush();
                                     }
                                     break;
-                                case 4: break; // go back to main menu
+                                case 4:
+                                    break; // go back to main menu
                                 case 5: // search
                                     String searchTerm = reader.readLine();
                                     ArrayList<Bike> matches = search(searchTerm, bikes);
@@ -70,8 +75,10 @@ public class CustomerPageServer {
                                     break;
                             }
                             break;
-                        case 2: break; // main menu option 2: view cart
+                        case 2:
+                            break; // main menu option 2: view cart
                         // TODO: shopping cart implementation
+
                         case 3: // main menu option 3: export file with purchase history
                             String fileName = reader.readLine();
                             writer.println(getPurchaseHistory(fileName));
@@ -180,6 +187,7 @@ public class CustomerPageServer {
             return false;
         }
     }
+
     public static boolean deleteAccount(String user) {
         boolean deleted = false;
         ArrayList<Buyer> buyers = UserInfo.getBuyers();

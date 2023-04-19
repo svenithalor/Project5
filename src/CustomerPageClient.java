@@ -2,19 +2,13 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 import javax.swing.*;
+
 public class CustomerPageClient {
     //TODO
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to boilermaker bikes!");
-        System.out.println("Enter a host name");
-        String host = scanner.nextLine();
-        System.out.println("Enter a port number");
-        int port = scanner.nextInt();
-        scanner.nextLine();
         try {
-            Socket socket = new Socket(host, port);
+            Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             System.out.println("Connection established!");
@@ -27,11 +21,11 @@ public class CustomerPageClient {
                 System.out.println("4. Logout");
                 System.out.println("5. Delete account");
                 int choice = scanner.nextInt();
-                scanner.nextLine();
                 writer.println(choice);
                 writer.flush();
                 switch (choice) {
-                    case 1: String bikeInfo = reader.readLine(); // main menu option 1: display bikes
+                    case 1:
+                        String bikeInfo = reader.readLine(); // main menu option 1: display bikes
                         while (bikeInfo != null) {
                             System.out.println(bikeInfo);
                             bikeInfo = reader.readLine();
@@ -83,6 +77,7 @@ public class CustomerPageClient {
                         break;
                     case 2: // option 2: view cart
                         // TODO: view/edit cart and checkout
+                        //This is where we can put in some GUI that shows the elements of cart
                         break;
                     case 3: // option 3: view purchase history
                         System.out.println("Enter name of file to export data to");
@@ -105,7 +100,7 @@ public class CustomerPageClient {
                         String confirm = scanner.nextLine();
                         writer.println(confirm);
                         String deleted = reader.readLine();
-                        if (confirm.equals("1")){
+                        if (confirm.equals("1")) {
                             break;
                         } else if (deleted.equals("true")) {
                             System.out.println("Account deleted successfully!");
@@ -116,9 +111,9 @@ public class CustomerPageClient {
                         break;
                 }
             } while (repeat == 1);
-        } catch(UnknownHostException uhe) {
+        } catch (UnknownHostException uhe) {
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
 
         }
 

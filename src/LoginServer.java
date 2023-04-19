@@ -155,12 +155,14 @@ public class LoginServer {
                         //Creates the new buyer's account and stores it in the buyer database
                         Buyer newBuyer = new Buyer(newUserName, null, null);
                         buyers.add(newBuyer);
+                        UserInfo.setBuyers(buyers);
                         userIndex = buyers.indexOf(newBuyer);
                         break;
                     case "seller":
                         //Creates the new seller's account and stores it in the seller database
                         Seller newSeller = new Seller(userName, null);
                         sellers.add(newSeller);
+                        UserInfo.setSellers(sellers);
                         userIndex = sellers.indexOf(newSeller);
                         break;
                 }
