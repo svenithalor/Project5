@@ -98,7 +98,8 @@ public class CustomerPageClient {
                         break;
                     case 4: // option 4: logout
                         repeat = 0;
-                        break; // TODO: implement logout
+                        LoginClient.userLogout();
+                        break;
                     case 5: // option 5: delete account
                         System.out.println("Enter username to confirm account deletion or enter 1 to cancel");
                         String confirm = scanner.nextLine();
