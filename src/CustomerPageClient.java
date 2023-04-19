@@ -31,7 +31,7 @@ public class CustomerPageClient {
                 writer.println(choice);
                 writer.flush();
                 switch (choice) {
-                    case 1: String bikeInfo = reader.readLine(); // case 1: display bikes
+                    case 1: String bikeInfo = reader.readLine(); // main menu option 1: display bikes
                         while (bikeInfo != null) {
                             System.out.println(bikeInfo);
                             bikeInfo = reader.readLine();
@@ -45,14 +45,15 @@ public class CustomerPageClient {
                         scanner.nextLine();
                         writer.println(choice1);
                         writer.flush();
-                        switch (choice1) {
-                            case 1, 2: String sortedBikeInfo = reader.readLine();
+                        switch (choice1) { // switch of choices within view bikes
+                            case 1, 2: // sorting bikes
+                                String sortedBikeInfo = reader.readLine();
                                 while (sortedBikeInfo != null) {
                                     System.out.println(sortedBikeInfo);
                                     sortedBikeInfo = reader.readLine();
                                 }
                                 break;
-                            case 3:
+                            case 3: // view bike listing
                                 System.out.println("Enter id of bike to view");
                                 int id = scanner.nextInt();
                                 scanner.nextLine();
@@ -63,11 +64,11 @@ public class CustomerPageClient {
                                 int cart = Integer.parseInt(scanner.nextLine());
                                 if (cart == 1) {
                                     // TODO: add to cart implementation
-
                                 }
                                 break;
-                            case 4: break;
-                            case 5:
+                            case 4: // go back
+                                break;
+                            case 5: // search
                                 System.out.println("Enter search"); // TODO: search box text field
                                 String search = scanner.nextLine();
                                 writer.println(search);
@@ -80,9 +81,11 @@ public class CustomerPageClient {
                                 break;
                         }
                         break;
-                    case 2: // TODO: view/edit cart and checkout
+                    case 2: // option 2: view cart
+                        // TODO: view/edit cart and checkout
                         break;
-                    case 3: System.out.println("Enter name of file to export data to");
+                    case 3: // option 3: view purchase history
+                        System.out.println("Enter name of file to export data to");
                         String fileName = scanner.nextLine();
                         writer.println(fileName);
                         writer.flush();
@@ -93,11 +96,10 @@ public class CustomerPageClient {
                             System.out.println("An error occurred, try again!");
                         }
                         break;
-                    case 4:
+                    case 4: // option 4: logout
                         repeat = 0;
-                        LoginClient.userLogout();
-                        break;
-                    case 5:
+                        break; // TODO: implement logout
+                    case 5: // option 5: delete account
                         System.out.println("Enter username to confirm account deletion or enter 1 to cancel");
                         String confirm = scanner.nextLine();
                         writer.println(confirm);

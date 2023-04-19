@@ -16,26 +16,29 @@ public class CustomerPageServer {
                     int choice = Integer.parseInt(reader.readLine());
                     ArrayList<Bike> bikes = UserInfo.getBikes();
                     switch(choice) {
-                        case 1:
+                        case 1: // main menu switch case 1: view available bikes
                             for (Bike bike : bikes) {
                                 writer.println(bike.toString());
                                 writer.flush();
                             }
                             int choice1 = Integer.parseInt(reader.readLine());
                             switch (choice1) {
-                                case 1: ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
+                                case 1: // sort by quantity
+                                    ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
                                     for (Bike bike: quantitySorted) {
                                         writer.println(bike.toString());
                                         writer.flush();
                                     }
                                     break;
-                                case 2: ArrayList<Bike> priceSorted = sortByPrice(bikes);
+                                case 2: // sort by price
+                                    ArrayList<Bike> priceSorted = sortByPrice(bikes);
                                     for (Bike bike: priceSorted) {
                                         writer.println(bike.toString());
                                         writer.flush();
                                     }
                                     break;
-                                case 3: int id = Integer.parseInt(reader.readLine());
+                                case 3: // view bike listing
+                                    int id = Integer.parseInt(reader.readLine());
                                     Bike bikeToView = null;
                                     for (Bike bike : bikes) {
                                         if (bike.getId() == id) {
@@ -51,8 +54,9 @@ public class CustomerPageServer {
                                         writer.flush();
                                     }
                                     break;
-                                case 4: break;
-                                case 5: String searchTerm = reader.readLine();
+                                case 4: break; // go back to main menu
+                                case 5: // search
+                                    String searchTerm = reader.readLine();
                                     ArrayList<Bike> matches = search(searchTerm, bikes);
                                     if (matches != null) {
                                         for (Bike bike : matches) {
@@ -66,12 +70,18 @@ public class CustomerPageServer {
                                     break;
                             }
                             break;
-                        case 2: break; // TODO: shopping cart implementation
-                        case 3: String fileName = reader.readLine();
+                        case 2: break; // main menu option 2: view cart
+                        // TODO: shopping cart implementation
+                        case 3: // main menu option 3: export file with purchase history
+                            String fileName = reader.readLine();
                             writer.println(getPurchaseHistory(fileName));
                             writer.flush();
                             break;
-                        case 5: String user = reader.readLine();
+                        case 4: // logout -- do we need processing on the server side for this?
+                            repeat = 0;
+                            break;
+                        case 5: // main menu option 5: delete account
+                            String user = reader.readLine();
                             boolean deleted = deleteAccount(user);
                             writer.println(deleted);
                             writer.flush();
