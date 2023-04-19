@@ -157,10 +157,10 @@ public class CustomerPageServer {
     public static boolean getPurchaseHistory(String fileName) {
         try {
             File file = new File(fileName);
-            PrintWriter pw = new PrintWriter(file);
-            for (PurchasedBike b : purchasedBikes) {
+            PrintWriter pw = new PrintWriter(file); // TODO: purchased bike error
+            /*for (PurchasedBike b : purchasedBikes) {
                 pw.println(b.toString());
-            }
+            }*/
             return true;
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
