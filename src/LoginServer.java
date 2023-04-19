@@ -179,7 +179,11 @@ public class LoginServer {
 
             //reads the userType entered by the user and interprets it
             String userType = reader.readLine();
-            if (userType.equals("0")) {
+            if (userType == null) {
+                writer.close();
+                reader.close();
+            }
+            else if (userType.equals("0")) {
                 userType = "buyer";
                 //System.out.printf("Received from the Client: %s%n", userType);
             } else if (userType.equals("1")) {
@@ -192,6 +196,9 @@ public class LoginServer {
             //stores the user index and sends the user either to their corresponding buyer or seller page
 
             int userIndex = login.userLogin(userType, reader, writer);
+            //System.out.println(userIndex);
+
+            //as long as the user index is valid, take the user to the buyer or seller menu
             if (userIndex != -1) {
                 if (userType.equals("buyer")) {
                     Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
@@ -203,8 +210,6 @@ public class LoginServer {
                     sp.runSellerPage(thisSeller);
                 }
             }
-            System.out.println(userIndex);
-            //Need to figure out how to lead the user to the next class/method
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -145,8 +145,14 @@ public class LoginClient {
             String userType = ""; //saves the usertype selected by this user
 
             // welcome message
-            JOptionPane.showMessageDialog(null, "Welcome to the Boilermaker Bikes Shop!",
-                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+           int welcome =  JOptionPane.showConfirmDialog(null, "Welcome to the Boilermaker Bikes Shop!",
+                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+           //allows the user to exit if they press the x button
+           if (welcome == JOptionPane.CLOSED_OPTION) {
+               writer.close();
+               reader.close();
+               return;
+           }
 
             //Asks if they are a buyer or a seller via a dropdown box
             JPanel panel = new JPanel();
