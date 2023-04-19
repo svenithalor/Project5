@@ -32,8 +32,8 @@ public class ControlFlowMenu {
                 sp.runSellerPage(thisSeller);
             }
         }
-        UserInfo.userLogout();
-        UserInfo.userLogout();
+        LoginClient.userLogout();
+        LoginClient.userLogout();
     }
 
 }
