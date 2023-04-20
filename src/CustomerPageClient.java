@@ -124,6 +124,7 @@ public class CustomerPageClient {
      * @param writer to write the choice made by the buyer to the server
      * @param reader to close the BufferedReader in the event that the buyer exits out of the menu
      * @return the menu item selected by the user
+     * @author Christina Joslin
      */
     public int displayMainMenu(PrintWriter writer,BufferedReader reader) throws IOException {
         //Creates a dropdown menu for the buyer to scroll through the menu options
