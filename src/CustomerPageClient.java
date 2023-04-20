@@ -11,18 +11,13 @@ public class CustomerPageClient {
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            System.out.println("Connection established!");
             int repeat = 1;
+            CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
             do {
-                System.out.println("Select an option: ");
-                System.out.println("1. View all available bikes");
-                System.out.println("2. Review cart");
-                System.out.println("3. Get purchase history");
-                System.out.println("4. Logout");
-                System.out.println("5. Delete account");
-                int choice = scanner.nextInt();
-                writer.println(choice);
-                writer.flush();
+               //I created a method called displayMenu that would just consistently display
+                //the menu and return the choice made by the user
+                int choice = C.displayMainMenu(writer,reader);
+
                 switch (choice) {
                     case 1:
                         String bikeInfo = reader.readLine(); // main menu option 1: display bikes
@@ -112,10 +107,42 @@ public class CustomerPageClient {
                 }
             } while (repeat == 1);
         } catch (UnknownHostException uhe) {
-
+            uhe.printStackTrace(); //temporary messure just to make sure everything is working
         } catch (IOException ioe) {
-
+            ioe.printStackTrace(); //temporary measure just to make sure everything is working
         }
 
+    }
+
+    /******
+     * This method displays the customer page menu to the user and returns the menu item that they selected
+     * @param writer to write the choice made by the buyer to the server
+     * @param reader to close the BufferedReader in the event that the buyer exits out of the menu
+     * @return the menu item selected by the user
+     */
+    public int displayMainMenu(PrintWriter writer,BufferedReader reader) throws IOException {
+        //Creates a dropdown menu for the buyer to scroll through the menu options
+        //Just an idea for how the dropdown can be implemented
+        JPanel panel = new JPanel();
+        JLabel label1 = new JLabel("Select an option: ");
+        panel.add(label1);
+        JComboBox dropdown = new JComboBox(new String[]{"1. View all available bikes","2. Review cart",
+                "3. Get purchase history","4. Logout","5. Delete account"});
+        panel.add(dropdown);
+        int option = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+            //sends the chosen option to the server to be processed and then returns this index to the user
+            writer.write("" + dropdown.getSelectedIndex() + 1);
+            writer.println();
+            writer.flush();
+            return dropdown.getSelectedIndex() + 1;
+        } else {
+            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
+                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+            writer.close();
+            reader.close();
+            return -1;
+        }
     }
 }
