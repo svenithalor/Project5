@@ -219,6 +219,7 @@ public class CustomerPage {
         for (Bike bike : bikes) {
             if (bike.getQuantity() > 0) {
                 System.out.println(bike.toString());
+                System.out.println("Hello world");
             }
         }
     }

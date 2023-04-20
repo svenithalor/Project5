@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 /*********
  * This class displays GUI for the login and sends the user input to the server. It also generates appropriate
  * error/prompt messages as the user logins in and or creates an account.
  *
- * @author Christina Joslin (userLogin Client Server and main Client/Server) & Duoli Chen (userLogout and main Client/Server) lab sec 4427
+ * @author Christina Joslin (userLogin Client Server and main Client/Server) &
+ * Duoli Chen (userLogout and main Client/Server) lab sec 4427
  * @version 4/17/2023
  */
 public class LoginClient {
@@ -118,9 +118,8 @@ public class LoginClient {
 
     /************
      * This method logs the user out of the application and saves their information to a file
-     * @param userType the user that is logging our whether a buyer or seller
      */
-    public void userLogout(int userType) {
+    public static void userLogout() {
         JPanel panel = new JPanel();
         JLabel label1 = new JLabel("Do you want to logout?");
         panel.add(label1);
@@ -146,8 +145,14 @@ public class LoginClient {
             String userType = ""; //saves the usertype selected by this user
 
             // welcome message
-            JOptionPane.showMessageDialog(null, "Welcome to the Boilermaker Bikes Shop!",
-                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+           int welcome =  JOptionPane.showConfirmDialog(null, "Welcome to the Boilermaker Bikes Shop!",
+                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+           //allows the user to exit if they press the x button
+           if (welcome == JOptionPane.CLOSED_OPTION) {
+               writer.close();
+               reader.close();
+               return;
+           }
 
             //Asks if they are a buyer or a seller via a dropdown box
             JPanel panel = new JPanel();
@@ -175,7 +180,6 @@ public class LoginClient {
                 reader.close();
                 return;
             }
-
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
             login.userLogin(reader, writer);
@@ -187,7 +191,6 @@ public class LoginClient {
             e.printStackTrace();
             return;
         }
-
 
     }
 

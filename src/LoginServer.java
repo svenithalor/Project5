@@ -155,12 +155,14 @@ public class LoginServer {
                         //Creates the new buyer's account and stores it in the buyer database
                         Buyer newBuyer = new Buyer(newUserName, null, null);
                         buyers.add(newBuyer);
+                        UserInfo.setBuyers(buyers);
                         userIndex = buyers.indexOf(newBuyer);
                         break;
                     case "seller":
                         //Creates the new seller's account and stores it in the seller database
                         Seller newSeller = new Seller(userName, null);
                         sellers.add(newSeller);
+                        UserInfo.setSellers(sellers);
                         userIndex = sellers.indexOf(newSeller);
                         break;
                 }
@@ -179,7 +181,11 @@ public class LoginServer {
 
             //reads the userType entered by the user and interprets it
             String userType = reader.readLine();
-            if (userType.equals("0")) {
+            if (userType == null) {
+                writer.close();
+                reader.close();
+            }
+            else if (userType.equals("0")) {
                 userType = "buyer";
                 //System.out.printf("Received from the Client: %s%n", userType);
             } else if (userType.equals("1")) {
@@ -189,10 +195,23 @@ public class LoginServer {
             //creates a login server object and goes to the login method
             LoginServer login = new LoginServer();
 
-            //Stores the userIndex
+            //stores the user index and sends the user either to their corresponding buyer or seller page
+
             int userIndex = login.userLogin(userType, reader, writer);
-            System.out.println(userIndex);
-            //Need to figure out how to lead the user to the next class/method
+            //System.out.println(userIndex);
+
+            //as long as the user index is valid, take the user to the buyer or seller menu
+            if (userIndex != -1) {
+                if (userType.equals("buyer")) {
+                    Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
+                    CustomerPage cp = new CustomerPage(UserInfo.getBikes(), thisBuyer);
+                    cp.open(thisBuyer);
+                } else if (userType.equals("seller")) {
+                    Seller thisSeller = UserInfo.getSellers().get(userIndex);
+                    SellerPage sp = new SellerPage(thisSeller.getUsername(), thisSeller.getInventory());
+                    sp.runSellerPage(thisSeller);
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
