@@ -151,4 +151,12 @@ public class CustomerPageClient {
             return -1;
         }
     }
+
+    /*****
+     * This method will display the shopping cart contents to the user and allow them to add/delete
+     * items accordingly and check out items
+     */
+    public void shoppingCart(PrintWriter writer,BufferedReader reader) {
+        //TODO
+    }
 }
