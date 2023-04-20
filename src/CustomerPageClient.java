@@ -18,6 +18,11 @@ public class CustomerPageClient {
                 //the menu and return the choice made by the user
                 int choice = C.displayMainMenu(writer,reader);
 
+                //checks if the user attempts to exit. If they do, then end the program
+                if (choice == -1) {
+                    return;
+                }
+
                 switch (choice) {
                     case 1:
                         String bikeInfo = reader.readLine(); // main menu option 1: display bikes

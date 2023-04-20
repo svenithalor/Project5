@@ -17,6 +17,12 @@ public class CustomerPageServer {
                 while (repeat == 1) {
                     String input = reader.readLine();
                     int choice = Integer.parseInt(input);
+                    //if the user attempts to exit the website, then end the program.
+                    if (choice == -1) {
+                        reader.close();
+                        writer.close();
+                        return;
+                    }
                     UserInfo.readUsers(); //this is just a temporary value for reading new bikes in without using the login
                     ArrayList<Bike> bikes = UserInfo.getBikes();
                     switch (choice) {
