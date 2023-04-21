@@ -90,6 +90,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
                 if (e.getSource() == addItemButton) {
                     //tells the server that the user wants to add an item
+                    //try
                     writer.write("add");
                     writer.println();
                     writer.flush();
@@ -132,7 +133,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             }
 
 
-
         }
 
     };
@@ -160,6 +160,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         //refresh the page so they can see the item they added
 
     }
+
 
 
 }
