@@ -7,6 +7,7 @@ import java.net.Socket;
 
 public class ShoppingCartServer {
 
+
     public static void main(String[] args) {
         try {
             ServerSocket serverSocket = new ServerSocket(4242);
@@ -16,12 +17,23 @@ public class ShoppingCartServer {
             do {
                 //waits for what button the user presses
                 String input = reader.readLine();
-                System.out.println(input);
 
                 if (input.equals("add")) {
+                    //do something
 
 
                 } else if (input.equals("delete")) {
+                    String d = reader.readLine();
+                    //converts the input into an integer
+                    try {
+
+                        int bikeId = Integer.parseInt(d);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
 
 
                     //do something
@@ -47,7 +59,7 @@ public class ShoppingCartServer {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error Here");
+
         }
 
 

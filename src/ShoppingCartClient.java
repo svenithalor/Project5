@@ -91,32 +91,47 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                //creates a socket-server connection again *Note this will need to be changed
                if (e.getSource() == addItemButton) {
                    System.out.println("add");
+                   writer.write("add");
+                   writer.println();
+                   writer.flush();
                    String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
 
                }
                if (e.getSource() == deleteItemButton) {
-                   System.out.println("delete");
-                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-
                    //tells the server that the user wants to delete an item
                    writer.write("delete");
                    writer.println();
                    writer.flush();
+                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                   //sends the bike id to the server and confirms that this bike is still available
+                   writer.write("bikeId");
+                   writer.println();
+                   writer.flush();
 
-                   //do something
                }
                if (e.getSource() == checkoutButton) {
+                   System.out.println("checkout");
+                   writer.write("checkout");
+                   writer.println();
+                   writer.flush();
                    //tells the server that the user wants to check out
                    //do something
                    //remove elements from the shopping cart and putting it in the purchase history
                    //also removing those elements from the bikes
                }
                if (e.getSource() == returnToHomeButton) {
+                   writer.write("backHome");
+                   writer.println();
+                   writer.flush();
                    //tells the server that the user wants to return home
 
                    //do something
                }
                if (e.getSource() == refreshButton) {
+                   writer.write("refresh");
+                   writer.println();
+                   writer.flush();
+
                    //tells the server that the user needs to refresh their screen
                    //do something
                }
