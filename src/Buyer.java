@@ -67,8 +67,34 @@ public class Buyer {
 
     }
 
+    /********
+     * Updates the list of bikes purchased by this buyer
+     * @param purchaseHistory of this buyer
+     */
     public void setPurchaseHistory(ArrayList<PurchasedBike> purchaseHistory) {
         this.purchaseHistory = purchaseHistory;
+    }
+
+    /***************
+     * Displays the bike id, model name, final price, and quantity purchased of the bike in the shopping cart
+     * @return 2D object array to be displayed in a JTable in the shopping cart
+     */
+    public Object[][] shoppingCartInfo() {
+        Object[][] items; //a 2 dimension array used to display the items in the user's shopping cart
+        ArrayList<Object[]> temp = new ArrayList<>(); //temporarily stores an individual array container the information for each purchased bike
+
+        //iterates through each bike in the user's shopping cart, creates an array out of hte information
+        // and temporarily stores it in an arraylist
+
+        for (PurchasedBike bike : getShoppingCart()) {
+            Object[] it = new Object[]{"" + bike.getId(), "" + bike.getModelName(), "$" + bike.getFinalPrice(), "" + bike.getQuantity()};
+            temp.add(it);
+
+        }
+        //converts the arraylist information into the 2D object array used for the JTable
+        items = temp.toArray(new Object[0][0]);
+
+        return items;
     }
 
     @Override
@@ -84,12 +110,12 @@ public class Buyer {
         StringBuilder message = new StringBuilder(String.format("username: %s%n", username));
         //identifies the bikes in the shopping cart
         for (PurchasedBike bike : shoppingCart) {
-            message.append(String.format("%s.shoppingcart ",username));
+            message.append(String.format("%s.shoppingcart ", username));
             message.append(bike.toString()).append("\n");
         }
         //identifies the bikes in the purchasing history
         for (PurchasedBike bike : purchaseHistory) {
-            message.append(String.format("%s.purchasehistory ",username));
+            message.append(String.format("%s.purchasehistory ", username));
             message.append(bike.toString()).append("\n");
         }
         return message.toString();

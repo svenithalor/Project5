@@ -11,7 +11,7 @@ public class PurchasedBike extends Bike {
     //Constructors
 
     public PurchasedBike(String color, int wheelSize, double price, double finalPrice, String modelName, boolean used,
-                         String description, String sellerName, int quantity, boolean insured,int id) {
+                         String description, String sellerName, int quantity, boolean insured, int id) {
         super(color, wheelSize, price, modelName, used, description, sellerName, quantity, id);
         this.insured = insured;
         this.finalPrice = finalPrice;
@@ -48,20 +48,6 @@ public class PurchasedBike extends Bike {
     public boolean isInsured() {
         return insured;
     }
-
-    /***************
-     * Displays general information about this purchased bike to the user to be displayed in the shopping cart including
-     * its model name, color, wheel size, price, seller name, if it is used, and if it is insured under bike-in-a-tree
-     * insurance
-     * @return String[] array message containing the attributes of a purchased bike
-     */
-    public Object[][] shoppingCartInfo() {
-        //three things, bike ID, bike name, final price, and quantity to be purchased
-        Object [][] items = new Object[][];
-
-
-    }
-
 
 
     /***********

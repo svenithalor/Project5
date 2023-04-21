@@ -9,6 +9,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     JButton deleteItemButton; //allows the user to delete a bike from their shopping cart
     JButton checkoutButton; //allows the user to checkout all of the items in their shopping cart
     JButton returnToHomeButton; //allows the user to return back to hte main menu
+    JButton refreshButton; //allows the user to refresh their screen and see any updates made by other users
     Container content; //where the shopping cart items will be displayed
 
     public static void main(String[] args) {
@@ -54,11 +55,15 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         JButton returnToHomeButton = new JButton("Return to Home");
         returnToHomeButton.addActionListener(actionListener);
 
+        JButton refreshButton = new JButton("Refresh Screen");
+        refreshButton.addActionListener(actionListener);
+
         //adds the buttons to the bottom of the frame
         panelBottom.add(addItemButton);
         panelBottom.add(deleteItemButton);
         panelBottom.add(checkoutButton);
         panelBottom.add(returnToHomeButton);
+        panelBottom.add(refreshButton);
         content.add(panelBottom,BorderLayout.SOUTH);
 
 
@@ -80,22 +85,29 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             if (e.getSource() == returnToHomeButton) {
                 //do something
             }
+            if (e.getSource() == refreshButton) {
+
+                //do something (concurrency element
+            }
 
         }
 
     };
 
     /*******
-     * This method displays the bikes in a certain buyer's shopping cart
+     * This method displays the bikes in a certain buyer's shopping cart using a JTable
      * @param b the buyer who wants to view their shopping cart
-     * @return PurchasedBike[] an
      */
     public static void displayBikes (Buyer b,Container content) {
         String[] columnNames = {"Bike ID","Model Name","Price","Quantity"};
-        JTable table = new JTable(new Object[][]{{"003451","Smith","$500","1"}},columnNames);
+        JTable table = new JTable(b.shoppingCartInfo(),columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+
         //prevents the user from being able to edit the table of values
         table.setDefaultEditor(Object.class,null);
-        content.add(table);
+
+        //makes the table names visible
+        content.add(scrollPane);
 
     }
 
