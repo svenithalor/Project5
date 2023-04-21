@@ -94,7 +94,24 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                    writer.write("add");
                    writer.println();
                    writer.flush();
-                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                   //checks if the user entered bike ID is valid
+                   do {
+                       String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                       //sends the bike id to the server
+                       writer.write(bikeId);
+                       writer.println();
+                       writer.flush();
+                       //confirms that the user input is correct
+                       String valid = reader.readLine();
+                       if (valid.equals("true")) {
+                           break;
+                       }
+                       JOptionPane.showMessageDialog(null,"Invalid Input. Please try again.","Boilermaker Bikes",JOptionPane.ERROR_MESSAGE);
+
+                   } while (true);
+
+                   //check if bike ID is in the listing page
+
 
                }
                if (e.getSource() == deleteItemButton) {
@@ -102,16 +119,23 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                    writer.write("delete");
                    writer.println();
                    writer.flush();
+                   //checks if the user entered bike ID is valid
                    do {
+                       String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                       //sends the bike id to the server
+                       writer.write(bikeId);
+                       writer.println();
+                       writer.flush();
+                       //confirms that the user input is correct
+                       String valid = reader.readLine();
+                       if (valid.equals("true")) {
+                           break;
+                       }
+                       JOptionPane.showMessageDialog(null,"Invalid Input. Please try again.","Boilermaker Bikes",JOptionPane.ERROR_MESSAGE);
 
+                   } while (true);
 
-                   }
-                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-                   //sends the bike id to the server
-                   writer.write(bikeId);
-                   writer.println();
-                   writer.flush();
-                   //confirms that the user input is correct
+                   //check if bike Id is in their shopping cart
 
 
                }
@@ -176,6 +200,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         //refresh the page so they can see the item they added
 
     }
+
 
 
 }
