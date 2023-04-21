@@ -24,17 +24,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     Container content; //where the shopping cart items will be displayed
 
     public static void main(String[] args) {
-
-        try {
-            Socket socket = new Socket("localhost", 4242);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            SwingUtilities.invokeLater(new ShoppingCartClient());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SwingUtilities.invokeLater(new ShoppingCartClient());
 
 
     }
@@ -64,19 +54,19 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         //Creates the buttons for the shopping cart page and adds them to the frame
         JPanel panelBottom = new JPanel();
 
-        JButton addItemButton = new JButton("Add Item");
+        addItemButton = new JButton("Add Item");
         addItemButton.addActionListener(actionListener);
 
-        JButton deleteItemButton = new JButton("Delete Item");
+        deleteItemButton = new JButton("Delete Item");
         deleteItemButton.addActionListener(actionListener);
 
-        JButton checkoutButton = new JButton("Checkout");
+        checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(actionListener);
 
-        JButton returnToHomeButton = new JButton("Return to Home");
+        returnToHomeButton = new JButton("Return to Home");
         returnToHomeButton.addActionListener(actionListener);
 
-        JButton refreshButton = new JButton("Refresh Screen");
+        refreshButton = new JButton("Refresh Screen");
         refreshButton.addActionListener(actionListener);
 
         //adds the buttons to the bottom of the frame
@@ -91,37 +81,51 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     }
 
     ActionListener actionListener = new ActionListener() {
+       @Override
         public void actionPerformed(ActionEvent e) {
-            //creates a socket-sever connection again *Note this will need to be changed
-            if (e.getSource() == addItemButton) {
-                System.out.println("add");
-            }
-            if (e.getSource() == deleteItemButton) {
-                System.out.println("delete");
-                //String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+           try {
+               Socket socket = new Socket("localhost", 4242);
+               BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+               PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-                //tells the server that the user wants to delete an item
-                //writer.write("delete");
-                //writer.println();
-                //writer.flush();
+               //creates a socket-server connection again *Note this will need to be changed
+               if (e.getSource() == addItemButton) {
+                   System.out.println("add");
+                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
 
-                //do something
-            }
-            if (e.getSource() == checkoutButton) {
-                //tells the server that the user wants to check out
-                //do something
-                //remove elements from the shopping cart and putting it in the purchase history
-                //also removing those elements from the bikes
-            }
-            if (e.getSource() == returnToHomeButton) {
-                //tells the server that the user wants to return home
+               }
+               if (e.getSource() == deleteItemButton) {
+                   System.out.println("delete");
+                   String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
 
-                //do something
-            }
-            if (e.getSource() == refreshButton) {
-                //tells the server that the user needs to refresh their screen
-                //do something
-            }
+                   //tells the server that the user wants to delete an item
+                   writer.write("delete");
+                   writer.println();
+                   writer.flush();
+
+                   //do something
+               }
+               if (e.getSource() == checkoutButton) {
+                   //tells the server that the user wants to check out
+                   //do something
+                   //remove elements from the shopping cart and putting it in the purchase history
+                   //also removing those elements from the bikes
+               }
+               if (e.getSource() == returnToHomeButton) {
+                   //tells the server that the user wants to return home
+
+                   //do something
+               }
+               if (e.getSource() == refreshButton) {
+                   //tells the server that the user needs to refresh their screen
+                   //do something
+               }
+
+
+
+           } catch (IOException ex)  {
+               ex.printStackTrace();
+           }
 
 
         }
