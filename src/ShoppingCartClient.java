@@ -109,6 +109,8 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                     writer.println();
                     writer.flush();
                     //do something
+                    //remove elements from the shopping cart and putting it in the purchase history
+                    //also removing those elements from the bikes
                 }
                 if (e.getSource() == returnToHomeButton) {
                     //tells the server that the user wants to return home
@@ -153,6 +155,9 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     }
 
     public void addBike() {
+        //ask for the bike ID they want to remove and we'll have to check if that ID is still available
+        //ask if they want it insured or not (JOptionPane)
+        //refresh the page so they can see the item they added
 
     }
 

@@ -41,8 +41,8 @@ public class LoginServer {
 
         /*********
          * Iterates through the entire database of buyers or sellers and checks if the username already exists.
-         * If it DOES exist, then send true to the client and exit this method. If it DOES NOT exist,
-         * then send false to the client which will prompt them to create a new account with a unique username
+         * If it DOES exist, then send true to the client and have them check their password next. If it DOES NOT exist,
+         * then send false to the client which will prompt them to create a new account with a unique username and password
          */
         do {
             //reads the username entered by the user
@@ -81,25 +81,12 @@ public class LoginServer {
                     writer.write("true");
                     writer.println();
                     writer.flush();
+                    //now prompts the user to enter their password
+                    String password = ""; //stores the password enterred by the user
+                    do {
+                        password = reader.readLine();
+                    } while (!passwordChecker(userType, password, userName, reader, writer));
 
-                    //now prompts the user to answer their password
-                    String password = reader.readLine();
-
-                    switch (userType) {
-                        case "buyer" :
-                            for (Buyer buyer: buyers) {
-                                if (buyer.getPassword().equals(password) && buyer.getUsername().equals(userName)) {
-                                    found = true;
-                                    userIndex = buyers.indexOf(buyer);
-                                    return userIndex;
-                                }
-                            }
-                            break;
-                        case "seller" :
-
-                            break;
-
-                    }
 
                     return userIndex;
                 }
@@ -173,14 +160,14 @@ public class LoginServer {
                 switch (userType) {
                     case "buyer":
                         //Creates the new buyer's account and stores it in the buyer database
-                        Buyer newBuyer = new Buyer(newUserName, "", null,null);
+                        Buyer newBuyer = new Buyer(newUserName, "", null, null);
                         buyers.add(newBuyer);
                         UserInfo.setBuyers(buyers);
                         userIndex = buyers.indexOf(newBuyer);
                         break;
                     case "seller":
                         //Creates the new seller's account and stores it in the seller database
-                        Seller newSeller = new Seller(userName, null,null);
+                        Seller newSeller = new Seller(userName, null, null);
                         sellers.add(newSeller);
                         UserInfo.setSellers(sellers);
                         userIndex = sellers.indexOf(newSeller);
@@ -189,6 +176,39 @@ public class LoginServer {
             }
             attempt++; //increments the number of attempts made to login
         } while (true);
+    }
+
+    /********
+     * This method checks if the password entered by a user is valid or invalid and corresponds with the same valid
+     * username enterred by the user
+     *
+     * @param password entered by the user
+     * @param reader reads the password enterrd by th client to the user
+     * @param writer writes back to the client whether or not the password was valid
+     * @return whether the password and username combo already exists or not
+     */
+    public boolean passwordChecker(String userType, String password, String userName, BufferedReader reader, PrintWriter writer) {
+        boolean found = false; //saves whether or not the user's password was found
+        String password = reader.readLine();
+        switch (userType) {
+            case "buyer":
+                for (Buyer buyer : buyers) {
+                    if (buyer.getPassword().equals(password) && buyer.getUsername().equals(userName)) {
+                        found = true;
+                        break;
+                    }
+                }
+                break;
+            case "seller":
+                for (Seller seller : sellers) {
+                    if (seller.getPassword().equals(password) && seller.getUsername().equals(userName)) {
+                        found = true;
+                        break;
+                    }
+                }
+                break;
+        }
+        return found;
     }
 
     public static void main(String[] args) {
@@ -204,8 +224,7 @@ public class LoginServer {
             if (userType == null) {
                 writer.close();
                 reader.close();
-            }
-            else if (userType.equals("0")) {
+            } else if (userType.equals("0")) {
                 userType = "buyer";
                 //System.out.printf("Received from the Client: %s%n", userType);
             } else if (userType.equals("1")) {
@@ -238,5 +257,6 @@ public class LoginServer {
         }
 
     }
+
 
 }

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,7 @@ import java.net.Socket;
  * @version 4/17/2023
  */
 public class LoginClient {
+
     /********
      * This method display the appropriate prompts to the user depending on if the user is accessing their existing
      * account or needs to create a new one
@@ -192,6 +194,7 @@ public class LoginClient {
                 reader.close();
                 return;
             }
+
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
             login.userLogin(reader, writer);
