@@ -77,7 +77,7 @@ public class CustomerPageClient {
                         break;
                     case 2: // option 2: view cart
                         // TODO: view/edit cart and checkout
-                        //This is where we can put in some GUI that shows the elements of cart
+                        //Takes them to the shopping cart...
                         break;
                     case 3: // option 3: view purchase history
                         System.out.println("Enter name of file to export data to");
@@ -152,11 +152,6 @@ public class CustomerPageClient {
         }
     }
 
-    /*****
-     * This method will display the shopping cart contents to the user and allow them to add/delete
-     * items accordingly and check out items
-     */
-    public void shoppingCart(PrintWriter writer,BufferedReader reader) {
-        //TODO
-    }
+
+
 }

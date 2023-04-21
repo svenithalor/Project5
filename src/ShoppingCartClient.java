@@ -2,8 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-
+/*************
+ * This method displays and updates the contents of a buyer's shopping cart. It also allows the buyer to add
+ * items to their shopping cart and checkout all the items in their shopping cart.
+ *
+ * @author Christina Joslin, lab sec 4427
+ * @version 4/20/2023
+ */
 public class ShoppingCartClient extends JComponent implements Runnable {
     JButton addItemButton; //allows the user to add a bike to their shopping cart
     JButton deleteItemButton; //allows the user to delete a bike from their shopping cart
@@ -14,6 +25,8 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new ShoppingCartClient());
+
+
 
     }
 
@@ -30,15 +43,13 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
-        //creates the shopping cart
-        UserInfo.readUsers(); //temporarily value to read in buyers and sellers
+        UserInfo.readUsers(); //NOTE* temporary value to read in buyers and sellers
 
-        ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0),frame);
+
+        ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0),frame); //NOTE* temporary input
         //Creates the list of items in the buyer's shopping cart
         JLabel l = new JLabel("Shopping Cart");
         content.add(l,BorderLayout.NORTH);
-        //items = new JList(ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0)));
-        //content.add(items);
 
         //Creates the buttons for the shopping cart page and adds them to the frame
         JPanel panelBottom = new JPanel();
@@ -71,24 +82,54 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
     ActionListener actionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == addItemButton) {
-                //do something
+            //creates a socket-sever connection again *Note this will need to be changed
+            try {
+                Socket socket = new Socket("localhost", 4242);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-            }
-            if (e.getSource() == deleteItemButton) {
+                if (e.getSource() == addItemButton) {
+                    //tells the server that the user wants to add an item
+                    writer.write("add");
+                    writer.println();
+                    writer.flush();
 
-                //do something
-            }
-            if (e.getSource() == checkoutButton) {
-                //do something
-            }
-            if (e.getSource() == returnToHomeButton) {
-                //do something
-            }
-            if (e.getSource() == refreshButton) {
+                }
+                if (e.getSource() == deleteItemButton) {
+                    //tells the server that the user wants to delete an item
+                    writer.write("delete");
+                    writer.println();
+                    writer.flush();
 
-                //do something (concurrency element
+                    //do something
+                }
+                if (e.getSource() == checkoutButton) {
+                    //tells the server that the user wants to check out
+                    writer.write("checkout");
+                    writer.println();
+                    writer.flush();
+                    //do something
+                }
+                if (e.getSource() == returnToHomeButton) {
+                    //tells the server that the user wants to return home
+                    writer.write("backHome");
+                    writer.println();
+                    writer.flush();
+                    //do something
+                }
+                if (e.getSource() == refreshButton) {
+                    //tells the server that the user needs to refresh their screen
+                    writer.write("refresh");
+                    writer.println();
+                    writer.flush();
+                    //do something
+                }
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
+
+
 
         }
 
@@ -108,6 +149,10 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
         //makes the table names visible
         content.add(scrollPane);
+
+    }
+
+    public void addBike() {
 
     }
 
