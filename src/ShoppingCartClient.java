@@ -102,11 +102,17 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                    writer.write("delete");
                    writer.println();
                    writer.flush();
+                   do {
+
+
+                   }
                    String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-                   //sends the bike id to the server and confirms that this bike is still available
-                   writer.write("bikeId");
+                   //sends the bike id to the server
+                   writer.write(bikeId);
                    writer.println();
                    writer.flush();
+                   //confirms that the user input is correct
+
 
                }
                if (e.getSource() == checkoutButton) {

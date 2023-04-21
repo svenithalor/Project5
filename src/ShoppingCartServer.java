@@ -7,8 +7,32 @@ import java.net.Socket;
 
 public class ShoppingCartServer {
 
+    /********
+     * This method checks if the user entered Bike ID is a 4 digit number. If it is valid, then return false and if
+     * it is not, then return false
+     * @param input the bike id enterred by the user
+     * @return
+     */
+    public boolean checkBikeID(String input) {
+        //checks if the bike id consists of 4 digits
+        if (input.length() != 4) {
+            return false;
+        }
+        try {
+            //checks if the bikeID consists of numbers. if not then return false
+            int bikeId = Integer.parseInt(input);
+
+        } catch (Exception e) {
+            return false;
+
+        }
+        return true;
+    }
+
 
     public static void main(String[] args) {
+        //creates a Shopping Cart server object to navigate the shopping cart server
+        ShoppingCartServer s = new ShoppingCartServer();
         try {
             ServerSocket serverSocket = new ServerSocket(4242);
             Socket socket = serverSocket.accept();
@@ -23,17 +47,16 @@ public class ShoppingCartServer {
 
 
                 } else if (input.equals("delete")) {
-                    String d = reader.readLine();
-                    //converts the input into an integer
-                    try {
+                    boolean validInput = false;
+                    do {
+                        String d = reader.readLine();
+                        validInput = s.checkBikeID(d);
+                        //lets the client know if the user input is valid or not
+                        writer.write("" + validInput);
+                        writer.println();
+                        writer.flush();
 
-                        int bikeId = Integer.parseInt(d);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
+                    } while (!validInput);
 
 
                     //do something
