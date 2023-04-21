@@ -81,96 +81,101 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     }
 
     ActionListener actionListener = new ActionListener() {
-       @Override
+        @Override
         public void actionPerformed(ActionEvent e) {
-           try {
-               Socket socket = new Socket("localhost", 4242);
-               BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-               PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            try {
+                Socket socket = new Socket("localhost", 4242);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                UserInfo.readUsers();
 
-               //creates a socket-server connection again *Note this will need to be changed
-               if (e.getSource() == addItemButton) {
-                   System.out.println("add");
-                   writer.write("add");
-                   writer.println();
-                   writer.flush();
-                   //checks if the user entered bike ID is valid
-                   do {
-                       String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-                       //sends the bike id to the server
-                       writer.write(bikeId);
-                       writer.println();
-                       writer.flush();
-                       //confirms that the user input is correct
-                       String valid = reader.readLine();
-                       if (valid.equals("true")) {
-                           break;
-                       }
-                       JOptionPane.showMessageDialog(null,"Invalid Input. Please try again.","Boilermaker Bikes",JOptionPane.ERROR_MESSAGE);
+                /***********
+                 * Add Item button: Insert description here...
+                 */
+                if (e.getSource() == addItemButton) {
+                    String bikeId = ""; //stores the bikeId entered by the user
+                    System.out.println("add");
+                    writer.write("add");
+                    writer.println();
+                    writer.flush();
+                    //checks if the user entered bike ID is valid
+                    do {
+                        bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ", "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                        //sends the bike id to the server
+                        writer.write(bikeId);
+                        writer.println();
+                        writer.flush();
+                        //confirms that the user input is correct
+                        String valid = reader.readLine();
+                        System.out.println(valid);
+                        if (valid.equals("true")) {
+                            break;
+                        }
+                        JOptionPane.showMessageDialog(null, "Bike ID Not found. Please try again.",
+                                "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
 
-                   } while (true);
-
-                   //check if bike ID is in the listing page
-
-
-               }
-               if (e.getSource() == deleteItemButton) {
-                   //tells the server that the user wants to delete an item
-                   writer.write("delete");
-                   writer.println();
-                   writer.flush();
-                   //checks if the user entered bike ID is valid
-                   do {
-                       String bikeId = JOptionPane.showInputDialog(null,"Enter bike ID: ","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
-                       //sends the bike id to the server
-                       writer.write(bikeId);
-                       writer.println();
-                       writer.flush();
-                       //confirms that the user input is correct
-                       String valid = reader.readLine();
-                       if (valid.equals("true")) {
-                           break;
-                       }
-                       JOptionPane.showMessageDialog(null,"Invalid Input. Please try again.","Boilermaker Bikes",JOptionPane.ERROR_MESSAGE);
-
-                   } while (true);
-
-                   //check if bike Id is in their shopping cart
+                    } while (true);
 
 
-               }
-               if (e.getSource() == checkoutButton) {
-                   System.out.println("checkout");
-                   writer.write("checkout");
-                   writer.println();
-                   writer.flush();
-                   //tells the server that the user wants to check out
-                   //do something
-                   //remove elements from the shopping cart and putting it in the purchase history
-                   //also removing those elements from the bikes
-               }
-               if (e.getSource() == returnToHomeButton) {
-                   writer.write("backHome");
-                   writer.println();
-                   writer.flush();
-                   //tells the server that the user wants to return home
+                }
+                /******
+                 * Delete Item Button: add description here...
+                 */
+                if (e.getSource() == deleteItemButton) {
+                    //tells the server that the user wants to delete an item
+                    writer.write("delete");
+                    writer.println();
+                    writer.flush();
+                    //checks if the user entered bike ID is valid
+                    do {
+                        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ", "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                        //sends the bike id to the server
+                        writer.write(bikeId);
+                        writer.println();
+                        writer.flush();
+                        //confirms that the user input is correct
+                        String valid = reader.readLine();
+                        System.out.println(valid);
+                        if (valid.equals("true")) {
+                            break;
+                        }
+                        JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.", "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
 
-                   //do something
-               }
-               if (e.getSource() == refreshButton) {
-                   writer.write("refresh");
-                   writer.println();
-                   writer.flush();
-
-                   //tells the server that the user needs to refresh their screen
-                   //do something
-               }
+                    } while (true);
 
 
+                }
+                if (e.getSource() == checkoutButton) {
+                    System.out.println("checkout");
+                    writer.write("checkout");
+                    writer.println();
+                    writer.flush();
+                    //tells the server that the user wants to check out
+                    //do something
+                    //remove elements from the shopping cart and putting it in the purchase history
+                    //also removing those elements from the bikes
+                }
+                if (e.getSource() == returnToHomeButton) {
+                    writer.write("backHome");
+                    writer.println();
+                    writer.flush();
+                    //tells the server that the user wants to return home
 
-           } catch (IOException ex)  {
-               ex.printStackTrace();
-           }
+                    //do something
+                }
+                if (e.getSource() == refreshButton) {
+                    writer.write("refresh");
+                    writer.println();
+                    writer.flush();
+
+                    //tells the server that the user needs to refresh their screen
+                    //do something
+                }
+
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
 
 
         }
@@ -200,7 +205,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         //refresh the page so they can see the item they added
 
     }
-
 
 
 }
