@@ -9,7 +9,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     JButton deleteItemButton; //allows the user to delete a bike from their shopping cart
     JButton checkoutButton; //allows the user to checkout all of the items in their shopping cart
     JButton returnToHomeButton; //allows the user to return back to hte main menu
-    JList items; //allows the user to see the items in their cart
     Container content; //where the shopping cart items will be displayed
 
     public static void main(String[] args) {
@@ -30,8 +29,16 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
-        //creates the
-        JList item
+        //creates the shopping cart
+        UserInfo.readUsers(); //temporarily value to read in buyers and sellers
+
+        ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0),frame);
+        //Creates the list of items in the buyer's shopping cart
+        JLabel l = new JLabel("Shopping Cart");
+        content.add(l,BorderLayout.NORTH);
+        //items = new JList(ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0)));
+        //content.add(items);
+
         //Creates the buttons for the shopping cart page and adds them to the frame
         JPanel panelBottom = new JPanel();
 
@@ -77,6 +84,20 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         }
 
     };
+
+    /*******
+     * This method displays the bikes in a certain buyer's shopping cart
+     * @param b the buyer who wants to view their shopping cart
+     * @return PurchasedBike[] an
+     */
+    public static void displayBikes (Buyer b,Container content) {
+        String[] columnNames = {"Bike ID","Model Name","Price","Quantity"};
+        JTable table = new JTable(new Object[][]{{"003451","Smith","$500","1"}},columnNames);
+        //prevents the user from being able to edit the table of values
+        table.setDefaultEditor(Object.class,null);
+        content.add(table);
+
+    }
 
 
 }
