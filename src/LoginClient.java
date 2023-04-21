@@ -59,8 +59,20 @@ public class LoginClient {
              * prompt the user to create an account
              */
             if (userNameFound) {
-                JOptionPane.showMessageDialog(null, "Successful Login!", "Boilermaker Bikes",
-                        JOptionPane.INFORMATION_MESSAGE);
+                String input = JOptionPane.showInputDialog(null,"Please enter your password (5 characters only)","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+
+                //allow the user to user the exit button
+                if (input == null) {
+                    return;
+                }
+
+                //sends the password to the server
+                writer.write(input);
+                writer.println();
+                writer.flush();
+
+                //JOptionPane.showMessageDialog(null, "Successful Login!", "Boilermaker Bikes",
+                       // JOptionPane.INFORMATION_MESSAGE);
                 return;
             } else {
                 int newAccount = JOptionPane.showConfirmDialog(null, "User not found. Would you" +

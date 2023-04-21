@@ -8,13 +8,15 @@ import java.io.*;
  */
 public class Buyer {
 
-    private ArrayList<PurchasedBike> shoppingCart = new ArrayList<>(); //shopping cart where the user can store their
+    private ArrayList<PurchasedBike> shoppingCart; //shopping cart where the user can store their
     // purchase bikes
-    private ArrayList<PurchasedBike> purchaseHistory = new ArrayList<>(); //list of bikes purchased by the user
+    private ArrayList<PurchasedBike> purchaseHistory; //list of bikes purchased by the user
     private String username; //stores the username of this buyer
+    private String password; //stores the password of this buyer
 
-    public Buyer(String username, ArrayList<PurchasedBike> shoppingCart, ArrayList<PurchasedBike> purchaseHistory) {
+    public Buyer(String username,String password, ArrayList<PurchasedBike> shoppingCart, ArrayList<PurchasedBike> purchaseHistory) {
         this.username = username;
+        this.password= password;
         //if the initial shopping cart is null, then set the arraylist to empty
         if (shoppingCart == null) {
             this.shoppingCart = new ArrayList<>();
@@ -39,6 +41,22 @@ public class Buyer {
      */
     public String getUsername() {
         return username;
+    }
+
+    /********
+     * Gets the user's password
+     * @return the user's password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /*********
+     * Updates the user's password
+     * @param password of this user
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /*************
@@ -108,6 +126,7 @@ public class Buyer {
      *********/
     public String toString() {
         StringBuilder message = new StringBuilder(String.format("username: %s%n", username));
+        message.append(String.format("password: %s%n",password));
         //identifies the bikes in the shopping cart
         for (PurchasedBike bike : shoppingCart) {
             message.append(String.format("%s.shoppingcart ", username));

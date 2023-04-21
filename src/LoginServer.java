@@ -81,6 +81,26 @@ public class LoginServer {
                     writer.write("true");
                     writer.println();
                     writer.flush();
+
+                    //now prompts the user to answer their password
+                    String password = reader.readLine();
+
+                    switch (userType) {
+                        case "buyer" :
+                            for (Buyer buyer: buyers) {
+                                if (buyer.getPassword().equals(password) && buyer.getUsername().equals(userName)) {
+                                    found = true;
+                                    userIndex = buyers.indexOf(buyer);
+                                    return userIndex;
+                                }
+                            }
+                            break;
+                        case "seller" :
+
+                            break;
+
+                    }
+
                     return userIndex;
                 }
             } else if (!found) {
@@ -153,14 +173,14 @@ public class LoginServer {
                 switch (userType) {
                     case "buyer":
                         //Creates the new buyer's account and stores it in the buyer database
-                        Buyer newBuyer = new Buyer(newUserName, null, null);
+                        Buyer newBuyer = new Buyer(newUserName, "", null,null);
                         buyers.add(newBuyer);
                         UserInfo.setBuyers(buyers);
                         userIndex = buyers.indexOf(newBuyer);
                         break;
                     case "seller":
                         //Creates the new seller's account and stores it in the seller database
-                        Seller newSeller = new Seller(userName, null);
+                        Seller newSeller = new Seller(userName, null,null);
                         sellers.add(newSeller);
                         UserInfo.setSellers(sellers);
                         userIndex = sellers.indexOf(newSeller);

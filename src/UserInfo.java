@@ -90,12 +90,14 @@ public class UserInfo {
          * Format (each line represents a bike in the buyer's shopping cart or in their purchase history)
          *
          * username: [insert name1]
+         * password: [insert 5 characters here]
          * [insert name1].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * [insert name1].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * [insert name1].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * [insert name1].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * **********
          * username: [insert name2]
+         * password: [insert 5 characters here]
          * [insert name2].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * [insert name2].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
          * [insert name2].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,insured,id
@@ -107,6 +109,7 @@ public class UserInfo {
          *
          *******/
         String username = ""; //saves the username of each buyer
+        String password = ""; //save the password of each buyer
         ArrayList<PurchasedBike> shoppingCart; //saves the previous shopping cart of each buyer
         ArrayList<PurchasedBike> purchaseHistory; //saves the previous purchasing history of each buyer
         ArrayList<Bike> inventory; //saves the inventory of each seller
@@ -117,8 +120,13 @@ public class UserInfo {
             while ((line = bufferedReader.readLine()) != null) {
                 // reads the username
                 if (line.startsWith("username:")) {
-                    String parts[] = line.split(" ");
+                    String[] parts = line.split(" ");
                     username = parts[1];
+                }
+                //reads the password
+                if (line.startsWith("password:")) {
+                    String[] parts = line.split(" ");
+                    password = parts[1];
                 }
                 //reads through the shopping cart
                 if (line.startsWith(String.format("%s.shoppingcart", username))) {
@@ -160,7 +168,7 @@ public class UserInfo {
                 }
                 if (line.startsWith("*")) {
                     //creates a buyer object to add to the database
-                    Buyer buyer = new Buyer(username, shoppingCart, purchaseHistory);
+                    Buyer buyer = new Buyer(username, password, shoppingCart, purchaseHistory);
                     buyers.add(buyer);
                     shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user to read in a new user
                     purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user to read in a new user
@@ -179,11 +187,13 @@ public class UserInfo {
          * Format (each line represents a bike in a seller' inventory)
          *
          * username: [insert name1]
+         * password: [insert 5 characters here]
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name1].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * **********
          * username: [insert name2]
+         * password: [insert 5 characters here]
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * [insert name2].inventory color,wheelSize,price,modelName,used,description,sellerName,quantity,id
          * **********
@@ -195,8 +205,13 @@ public class UserInfo {
             while ((line = bufferedReader.readLine()) != null) {
                 // reads the username
                 if (line.startsWith("username:")) {
-                    String parts[] = line.split(" ");
+                    String[] parts = line.split(" ");
                     username = parts[1];
+                }
+                //reads the password
+                if (line.startsWith("password:")) {
+                    String[] parts = line.split(" ");
+                    password = parts[1];
                 }
                 //reads through the inventory
                 if (line.startsWith(String.format("%s.inventory", username))) {
@@ -220,7 +235,7 @@ public class UserInfo {
                 }
                 if (line.startsWith("*")) {
                     //creates the seller object to add to the database
-                    Seller seller = new Seller(username, inventory);
+                    Seller seller = new Seller(username, password, inventory);
                     sellers.add(seller);
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }

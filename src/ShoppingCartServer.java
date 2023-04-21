@@ -36,10 +36,7 @@ public class ShoppingCartServer {
 
                 //do something
 
-
             }
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
