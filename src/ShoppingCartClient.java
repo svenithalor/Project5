@@ -88,6 +88,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
+
                 if (e.getSource() == addItemButton) {
                     //tells the server that the user wants to add an item
                     //try

@@ -189,7 +189,7 @@ public class LoginServer {
      */
     public boolean passwordChecker(String userType, String password, String userName, BufferedReader reader, PrintWriter writer) {
         boolean found = false; //saves whether or not the user's password was found
-        String password = reader.readLine();
+        //String password = reader.readLine();
         switch (userType) {
             case "buyer":
                 for (Buyer buyer : buyers) {

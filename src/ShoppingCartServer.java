@@ -16,15 +16,21 @@ public class ShoppingCartServer {
 
             //waits for what button the user presses
             String input = reader.readLine();
+            System.out.println(input);
             if (input.equals("add")) {
+                System.out.println("add");
 
                 //do something
 
             } else if (input.equals("delete")) {
 
+                System.out.println("delete");
+
+
                 //do something
 
             } else if (input.equals("checkout")) {
+
 
                 //do something
 
@@ -40,6 +46,7 @@ public class ShoppingCartServer {
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error Here");
         }
 
 
