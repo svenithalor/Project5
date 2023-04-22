@@ -9,10 +9,10 @@ public class SellerPageClient {
     public static void main(String[] args) {
         SellerPageClient C = new SellerPageClient(); //creates an object to be used to navigate the menu
         do {
-            //C.displayMainMenu(PrintWriter writer, BufferedReader reader);
+            int o = C.displayMainMenu(PrintWriter writer, BufferedReader reader);
 
 
-        } while (true);
+        } while (o != 8);
     }
     /******
      * This method displays the seller page menu to the user and returns the menu item that they selected
