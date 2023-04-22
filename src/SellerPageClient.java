@@ -5,14 +5,30 @@ import java.io.PrintWriter;
 
 public class SellerPageClient {
     //TODO
+    public SellerPageClient(String name, ArrayList<Bike> inventory) {
+        this.name = name;
+        this.inventory = inventory;
+    }
+    public void runSellerPageClient(Seller seller) {
+        try {
+            SellerPageClient C = new SellerPageClient(seller.getUsername(), seller.getInventory()); //creates an object to be used to navigate the menu
+            Socket socket = new Socket("localhost", 4242);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            do {
+                int o = C.displayMainMenu(writer, reader); // writer and reader have already been created
 
-    public static void main(String[] args) {
-        SellerPageClient C = new SellerPageClient(); //creates an object to be used to navigate the menu
-        do {
-            int o = C.displayMainMenu(PrintWriter writer, BufferedReader reader);
 
+            } while (o != 8);
 
-        } while (o != 8);
+            reader.close();
+            writer.close();
+            socket.close();
+        } catch (Exception e) {
+            // JOption pane for something went wrong
+        }
+        
+        
     }
     /******
      * This method displays the seller page menu to the user and returns the menu item that they selected
