@@ -57,24 +57,34 @@ public class LoginClient {
             }
 
             /********
-             * If the username is found, then print a success message and leave this method. Otherwise,
+             * If the username is found, then check the password. Otherwise,
              * prompt the user to create an account
              */
             if (userNameFound) {
-                String input = JOptionPane.showInputDialog(null,"Please enter your password (5 characters only)","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                boolean passwordFound = false; //keeps track of if the user enter the correct password corresponding to their username
+                do {
+                    String password = JOptionPane.showInputDialog(null,"Please enter your password (5 characters only)","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
 
-                //allow the user to user the exit button
-                if (input == null) {
-                    return;
-                }
+                    //allow the user to user the exit button
+                    if (password == null) {
+                        return;
+                    }
+                    //sends the password to the server
+                    writer.write(password);
+                    writer.println();
+                    writer.flush();
+                    //receives the servers input after checking the buyer's database for a username/password match
+                    passwordFound = Boolean.parseBoolean(reader.readLine());
 
-                //sends the password to the server
-                writer.write(input);
-                writer.println();
-                writer.flush();
+                    //if the password is invalid, then print an error message and allow the user to try again
+                    if (!passwordFound) {
+                        JOptionPane.showMessageDialog(null,"Invalid password. Please try again.");
+                    }
 
-                //JOptionPane.showMessageDialog(null, "Successful Login!", "Boilermaker Bikes",
-                       // JOptionPane.INFORMATION_MESSAGE);
+                } while (!passwordFound);
+
+                JOptionPane.showMessageDialog(null, "Successful Login!", "Boilermaker Bikes",
+                       JOptionPane.INFORMATION_MESSAGE);
                 return;
             } else {
                 int newAccount = JOptionPane.showConfirmDialog(null, "User not found. Would you" +
@@ -99,9 +109,9 @@ public class LoginClient {
                     writer.flush();
                 }
                 /********
-                 * Prompts the user to create a new account
+                 * Prompts the user to create a new account starting with a username
                  */
-                boolean success = false; //keeps track of if the username created is different from what exists
+                boolean usernameSuccess = false; //keeps track of if the username created is different from what exists
 
                 do {
                     //sends the new username to the server to check if it does not match up with an existing username
@@ -115,13 +125,38 @@ public class LoginClient {
                     //if the username matches up with an existing one, then have the user try again.
                     String input = reader.readLine();
                     //System.out.printf("Successfully Created an Account: %s%n", input);
-                    success = Boolean.parseBoolean(input);
-                    if (!success) {
+                    usernameSuccess = Boolean.parseBoolean(input);
+                    System.out.println("Username Success " + usernameSuccess);
+                    if (!usernameSuccess) {
                         JOptionPane.showConfirmDialog(null, "Error, this username is already " +
                                         "taken. Try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
                                 JOptionPane.ERROR_MESSAGE);
                     }
-                } while (!success);
+                } while (!usernameSuccess);
+
+                /*******
+                 * Have the user create a new password
+                 */
+                boolean passwordSuccess = false;  //keeps track of if the password created is different from what exists
+
+                do {
+                    //sends the new password to the server to check if it does not match up with an existing username
+                    String newPassword = JOptionPane.showInputDialog(null, "Please enter a password:",
+                            "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    writer.write(newPassword);
+                    writer.println();
+                    writer.flush();
+                    String input = reader.readLine();
+                    //if the password is invalid or matches up with existing one, then have the user try again
+                    passwordSuccess = Boolean.parseBoolean(input);
+                    if (!passwordSuccess) {
+                        JOptionPane.showConfirmDialog(null,"Error, this password is invalid." +
+                                " Try again.","Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } while (!passwordSuccess);
+
                 JOptionPane.showMessageDialog(null, "Account successfully created!",
                         "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
                 attempt++; //increments of the number of attempts made by the user to login
@@ -131,7 +166,8 @@ public class LoginClient {
     }
 
     /************
-     * This method logs the user out of the application and saves their information to a file
+     * This method logs the user out of the application and saves their information to a file.
+     * @author Duoli
      */
     public static void userLogout() {
         JPanel panel = new JPanel();
@@ -183,10 +219,10 @@ public class LoginClient {
                 //saves the user type selected
                 if (dropdown.getSelectedIndex() == 0) {
                     userType = "buyer";
-                    System.out.printf("Sent to the server: %s%n", userType);
+                   // System.out.printf("Sent to the server: %s%n", userType);
                 } else if (dropdown.getSelectedIndex() == 1) {
                     userType = "seller";
-                    System.out.printf("Sent to the server: %s%n", userType);
+                    //System.out.printf("Sent to the server: %s%n", userType);
                 }
 
             } else {

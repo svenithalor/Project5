@@ -9,7 +9,7 @@ import java.io.*;
  * log in to their existing account or needs to create a new account.
  *
  *@author Christina Joslin, lab sec 4427
- *@version 4/17/2023
+ *@version 4/21/2023
  */
 public class LoginServer {
     private ArrayList<Buyer> buyers; //keeps track of all buyers from UserInfo
@@ -17,7 +17,7 @@ public class LoginServer {
 
     //Constructor
     public LoginServer() {
-        //initializes the buyer and seller databases
+        //initializes a copy of the buyer and seller databases
         this.sellers = UserInfo.getSellers();
         this.buyers = UserInfo.getBuyers();
     }
@@ -82,10 +82,10 @@ public class LoginServer {
                     writer.println();
                     writer.flush();
                     //now prompts the user to enter their password
-                    String password = ""; //stores the password enterred by the user
+                    String password = ""; //stores the password entered by the user
                     do {
                         password = reader.readLine();
-                    } while (!passwordChecker(userType, password, userName, reader, writer));
+                    } while (!ExistingPasswordChecker(userType, password, userName, writer));
 
 
                     return userIndex;
@@ -108,13 +108,15 @@ public class LoginServer {
                 return userIndex;
 
             } else if (userExited.equals("no")) {
-                //set up a new account for the user
-                boolean success = false; //keeps track of if the buyer or seller successfully created a new account
+                /********
+                 * sets up a new username for the user
+                 */
+                boolean userNameSuccess = false; //keeps track of if the buyer or seller successfully created a new account
                 String newUserName = ""; //keeps track of the new username entered to create an account
                 do {
                     newUserName = reader.readLine();
                     //System.out.printf("New username %s received from the server", newUserName);
-                    success = true;
+                    userNameSuccess = true;
                     //checks if that buyer or seller name already exists
                     switch (userType) {
                         case "buyer":
@@ -122,7 +124,7 @@ public class LoginServer {
                                 //System.out.println("Hello World");
                                 //System.out.println(userName);
                                 if (buyer.getUsername().equals(newUserName)) {
-                                    success = false;
+                                    userNameSuccess = false;
                                     break;
                                 }
                             }
@@ -132,21 +134,21 @@ public class LoginServer {
                                 //System.out.println("Hello World");
                                 //System.out.println(userName);
                                 if (seller.getUsername().equals(newUserName)) {
-                                    success = false;
+                                    userNameSuccess = false;
                                     break;
                                 }
                             }
                             break;
                     }
 
-                    if (success) {
+                    if (userNameSuccess) {
                         if (ready.equals("ready")) {
                             // System.out.println("Hello world Again! True");
                             writer.write("true");
                             writer.println();
                             writer.flush();
                         }
-                    } else if (!success) {
+                    } else if (!userNameSuccess) {
                         if (ready.equals("ready")) {
                             //System.out.println("Hello world Again! False");
                             writer.write("false");
@@ -154,20 +156,30 @@ public class LoginServer {
                             writer.flush();
                         }
                     }
-                } while (!success);
+                } while (!userNameSuccess);
 
+                /********
+                 * sets up a new password for the user
+                 */
+                String newPassword = ""; //keeps track of the new password entered to create an account
+                do {
+                    newPassword = reader.readLine();
+                } while (!NewPasswordChecker(userType,newPassword,writer));
 
+                /*****
+                 * Creates the corresponding buyer and seller accounts
+                 */
                 switch (userType) {
                     case "buyer":
                         //Creates the new buyer's account and stores it in the buyer database
-                        Buyer newBuyer = new Buyer(newUserName, "", null, null);
+                        Buyer newBuyer = new Buyer(newUserName, newPassword, null, null);
                         buyers.add(newBuyer);
                         UserInfo.setBuyers(buyers);
                         userIndex = buyers.indexOf(newBuyer);
                         break;
                     case "seller":
                         //Creates the new seller's account and stores it in the seller database
-                        Seller newSeller = new Seller(userName, null, null);
+                        Seller newSeller = new Seller(newUserName, newPassword, null);
                         sellers.add(newSeller);
                         UserInfo.setSellers(sellers);
                         userIndex = sellers.indexOf(newSeller);
@@ -179,17 +191,63 @@ public class LoginServer {
     }
 
     /********
-     * This method checks if the password entered by a user is valid or invalid and corresponds with the same valid
-     * username enterred by the user
-     *
-     * @param password entered by the user
-     * @param reader reads the password enterrd by th client to the user
-     * @param writer writes back to the client whether or not the password was valid
-     * @return whether the password and username combo already exists or not
+     * This method checks if the password entered by a new user is 5 characters and does NOT match with a password already
+     * in the buyer or seller database
+     * @param userType whether the user is a buyer or a seller
+     * @param password the user entered password
+     * @param writer tells the client if the user entered password is true (valid) or false (invalid)
+     * @return
      */
-    public boolean passwordChecker(String userType, String password, String userName, BufferedReader reader, PrintWriter writer) {
+    public boolean NewPasswordChecker(String userType, String password, PrintWriter writer) {
+        boolean valid = true; //saves if the user's new password is valid
+        //checks if the entered password is equal to 5 characters
+        if (password.length() != 5) {
+            valid = false;
+        }
+        //checks if that buyer or seller password already exists
+        switch (userType) {
+            case "buyer":
+                for (Buyer buyer : buyers) {
+                    if (buyer.getPassword().equals(password)) {
+                        valid = false;
+                        break;
+                    }
+                }
+                break;
+            case "seller":
+                for (Seller seller : sellers) {
+                    if (seller.getPassword().equals(password)) {
+                        valid = false;
+                        break;
+                    }
+                }
+                break;
+        }
+        //sends the status of the password validity to the client
+        writer.write("" + valid);
+        writer.println();
+        writer.flush();
+        return valid;
+
+    }
+
+    /********
+     * This method checks if the password entered by a user is 5 characters and corresponds with the same valid
+     * username entered by the user
+     *
+     * @param userType whether the user is a buyer or a seller
+     * @param password entered by the user
+     * @param userName entered by the user
+     * @param writer writes back to the client whether or not the password was valid
+     * @return whether the password is valid and exists (true) or is invalid and or does not exist (false)
+     */
+    public boolean ExistingPasswordChecker(String userType, String password, String userName, PrintWriter writer) {
         boolean found = false; //saves whether or not the user's password was found
-        //String password = reader.readLine();
+        //checks if the entered password is equal to 5 characters
+        if (password.length() != 5) {
+            found = false;
+        }
+        //checks if the entered password corresponds to an existing username in the buyers or seller database
         switch (userType) {
             case "buyer":
                 for (Buyer buyer : buyers) {
@@ -208,6 +266,10 @@ public class LoginServer {
                 }
                 break;
         }
+        //sends the status of the password search to the client
+        writer.write("" + found);
+        writer.println();
+        writer.flush();
         return found;
     }
 
