@@ -133,8 +133,6 @@ public class SellerPageClient {
                     JTextField IDinput = new JTextField();
                     JLabel option2NoQuantity = new JLabel("Enter the Quantity");
                     JTextField QuantityInput = new JTextField();
-                    JButton
-
                     option2No.add(option2NoIDLabel); 
                     option2No.add(IDinput);
                     option2No.add(option2NoQuantity);
@@ -148,7 +146,7 @@ public class SellerPageClient {
                     BikeDetailsGUI bdg = new BikeDetailsGUI();
                 }
             } else if (option == 3) {
-                int response3 = 
+               // int response3 =
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
             writer.write("" + option);
@@ -169,7 +167,7 @@ public class SellerPageClient {
         JPanel optionPanel = new JPanel();
         // ArrayList<JLabel> displayBikes = new ArrayList<>();
         for (Bike b : bikes) {
-            JLabel currentLabel = new JLabel(bike.toNiceString());
+            JLabel currentLabel = new JLabel(b.toNiceString());
             // displayBikes.add(currentLabel);
             optionPanel.add(currentLabel);
         }
