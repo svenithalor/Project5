@@ -118,40 +118,91 @@ public class SellerPageClient {
         int confirmOption = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (confirmOption == JOptionPane.OK_OPTION) {
+            writer.write(option);
+            writer.println();
+            writer.flush();
+
             if (option == 1) {
-                JFrame opt1  = basicViewOnly(inventory);
-                opt1.setVisible(true);
+                basicViewOnly(inventory);
+                
             } else if (option == 2) {
+                
+
                 int response = JOptionPane.showConfirmDialog(null, "Are you updating the stock of an existing bike?", 
                     "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
                 if (response == 0) {
-                    JFrame o2Frame = new JFrame();
-                    o2Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    BikeQuantityIDGUI bqig = new BikeQuantityIDGUI();
+                    bqig.run();
+                    int[] idq = bqig.sendIDandQuantity();
+                    int tempID = idq[0];
+                    int tempQuant = idq[1];
+                    if (this.checkValidID(tempID)) {
+                        Bike tempBike = this.getBikeWithID(tempID);
+                        tempBike.setQuantity(tempBike.getQuantity() + tempQuant);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
 
-                    JPanel option2No = new JPanel();
-                    JLabel option2NoIDLabel = new JLabel("Enter the ID of the bike.");
-                    JTextField IDinput = new JTextField();
-                    JLabel option2NoQuantity = new JLabel("Enter the Quantity");
-                    JTextField QuantityInput = new JTextField();
-                    JButton
+                    }
 
-                    option2No.add(option2NoIDLabel); 
-                    option2No.add(IDinput);
-                    option2No.add(option2NoQuantity);
-                    option2No.add(QuantityInput);
-                    o2Frame.add(option2No);
-
-                    o2Frame.setVisible(true);
 
 
                 } else {
                     BikeDetailsGUI bdg = new BikeDetailsGUI();
+                    bdg.run();
+                    Bike tempBike = bdg.sendBike();
+                    inventory.add(tempBike);
                 }
             } else if (option == 3) {
-                int response3 = 
+
+                BikeQuantityIDGUI bqig = new BikeQuantityIDGUI();
+                bqig.run();
+                int[] idq = bqig.sendIDandQuantity();
+                int tempID = idq[0];
+                int tempQuant = idq[1];
+                if (this.checkValidID(tempID)) {
+                    Bike tempBike = this.getBikeWithID(tempID);
+                    tempBike.setQuantity(tempBike.getQuantity() - tempQuant);
+                } else {
+                    JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                    JOptionPane.ERROR_MESSAGE);
+
+                }
+
+            } else if (option == 4) {
+                String term = JOptionPane.showInputDialog(null, "Enter a search term",
+                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+
+
+                writer.write(term);
+                writer.println();
+                writer.flush();
+
+                String matchesString = reader.readLine();
+                ArrayList<Bike> matches = recieveArrayList(matchesString);
+                if (matches.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
+                    JOptionPane.ERROR_MESSAGE);
+                } else {
+                    basicViewOnly(matches);
+                }
+                
+            } else if (option == 5) {
+               String deletedString = reader.readLine();
+               boolean deleted = Boolean.parseBoolean(deletedString);
+
+               if (deleted) {
+                JOptionPane.showMessageDialog(null, "Account Successfully deleted.", "Boilermaker Bikes", 
+                    JOptionPane.INFORMATION_MESSAGE);
+               } else {
+                JOptionPane.showMessageDialog(null, "An Error Occurred.", "Boilermaker Bikes",
+                JOptionPane.ERROR_MESSAGE);
+               }
+                
+
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
-            writer.write("" + option);
+            writer.write("" + Integer.toString(option));
             writer.println();
             writer.flush();
             return option;
@@ -164,17 +215,43 @@ public class SellerPageClient {
         }
     }
 
-    public static JFrame basicViewOnly(ArrayList<Bike> bikes) {
-        JFrame thing = new JFrame();
-        JPanel optionPanel = new JPanel();
+    public static void basicViewOnly(ArrayList<Bike> bikes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Bikes: \n");
+        
         // ArrayList<JLabel> displayBikes = new ArrayList<>();
         for (Bike b : bikes) {
-            JLabel currentLabel = new JLabel(bike.toNiceString());
-            // displayBikes.add(currentLabel);
-            optionPanel.add(currentLabel);
-        }
-        thing.add(optionPanel);
-        return thing;
+            sb.append(b.toNiceString() + "\n");
 
+        }
+        // sb.deleteCharAt(sb.length() - 1);
+
+        String vtr = sb.toString();
+
+        JOptionPane.showMessageDialog(null, vtr, "Boilermaker Bikes", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+
+    }
+
+    public boolean checkValidID(int id) {
+        boolean valid = false;
+        for (Bike b : inventory) {
+            if (b.getId() == id) {
+                valid = true;
+                return valid;
+            }
+        }
+        return valid;
+    }
+
+    public Bike getBikeWithID(int id) {
+        for (Bike b : inventory) {
+            if (b.getId() == id) {
+                return b;
+            }
+        }
+        Bike vtr = null;
+        return vtr;
     }
 }
