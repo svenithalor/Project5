@@ -40,18 +40,8 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         // Create the button
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
-            String name = nameField.getText();
-            String wheelSize = wheelSizeField.getText();
-            String color = colorField.getText();
-            String price = priceField.getText();
-            String description = descriptionField.getText();
-            String id = idField.getText();
-            String usedOrNo = usedOrNoField.getText();
-            String quantity = quantityField.getText();
-            String sellerName = sellerNameField.getText();
-
-            // Do something with the bike details, e.g. create a Bike object
-
+            this.sendBike();
+            
             // Close the window
             Window window = SwingUtilities.windowForComponent(this);
             if (window != null) {
@@ -78,8 +68,25 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         // Show the frame
         frame.setVisible(true);
     }
-
+    // I'm pretty sure this main method wont do anything besides allow 
+    // you to run this on its own (which is useful for testing)
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new BikeDetailsGUI());
+    }
+
+    public Bike sendBike() {
+        String name = nameField.getText();
+        int wheelSize = Integer.valueOf(wheelSizeField.getText());
+        String color = colorField.getText();
+        double price = Double.parseDouble(priceField.getText());
+        String description = descriptionField.getText();
+        int id = Integer.valueOf(idField.getText());
+        boolean usedOrNo = Boolean.parseBoolean(usedOrNoField.getText());
+        int quantity = Integer.valueOf(quantityField.getText());
+        String sellerName = sellerNameField.getText();
+
+        Bike vtr = new Bike(color, wheelSize, price, name, usedOrNo, description, sellerName, quantity, id);
+
+        return vtr;
     }
 }
