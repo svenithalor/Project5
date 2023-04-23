@@ -217,5 +217,15 @@ public class Bike {
                 used, description, sellerName, quantity,id);
         return message;
     }
+
+    /*******
+     * This method returns a string with the essential attributes of the bike, for the user's readability
+     * @return String containing only some attributes, with spacing, etc
+     */
+    public String toNiceString() {
+        String vtr = String.format("Name: %s | Price: $%.2f | Wheel size: %d | '%s'", modelName, price,
+            wheelSize, description);
+        return vtr;
+    }
 }
 

@@ -19,6 +19,7 @@ public class CustomerPageServer {
                     int choice = Integer.parseInt(input);
                     //if the user attempts to exit the website, then end the program.
                     if (choice == -1) {
+                        //UserInfo.writeUsers();  Commented this out for now but need to remember to save the user's info between sessions
                         reader.close();
                         writer.close();
                         return;
@@ -205,5 +206,15 @@ public class CustomerPageServer {
             }
         }
         return deleted;
+    }
+    /*****
+     * This method will display the shopping cart contents to the user and allow them to add/delete
+     * items accordingly and check out items
+     */
+    public void shoppingCart(PrintWriter writer,BufferedReader reader) {
+        //displays each bike in their shopping cart
+        //complex gui for this...each
+        //four buttons -+ add (simple gui textfield), delete (simple GUI textfield),
+        // checkout (simple GUI messagedialog), and return (have them return)
     }
 }

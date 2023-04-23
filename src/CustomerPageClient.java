@@ -77,7 +77,7 @@ public class CustomerPageClient {
                         break;
                     case 2: // option 2: view cart
                         // TODO: view/edit cart and checkout
-                        //This is where we can put in some GUI that shows the elements of cart
+                        //Takes them to the shopping cart...
                         break;
                     case 3: // option 3: view purchase history
                         System.out.println("Enter name of file to export data to");
@@ -124,6 +124,7 @@ public class CustomerPageClient {
      * @param writer to write the choice made by the buyer to the server
      * @param reader to close the BufferedReader in the event that the buyer exits out of the menu
      * @return the menu item selected by the user
+     * @author Christina Joslin
      */
     public int displayMainMenu(PrintWriter writer,BufferedReader reader) throws IOException {
         //Creates a dropdown menu for the buyer to scroll through the menu options
@@ -150,4 +151,7 @@ public class CustomerPageClient {
             return -1;
         }
     }
+
+
+
 }
