@@ -1,67 +1,85 @@
 import javax.swing.*;
+import java.awt.*;
 
-public class BikeDetailsGUI {
-    private JFrame frame;
-    private JLabel wheelSizeLabel, colorLabel, priceLabel, descriptionLabel;
-    private JTextField wheelSizeTextField, colorTextField, priceTextField, descriptionTextField;
-    private JButton submitButton;
-    
+public class BikeDetailsGUI extends JComponent implements Runnable {
+    private JTextField nameField, wheelSizeField, colorField, priceField, descriptionField, idField, usedOrNoField, quantityField, sellerNameField;
+
     public BikeDetailsGUI() {
-        frame = new JFrame("Bike Details");
-        frame.setSize(400, 300);
+        // Create the labels and text fields
+        nameField = new JTextField(20);
+        wheelSizeField = new JTextField(20);
+        colorField = new JTextField(20);
+        priceField = new JTextField(20);
+        descriptionField = new JTextField(20);
+        idField = new JTextField(20);
+        usedOrNoField = new JTextField(20);
+        quantityField = new JTextField(20);
+        sellerNameField = new JTextField(20);
+
+        // Create the panel and add the labels and text fields
+        JPanel panel = new JPanel(new GridLayout(9, 2));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Wheel Size:"));
+        panel.add(wheelSizeField);
+        panel.add(new JLabel("Color:"));
+        panel.add(colorField);
+        panel.add(new JLabel("Price:"));
+        panel.add(priceField);
+        panel.add(new JLabel("Description:"));
+        panel.add(descriptionField);
+        panel.add(new JLabel("ID Number:"));
+        panel.add(idField);
+        panel.add(new JLabel("Used or New:"));
+        panel.add(usedOrNoField);
+        panel.add(new JLabel("Quantity:"));
+        panel.add(quantityField);
+        panel.add(new JLabel("Seller Name:"));
+        panel.add(sellerNameField);
+
+        // Create the button
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+            String name = nameField.getText();
+            String wheelSize = wheelSizeField.getText();
+            String color = colorField.getText();
+            String price = priceField.getText();
+            String description = descriptionField.getText();
+            String id = idField.getText();
+            String usedOrNo = usedOrNoField.getText();
+            String quantity = quantityField.getText();
+            String sellerName = sellerNameField.getText();
+
+            // Do something with the bike details, e.g. create a Bike object
+
+            // Close the window
+            Window window = SwingUtilities.windowForComponent(this);
+            if (window != null) {
+                window.dispose();
+            }
+        });
+
+        // Add the panel and button to this component
+        this.setLayout(new BorderLayout());
+        this.add(panel, BorderLayout.CENTER);
+        this.add(submitButton, BorderLayout.PAGE_END);
+    }
+
+    @Override
+    public void run() {
+        // Create the frame
+        JFrame frame = new JFrame("Bike Details");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
-        
-        wheelSizeLabel = new JLabel("Wheel Size:");
-        wheelSizeLabel.setBounds(50, 50, 100, 30);
-        frame.add(wheelSizeLabel);
-        
-        wheelSizeTextField = new JTextField();
-        wheelSizeTextField.setBounds(160, 50, 150, 30);
-        frame.add(wheelSizeTextField);
-        
-        colorLabel = new JLabel("Color:");
-        colorLabel.setBounds(50, 90, 100, 30);
-        frame.add(colorLabel);
-        
-        colorTextField = new JTextField();
-        colorTextField.setBounds(160, 90, 150, 30);
-        frame.add(colorTextField);
-        
-        priceLabel = new JLabel("Price:");
-        priceLabel.setBounds(50, 130, 100, 30);
-        frame.add(priceLabel);
-        
-        priceTextField = new JTextField();
-        priceTextField.setBounds(160, 130, 150, 30);
-        frame.add(priceTextField);
-        
-        descriptionLabel = new JLabel("Description:");
-        descriptionLabel.setBounds(50, 170, 100, 30);
-        frame.add(descriptionLabel);
-        
-        descriptionTextField = new JTextField();
-        descriptionTextField.setBounds(160, 170, 150, 30);
-        frame.add(descriptionTextField);
-        
-        submitButton = new JButton("Submit");
-        submitButton.setBounds(160, 210, 100, 30);
-        submitButton.addActionListener(e -> submitButtonClicked());
-        frame.add(submitButton);
-        
+        frame.setSize(500, 400);
+
+        // Add this component to the frame
+        frame.getContentPane().add(this);
+
+        // Show the frame
         frame.setVisible(true);
     }
-    
-    private void submitButtonClicked() {
-        String wheelSize = wheelSizeTextField.getText();
-        String color = colorTextField.getText();
-        String price = priceTextField.getText();
-        String description = descriptionTextField.getText();
-        
-        // Do something with the entered details here
-    }
-    
+
     public static void main(String[] args) {
-        BikeDetailsGUI gui = new BikeDetailsGUI();
+        SwingUtilities.invokeLater(new BikeDetailsGUI());
     }
 }
