@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
 
@@ -20,25 +21,27 @@ public class CustomerPageClient {
 
                 //checks if the user attempts to exit. If they do, then end the program
                 if (choice == -1) {
-                    return;
+                    repeat = 0;
                 }
 
                 switch (choice) {
                     case 1:
-                        String bikeInfo = reader.readLine(); // main menu option 1: display bikes
-                        while (bikeInfo != null) {
-                            System.out.println(bikeInfo);
-                            bikeInfo = reader.readLine();
+                        int choice1 = C.displayBikesMenu(writer, reader); // main menu option 1: display bikes
+                        if (choice1 == -1) {
+                            break;
                         }
-                        System.out.println("1. Sort bikes by quantity available");
-                        System.out.println("2. Sort bikes by price");
-                        System.out.println("3. View bike");
-                        System.out.println("4. Go back");
-                        System.out.println("5. Search products");
-                        int choice1 = scanner.nextInt();
-                        scanner.nextLine();
                         writer.println(choice1);
                         writer.flush();
+                        String bikeDescription = reader.readLine();
+                        bikeDescription += "\n" + reader.readLine();
+                        bikeDescription += "\n" + reader.readLine();
+                        bikeDescription += "\nAdd bike to cart?";
+                        int option = JOptionPane.showConfirmDialog(null, bikeDescription, "Boilermaker Bikes",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                        System.out.println("1. Sort bikes by quantity available");
+                        System.out.println("2. Sort bikes by price");
+                        System.out.println("5. Search products");
+
                         switch (choice1) { // switch of choices within view bikes
                             case 1, 2: // sorting bikes
                                 String sortedBikeInfo = reader.readLine();
@@ -111,6 +114,8 @@ public class CustomerPageClient {
                         break;
                 }
             } while (repeat == 1);
+            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
+                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
         } catch (UnknownHostException uhe) {
             uhe.printStackTrace(); //temporary messure just to make sure everything is working
         } catch (IOException ioe) {
@@ -126,7 +131,7 @@ public class CustomerPageClient {
      * @return the menu item selected by the user
      * @author Christina Joslin
      */
-    public int displayMainMenu(PrintWriter writer,BufferedReader reader) throws IOException {
+    public int displayMainMenu(PrintWriter writer, BufferedReader reader) throws IOException {
         //Creates a dropdown menu for the buyer to scroll through the menu options
         //Just an idea for how the dropdown can be implemented
         JPanel panel = new JPanel();
@@ -144,14 +149,40 @@ public class CustomerPageClient {
             writer.flush();
             return dropdown.getSelectedIndex() + 1;
         } else {
-            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
-                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
-            writer.close();
-            reader.close();
             return -1;
         }
     }
 
+    public int displayBikesMenu(PrintWriter writer, BufferedReader reader) throws IOException {
+
+        String bikeNames = reader.readLine(); // main menu option 1: display bikes
+        String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
+        String[] buttons = {"Search","Sort by price", "Sort by quantity", "View bike", " Go back"};
+        JPanel panel = new JPanel();
+        JTextField searchField = new JTextField("Enter search", 10);
+        JComboBox dropdown = new JComboBox(bikeNamesArray);
+
+        panel.add(dropdown);
+        panel.add(searchField);
+        int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
+        System.out.println("option: " + option); // view bike = 3, sort quantity = 2, price = 1, search = 0
+        switch(option) {
+            case 0:
+                String search = searchField.getText();
+                return 10;
+            case 1:
+                return 10;
+            case 2:
+                return 10;
+            case 3:
+                return dropdown.getSelectedIndex();
+            case 4:
+                return -1;
+            default:
+                return 10;
+        }
+    }
 
 
 }

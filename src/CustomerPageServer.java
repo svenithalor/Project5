@@ -28,11 +28,24 @@ public class CustomerPageServer {
                     ArrayList<Bike> bikes = UserInfo.getBikes();
                     switch (choice) {
                         case 1: // main menu switch case 1: view available bikes
+                            ArrayList<String> bikeNames = new ArrayList<>();
                             for (Bike bike : bikes) {
-                                writer.println(bike.toString());
-                                writer.flush();
+                                String format = "%s | $%.2f";
+                                bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
                             }
+                            writer.println(bikeNames);
+                            writer.flush();
                             int choice1 = Integer.parseInt(reader.readLine());
+                            if (choice1 == -1) {
+                                reader.close();
+                                writer.close();
+                                return;
+                            }
+                            Bike chosenBike = bikes.get(choice1);
+                            writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
+                            writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
+                            writer.println(String.format("Description: %s", chosenBike.getDescription()));
+                            writer.flush();
                             switch (choice1) {
                                 case 1: // sort by quantity
                                     ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
