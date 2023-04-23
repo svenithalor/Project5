@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+import javax.swing.tree.ExpandVetoException;
+
 import java.util.ArrayList;
 import java.lang.StringBuilder;
 public class SellerPageServer {
@@ -74,6 +76,36 @@ public class SellerPageServer {
         return vtr;
     }
 
+    public ArrayList<Bike> searchBike(String term) {
+        ArrayList<Bike> matches = new ArrayList<>();
+
+        String t = term.toLowerCase();
+        for (Bike b : inventory) {
+            if (b.getColor().contains(t) || b.getModelName().contains(t)
+                || b.getDescription().contains(t) || Integer.toString(b.getId()).contains(t)) {
+                    matches.add(b);
+                }
+        }
+        return matches;
+    }
+
+    public boolean deleteAccount() {
+        String user = this.getName();
+        ArrayList<Seller> sellers = UserInfo.getSellers();
+        
+        try {
+            for (Seller seller : sellers) {
+                if(seller.getUsername().equalsIgnoreCase(user)) {
+                    sellers.remove(seller);
+                    //System.out.println("Account deleted.");
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+        
+    }
     public static void main(String[] args) {
         try {
             ServerSocket ss = new ServerSocket(4242); // change this port later
@@ -97,7 +129,30 @@ public class SellerPageServer {
             String strOption = null;
             int option = -1;
             do {
-                String strOption1 = reader.readLine(); // will read the input from 
+                strOption = reader.readLine(); // will read the input from client
+                option = Integer.parseInt(strOption);
+                // Options 1-3 are taken care of within client
+                if (option == 4) {
+                    String term = reader.readLine();
+                    ArrayList<Bike> matches = sp.searchBike(term);
+                    String vtr = sendArrayList(matches);
+
+                    writer.write(vtr);
+                    writer.println();
+                    writer.flush();
+
+                } else if (option == 5) {
+                    
+                    boolean deleted = sp.deleteAccount();
+                    
+                    String vtr = Boolean.toString(deleted);
+
+                    writer.write(vtr);
+                    writer.println();
+                    writer.flush();
+
+                }
+                
 
             } while (option != 8);
         } catch (Exception e) {
