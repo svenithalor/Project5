@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**************
+ *This
+ */
 public class ShoppingCartServer {
     private ArrayList<PurchasedBike> shoppingCart; //a copy of the buyer's current shopping cart
     private ArrayList<PurchasedBike> purchaseHistory; //a copy of the buyer's current purchase history

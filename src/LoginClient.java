@@ -141,7 +141,7 @@ public class LoginClient {
 
                 do {
                     //sends the new password to the server to check if it does not match up with an existing username
-                    String newPassword = JOptionPane.showInputDialog(null, "Please enter a password:",
+                    String newPassword = JOptionPane.showInputDialog(null, "Please enter a password (5 characters only):",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     writer.write(newPassword);
                     writer.println();

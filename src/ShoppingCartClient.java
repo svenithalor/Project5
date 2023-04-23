@@ -12,7 +12,7 @@ import java.net.Socket;
  * This method displays and updates the contents of a buyer's shopping cart. It also allows the buyer to add
  * items to their shopping cart and checkout all the items in their shopping cart.
  *
- * @author Christina Joslin, lab sec 4427
+ * @author Christina Joslin and Duoli Chen, lab sec 4427
  * @version 4/20/2023
  */
 public class ShoppingCartClient extends JComponent implements Runnable {
