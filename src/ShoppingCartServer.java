@@ -71,14 +71,13 @@ public class ShoppingCartServer {
     /*****
      * This method iterates through the shopping cart and adds all of them to purchased bikes. It also updates the list
      * of available bikes by searching for the corresponding bike based on id and reducing the quantity by the amount
-     * being purchased.
+     * being purchased. ONLY if the quantities are valid
      */
     public void checkout() {
         for (Bike b : bikesForSale) {
             for (PurchasedBike pb : shoppingCart) {
                 if (pb.getId() == b.getId()) {
                     b.setQuantity(b.getQuantity() - pb.getQuantity());
-                    System.out.println("hello world");
                 }
             }
         }
@@ -188,20 +187,27 @@ public class ShoppingCartServer {
                 String input = reader.readLine();
 
                 if (input.equals("add")) {
-                    boolean validInput = false;
+                    /*******
+                     * Checks if the user entered a valid Bike ID or not
+                     */
+                    boolean validId = false;
                     do {
                         String d = reader.readLine();
                         //Sample Buyer for now...
-                        validInput = s.checkBikeID(d,"add");
+                        validId = s.checkBikeID(d,"add");
                         //lets the client know if the user input is valid or not
-                        writer.write("" + validInput);
+                        writer.write("" + validId);
                         writer.println();
                         writer.flush();
 
-                    } while (!validInput);
+                    } while (!validId);
 
 
                 } else if (input.equals("delete")) {
+
+                    /********
+                     * Checks if the user entered a valid Bike ID or not
+                     */
                     boolean validInput = false;
                     do {
                         String d = reader.readLine();
