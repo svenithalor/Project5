@@ -179,12 +179,44 @@ public class ShoppingCartServer {
     }
 
     //TODO need to fill this in
-    public void checkout() {
+    public void checkout(BufferedReader reader,PrintWriter writer) {
+        /********
+         * Checks if all the bikes in the shopping cart still exist on the listing page
+         */
+        boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
+
+        for (PurchasedBike pb : shoppingCart) {
+            if (!UserInfo.getBikes().contains(pb)) {
+                stillAvailable = false;
+                return;
+            } else {
+                /*******
+                 * Checks if all the quantities in the shopping cart are still valid
+                 */
+                for (Bike b: UserInfo.getBikes()) {
+                    if (b.getQuantity() == 0) {
+                        stillAvailable = false;
+                        break;
+                    }
+                    //if the quantity available of this bike id is less than the quantity they want to purchase, return false
+                    if (b.getQuantity() < pb.getQuantity()) {
+                        stillAvailable = false;
+                        break;
+                    }
+
+                }
+            }
+        }
+        if (stillAvailable) {
+            writer.write("true");
+            writer.println();
+            writer.flush();
+        }
+
 
         //first need to check if all the id's still exist
         //then ned to check if all the quantities are still valid
         //finally I can remove the elements and update the listing page info and the buyers database
-
 
         for (Bike b : bikesForSale) {
             for (PurchasedBike pb : shoppingCart) {
@@ -327,7 +359,6 @@ public class ShoppingCartServer {
         }
         return false;
     }
-
 
     public static void main(String[] args) {
         UserInfo.readUsers(); //TEMP VAlUE reads the users in
