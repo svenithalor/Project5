@@ -273,7 +273,20 @@ public class UserInfo {
             e.printStackTrace();
         }
 
+    }
 
+    /**********
+     * This method allows the user to search for the index of a bike they are looking for on the listing page
+     * @param bikeId the 4 digit unique bike id entered by the user
+     * @return the bike with the matching id entered
+     */
+    public static Bike searchBike (int bikeId) {
+        for (Bike b: bikes) {
+            if (bikeId == b.getId()) {
+                return b;
+            }
+         }
+        return null;
     }
 
 }

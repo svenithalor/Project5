@@ -96,7 +96,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                     writer.write("add");
                     writer.println();
                     writer.flush();
-                    c.addBike(writer,reader);
+                    c.addBike(writer, reader);
                 }
                 if (e.getSource() == deleteItemButton) {
                     //tells the server that the user wants to delete an item
@@ -197,13 +197,14 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 try {
                     validId = Boolean.parseBoolean(reader.readLine());
                 } catch (IOException e) {
-                    System.out.println("Error under addBike"); //TEMP value
+                    System.out.println("Error under bike ID in AddBike"); //TEMP value
+                    break;
                 }
 
                 if (validId) {
                     break;
                 }
-                int choice = JOptionPane.showConfirmDialog(null,"Invalid Bike ID. Please try again.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                int choice = JOptionPane.showConfirmDialog(null, "Invalid Bike ID. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                 //allows the user to exit at any point using exit button
 
                 if (choice == JOptionPane.CLOSED_OPTION) {
@@ -213,36 +214,51 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             } while (!validId);
 
             //checks if the bike quantity is valid
+            String quantity = "";
+            boolean validQuantity = false;
 
-            String quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
-                    "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-            writer.write(quantity);
-            writer.println();
-            writer.flush();
+            do {
+                quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
+                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                writer.write(quantity);
+                writer.println();
+                writer.flush();
+                try {
+                    validQuantity = Boolean.parseBoolean(reader.readLine());
+                } catch (Exception e) {
+                    System.out.println("Error under bike quantity in AddBike");
+                    break;
+                }
+                if (validQuantity) {
+                    break;
+                }
+                int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                //allows the user to exit at any point using exit button
 
-            String[] options = {"No", "Yes"};
-            int x = JOptionPane.showOptionDialog(null, "Enter bike insurance ",
+                if (choice == JOptionPane.CLOSED_OPTION) {
+                    break;
+                }
+
+            } while (!validQuantity);
+
+            //asks the user if they would like bike insurance added to their total
+            int x = JOptionPane.showConfirmDialog(null, "Enter bike insurance ",
                     "Click a button",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-            System.out.println(x);
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-            String temp = "add," + bikeId + "," + quantity + "," + x;
-            //sends the bike id to the server
-            writer.write(temp);
-            writer.println();
-            writer.flush();
-            String valid = ""; //confirms if the user input is correct
-            try {
-                valid = reader.readLine();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (x == JOptionPane.YES_OPTION) {
+                writer.write("yes");
+                writer.println();
+                writer.flush();
+            } else if (x == JOptionPane.NO_OPTION) {
+                writer.write("no");
+                writer.println();
+                writer.flush();
+            } else {
+                return;
             }
 
-            if (valid.equals("true")) {
-                break;
-            }
-            JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.", "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
+
 
         } while (true);
 
