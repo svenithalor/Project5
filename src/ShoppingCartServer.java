@@ -48,10 +48,9 @@ public class ShoppingCartServer {
         int bikeId = Integer.parseInt(d);
 
         /*******
-         * Seraches for the bike ID in the existing
+         * Searches for the bike ID in the existing shopping cart
          */
         //if the bikeId is ALREADY in the cart...then return false you cannot add to the existing quantity
-        for
 
         /****
          * Checks if the user entered a valid Bike Quantity to add
@@ -62,7 +61,7 @@ public class ShoppingCartServer {
             try {
                 q = reader.readLine();
             } catch (Exception e) {
-                System.out.println("addBike method eror under quantity");
+                System.out.println("addBike method error under quantity");
                 return;
             }
             validQuantity = s.checkBikeQuantity(q, bikeId);
