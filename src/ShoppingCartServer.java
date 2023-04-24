@@ -405,12 +405,26 @@ public class ShoppingCartServer {
                 //waits for what button the user presses
                 String input = reader.readLine();
 
+                String[] is = input.split(",");
+                String tempTp = is[0];
+
                 /******
                  * Add button completed
                  */
                 if (input.equals("add")) {
+                    String tempReturn = "false";
 
-                    s.addBike(reader, writer, s);
+                    String tempId = is[1];
+                    String quantity = is[2];
+                    String insurance = is[3];
+                    if (s.checkBikeID(tempId, tempTp)) {
+                        tempReturn = "true";
+                        s.addToCart(Integer.parseInt(tempId), Integer.parseInt(quantity), Integer.parseInt(insurance));
+                    }
+                    writer.write(tempReturn);
+                    writer.println();
+                    writer.flush();
+
 
 
                 } else if (input.equals("delete")) {
@@ -418,18 +432,15 @@ public class ShoppingCartServer {
                     /********
                      * Checks if the user entered a valid Bike ID or not
                      */
-                    boolean validInput = false;
-                    do {
-                        String d = reader.readLine();
-                        //Sample Buyer for now...
-                        validInput = s.checkBikeID(d, "delete");
-                        //lets the client know if the user input is valid or not
-                        System.out.println(validInput);
-                        writer.write("" + validInput);
-                        writer.println();
-                        writer.flush();
-
-                    } while (!validInput);
+                    String tempReturn = "false";
+                    String tempId = is[1];
+                    if (s.checkBikeID(tempId, tempTp)) {
+                        tempReturn = "true";
+                        s.removeBike(Integer.parseInt(tempId));
+                    }
+                    writer.write(tempReturn);
+                    writer.println();
+                    writer.flush();
 
 
                 } else if (input.equals("checkout")) {
