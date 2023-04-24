@@ -280,13 +280,46 @@ public class UserInfo {
      * @param bikeId the 4 digit unique bike id entered by the user
      * @return the bike with the matching id entered
      */
-    public static Bike searchBike (int bikeId) {
-        for (Bike b: bikes) {
+    public static Bike searchBike(int bikeId) {
+        for (Bike b : bikes) {
             if (bikeId == b.getId()) {
                 return b;
             }
-         }
+        }
         return null;
     }
+
+    /*******
+     * This method allows for the user to get the index of a buyer they are looking for in the buyers database
+     * @return the index of the buyer they are looking for in the buyer database. If the buyer is not found, then
+     * return an index of -1
+     */
+    public static int getBuyerIndex(Buyer buyer) {
+        int index = -1;
+        for (Buyer b : buyers) {
+            if (b.equals(buyer)) {
+                index = buyers.indexOf(b);
+                break;
+            }
+        }
+        return index;
+    }
+
+    /*******
+     * This method allows for the user to get the index of a seller they are looking for in the sellers database
+     * @return the index of the seller they are looking for in the sellers database. If the seller is not found, then
+     * return an index of -1
+     */
+    public static int getSellerIndex(Seller seller) {
+        int index = -1;
+        for (Seller s : sellers) {
+            if (s.equals(seller)) {
+                index = buyers.indexOf(s);
+                break;
+            }
+        }
+        return index;
+    }
+
 
 }
