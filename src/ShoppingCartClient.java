@@ -24,6 +24,12 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     Container content; //where the shopping cart items will be displayed
     JFrame frame; //the content page for the shopping cart
 
+    static JTable table;
+    JFrame frame;
+    Socket socket;
+    BufferedReader reader;
+    PrintWriter writer;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new ShoppingCartClient());
 
@@ -77,6 +83,13 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         panelBottom.add(refreshButton);
         content.add(panelBottom, BorderLayout.SOUTH);
 
+        try {
+            socket = new Socket("localhost", 4242);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -84,78 +97,38 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             //creates an shopping cart client object to navigate to each method
-            ShoppingCartClient c = new ShoppingCartClient();
-            try {
-                Socket socket = new Socket("localhost", 4242);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter writer = new PrintWriter(socket.getOutputStream());
-
-                //creates a socket-server connection again
-
-                if (e.getSource() == addItemButton) {
-                    writer.write("add");
-                    writer.println();
-                    writer.flush();
-                    c.addBike(writer, reader);
-                }
-                if (e.getSource() == deleteItemButton) {
-                    //TODO
-                    //tells the server that the user wants to delete an item
-                    writer.write("delete");
-                    writer.println();
-                    writer.flush();
-                    //checks if the user entered bike ID is valid
-                    do {
-                        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ", "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-                        //sends the bike id to the server
-                        writer.write(bikeId);
-                        writer.println();
-                        writer.flush();
-                        //confirms that the user input is correct
-                        String valid = reader.readLine();
-                        if (valid.equals("true")) {
-                            break;
-                        }
-                        JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.", "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
-
-                    } while (true);
-
-                    //check if bike Id is in their shopping cart
-
-
-                }
-                if (e.getSource() == checkoutButton) {
-                    System.out.println("checkout");
-                    writer.write("checkout");
-                    writer.println();
-                    writer.flush();
-                    //tells the server that the user wants to check out
-                    //do something
-                    //remove elements from the shopping cart and putting it in the purchase history
-                    //also removing those elements from the bikes
-                }
-                if (e.getSource() == returnToHomeButton) {
-                    writer.write("backHome");
-                    writer.println();
-                    writer.flush();
-                    //tells the server that the user wants to return home
-
-                    //do something
-                }
-                if (e.getSource() == refreshButton) {
-                    //refreshes the page for the user
-                    writer.write("refresh");
-                    writer.println();
-                    writer.flush();
-                    frame.setVisible(false);
-                    frame.setVisible(true);
-                }
-
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            if (e.getSource() == addItemButton) {
+                addCart();
             }
+            if (e.getSource() == deleteItemButton) {
+                deleteCart();
+            }
+            if (e.getSource() == checkoutButton) {
+                System.out.println("checkout");
+                writer.write("checkout");
+                writer.println();
+                writer.flush();
+                //tells the server that the user wants to check out
+                //do something
+                //remove elements from the shopping cart and putting it in the purchase history
+                //also removing those elements from the bikes
+            }
+            if (e.getSource() == returnToHomeButton) {
+                writer.write("backHome");
+                writer.println();
+                writer.flush();
+                //tells the server that the user wants to return home
 
+                //do something
+            }
+            if (e.getSource() == refreshButton) {
+                //refreshes the page for the user
+                writer.write("refresh");
+                writer.println();
+                writer.flush();
+                frame.setVisible(false);
+                frame.setVisible(true);
+            }
 
         }
 
@@ -332,6 +305,55 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
         } while (true);
 
+    }
+
+    private void addCart() {
+        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
+                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+        String quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
+                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+        String[] options = {"No", "Yes"};
+        int x = JOptionPane.showOptionDialog(null, "Do you want insurance ",
+                "Click a button",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        System.out.println(x);
+
+        String temp = "add," + bikeId + "," + quantity + "," + x;
+        writer.write(temp);
+        writer.println();
+        writer.flush();
+        String valid = null;
+        try {
+            valid = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (valid.equals("false")) {
+            JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.",
+                    "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void deleteCart() {
+        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
+                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+
+        String tempStr = "delete," + bikeId;
+        writer.write(tempStr);
+        writer.println();
+        writer.flush();
+
+        String valid = null;
+        try {
+            valid = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (valid.equals("false")) {
+            JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.",
+                    "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 
