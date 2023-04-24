@@ -22,6 +22,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     JButton returnToHomeButton; //allows the user to return back to hte main menu
     JButton refreshButton; //allows the user to refresh their screen and see any updates made by other users
     Container content; //where the shopping cart items will be displayed
+    JFrame frame; //the content page for the shopping cart
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new ShoppingCartClient());
@@ -33,7 +34,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     public void run() {
 
         //Creates the JFrame
-        JFrame frame = new JFrame("Boilermaker Bikes");
+        frame = new JFrame("Boilermaker Bikes");
         content = frame.getContentPane();
         content.setLayout(new BorderLayout());
 
@@ -142,12 +143,12 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                     //do something
                 }
                 if (e.getSource() == refreshButton) {
+                    //refreshes the page for the user
                     writer.write("refresh");
                     writer.println();
                     writer.flush();
-
-                    //tells the server that the user needs to refresh their screen
-                    //do something
+                    frame.setVisible(false);
+                    frame.setVisible(true);
                 }
 
 
@@ -262,9 +263,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
         } while (true);
 
-        //ask for the bike ID they want to remove and we'll have to check if that ID is still available
-        //ask if they want it insured or not (JOptionPane)
-        //refresh the page so they can see the item they added
 
     }
 

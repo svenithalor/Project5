@@ -24,6 +24,83 @@ public class ShoppingCartServer {
     }
 
 
+    public void addBike(BufferedReader reader, PrintWriter writer, ShoppingCartServer s) {
+        /*******
+         * Checks if the user entered a valid Bike ID or not
+         */
+        boolean validId = false;
+        String d = ""; //temporarily saves the bike id entered by the user and if valid converts it to an integer
+        do {
+            try {
+                d = reader.readLine();
+            } catch (Exception e) {
+                System.out.println("addBike method error under id");
+                return;
+            }
+            validId = s.checkBikeID(d, "add");
+            //lets the client know if the user input is valid or not
+            writer.write("" + validId);
+            writer.println();
+            writer.flush();
+
+        } while (!validId);
+        //saves the bike Id entered
+        int bikeId = Integer.parseInt(d);
+
+        /*******
+         * Seraches for the bike ID in the existing
+         */
+        //if the bikeId is ALREADY in the cart...then return false you cannot add to the existing quantity
+        for
+
+        /****
+         * Checks if the user entered a valid Bike Quantity to add
+         */
+        boolean validQuantity = false;
+        String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+        do {
+            try {
+                q = reader.readLine();
+            } catch (Exception e) {
+                System.out.println("addBike method eror under quantity");
+                return;
+            }
+            validQuantity = s.checkBikeQuantity(q, bikeId);
+            writer.write("" + validQuantity);
+            writer.println();
+            writer.flush();
+        } while (!validQuantity);
+        //saves the quantity entered
+        int quantity = Integer.parseInt(q);
+
+        double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+
+
+        /********
+         * Checks if the user wants $50 insurance added to their bike
+         */
+        Bike bikeToAdd = UserInfo.searchBike(bikeId);
+        try {
+            boolean insured = Boolean.parseBoolean(reader.readLine());
+            if (!insured) {
+                finalPrice = bikeToAdd.getPrice() * quantity;
+            } else {
+                finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+            }
+
+            /******
+             * Adds the purchased bike to the buyer's shopping cart
+             */
+            PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
+            shoppingCart.add(newPurchase);
+            //need to somehow set the shopping cart
+
+        } catch (Exception e) {
+            System.out.println("Error under adding insurance in AddBike");
+            return;
+        }
+    }
+
     /*****
      * This method searches the available bikes for the one with the given id number. It creates a new PurchasedBike
      * and adds it to the ShoppingCart arraylist if a sufficient quantity of the desired Bike is available.
@@ -252,7 +329,7 @@ public class ShoppingCartServer {
                     String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
                     do {
                         q = reader.readLine();
-                        validQuantity = s.checkBikeQuantity(q,bikeId);
+                        validQuantity = s.checkBikeQuantity(q, bikeId);
                         writer.write("" + validQuantity);
                         writer.println();
                         writer.flush();
@@ -301,8 +378,6 @@ public class ShoppingCartServer {
                     } while (!validInput);
 
 
-
-
                 } else if (input.equals("checkout")) {
 
 
@@ -314,8 +389,7 @@ public class ShoppingCartServer {
 
                 } else if (input.equals("refresh")) {
 
-                    //do something
-
+                    //do something *we may or may not need this if statement*
                 }
 
 
