@@ -6,10 +6,9 @@ import javax.swing.*;
 
 public class CustomerPageClient {
     private String searchTerm;
-    public static void main(String[] args) {
+    public static void run(Buyer buyer) {
         Scanner scanner = new Scanner(System.in);
         try {
-            System.out.println("hello world");
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -25,6 +24,8 @@ public class CustomerPageClient {
                     case -1: repeat = 0;
                         break;
                     case 1: // main menu option 1: display bikes
+                        int repeat1 = 1;
+                        do {
                         int choice1 = C.displayBikesMenu(writer, reader, bikeNames);
 
                         writer.println(choice1);
@@ -35,7 +36,7 @@ public class CustomerPageClient {
                                 String bikeDescription = reader.readLine();
                                 bikeDescription += "\n" + reader.readLine();
                                 bikeDescription += "\n" + reader.readLine();
-                                String[] buttons = {"Go Back", "Add to cart"};
+                                String[] buttons = {"Go back", "Add to cart"};
                                 int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
                                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
                                 if (option == 0) {
@@ -50,6 +51,7 @@ public class CustomerPageClient {
                                 C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
                                 break;
                             case -1: // go back
+                                repeat1 = 0;
                                 break;
                             case -4: // search
                                 writer.println(C.searchTerm);
@@ -61,7 +63,7 @@ public class CustomerPageClient {
                                     JOptionPane.showMessageDialog(null, "No matches found!");
                                 }
                                 break;
-                        }
+                        } } while (repeat1 == 1);
                         break;
                     case 2: // option 2: view cart
                         // TODO: view/edit cart and checkout
@@ -86,6 +88,11 @@ public class CustomerPageClient {
                         String confirm = JOptionPane.showInputDialog("Enter username to confirm account deletion");
                         if (confirm != null) {
                             writer.println(confirm);
+                            writer.flush();
+                            writer.println(buyer.getUsername());
+                            writer.flush();
+                            int buyerIndex = UserInfo.getBuyers().indexOf(buyer);
+                            writer.println(buyerIndex);
                             String deleted = reader.readLine();
                             if (deleted.equals("true")) {
                                 JOptionPane.showMessageDialog(null, "Account deleted successfully!");

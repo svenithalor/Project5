@@ -10,7 +10,6 @@ public class CustomerPageServer {
         try {
             ServerSocket serverSocket = new ServerSocket(4242);
             while (true) {
-                System.out.println("hello world");
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -20,11 +19,12 @@ public class CustomerPageServer {
                     ArrayList<Bike> bikes = UserInfo.getBikes();
                     ArrayList<String> bikeNames = new ArrayList<>();
                     for (Bike bike : bikes) {
-                        String format = "%s | $%.2f";
-                        bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
+                        String format = "%s | $%.2f | Quantity: %d";
+                        bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                     }
                     writer.println(bikeNames);
                     writer.flush();
+                    bikeNames.clear();
 
                     String input = reader.readLine();
                     int choice = Integer.parseInt(input);
@@ -50,21 +50,23 @@ public class CustomerPageServer {
                                     ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
                                     ArrayList<String> sortedNames = new ArrayList<>();
                                     for (Bike bike : quantitySorted) {
-                                        String format = "%s | $%.2f";
-                                        sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
+                                        String format = "%s | $%.2f | Quantity: %d";
+                                        sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                     }
                                     writer.println(sortedNames);
                                     writer.flush();
+                                    sortedNames.clear();
                                     break;
                                 case -2: // sort by price
                                     ArrayList<Bike> priceSorted = sortByPrice(bikes);
                                     ArrayList<String> priceSortedNames = new ArrayList<>();
                                     for (Bike bike : priceSorted) {
-                                        String format = "%s | $%.2f";
-                                        priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
+                                        String format = "%s | $%.2f | Quantity: %d";
+                                        priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                     }
                                     writer.println(priceSortedNames);
                                     writer.flush();
+                                    priceSortedNames.clear();
                                     break;
                                 case -1:
                                     break; // go back to main menu
@@ -74,11 +76,12 @@ public class CustomerPageServer {
                                     ArrayList<String> matchNames = new ArrayList<>();
                                     if (matches != null) {
                                         for (Bike bike : matches) {
-                                            String format = "%s | $%.2f";
-                                            matchNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
+                                            String format = "%s | $%.2f | Quantity: %d";
+                                            matchNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                         }
                                         writer.println(matchNames);
                                         writer.flush();
+                                        matchNames.clear();
                                     } else {
                                         writer.println(-1);
                                         writer.flush();
@@ -100,8 +103,10 @@ public class CustomerPageServer {
                             repeat = 0;
                             break;
                         case 5: // main menu option 5: delete account
+                            String confirm = reader.readLine();
                             String user = reader.readLine();
-                            boolean deleted = deleteAccount(user);
+                            int buyerIndex = Integer.parseInt(reader.readLine());
+                            boolean deleted = deleteAccount(confirm, user, buyerIndex);
                             writer.println(deleted);
                             writer.flush();
                             break;
@@ -201,15 +206,13 @@ public class CustomerPageServer {
         }
     }
 
-    public static boolean deleteAccount(String user) {
+    public static boolean deleteAccount(String confirm, String user, int buyerIndex) {
         boolean deleted = false;
         ArrayList<Buyer> buyers = UserInfo.getBuyers();
-        for (Buyer buyer : buyers) {
-            if (buyer.getUsername().equalsIgnoreCase(user)) {
-                buyers.remove(buyer);
-                UserInfo.setBuyers(buyers);
-                deleted = true;
-            }
+        if (confirm.equals(user)) {
+            buyers.remove(buyerIndex);
+            UserInfo.setBuyers(buyers);
+            deleted = true;
         }
         return deleted;
     }
