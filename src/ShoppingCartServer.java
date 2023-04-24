@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**************
  *This class processes the user input of adding, removing, and checking out items from the shopping cart.
  *
- * @author Christina Joslin and Duoli Chen, lab sec 4427
+ * @author Christina Joslin, lab sec 4427
  * @version 4/24/2023
  */
 public class ShoppingCartServer {
@@ -178,70 +178,101 @@ public class ShoppingCartServer {
 
     }
 
-    //TODO need to fill this in
+    /******
+     * This method allows the buyer to check out all of the items in their shopping cart and updates
+     * the listing page to correspond with this purchase
+     * @param reader
+     * @param writer
+     */
+
     public void checkout(BufferedReader reader,PrintWriter writer) {
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
         boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
+        int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
 
         for (PurchasedBike pb : shoppingCart) {
             if (!UserInfo.getBikes().contains(pb)) {
                 stillAvailable = false;
-                return;
+                break;
             } else {
                 /*******
                  * Checks if all the quantities in the shopping cart are still valid
                  */
-                for (Bike b: UserInfo.getBikes()) {
-                    if (b.getQuantity() == 0) {
-                        stillAvailable = false;
-                        break;
-                    }
-                    //if the quantity available of this bike id is less than the quantity they want to purchase, return false
-                    if (b.getQuantity() < pb.getQuantity()) {
-                        stillAvailable = false;
-                        break;
-                    }
+                bikeEquivalentIndex = UserInfo.getBikes().indexOf(pb);
+                Bike bikeEquivalent = UserInfo.getBikes().get(bikeEquivalentIndex);
+
+                if (bikeEquivalent.getQuantity() == 0) {
+                    stillAvailable = false;
+                    break;
+                }
+
+                if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
+                    stillAvailable = false;
+                    break;
+                }
 
                 }
             }
-        }
+
+        /******
+         * Sends the status of the availability of the bike to the client
+         */
+        writer.write(stillAvailable + "");
+        writer.println();
+        writer.flush();
+
         if (stillAvailable) {
-            writer.write("true");
+            /******
+             * Updates the listing Page
+             */
+            for (Bike b : bikesForSale) {
+                for (PurchasedBike pb : shoppingCart) {
+                    if (pb.getId() == b.getId()) {
+                        b.setQuantity(b.getQuantity() - pb.getQuantity());
+                    }
+                }
+            }
+            UserInfo.setBikes(bikesForSale);
+
+            /******
+             * Updates the seller inventory
+             */
+            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+            for (Seller se : tempSellers) {
+                for (Bike b : se.getInventory()) {
+                    for (PurchasedBike pb : shoppingCart) {
+                        b.setQuantity(b.getQuantity() - pb.getQuantity());
+                    }
+                }
+            }
+            UserInfo.setSellers(tempSellers);
+
+            /*******
+             * Moves everything in the shopping cart to the purchase history
+             */
+            ArrayList<PurchasedBike> tempPurchaseHistory = buyer.getPurchaseHistory();
+            ArrayList<PurchasedBike> tempShoppingCart = buyer.getShoppingCart();
+
+            int len = shoppingCart.size();
+            for (int i = 0; i < len; i++) {
+                purchaseHistory.add(shoppingCart.get(0));
+                shoppingCart.remove(0);
+
+            }
+            buyer.setShoppingCart(tempShoppingCart);
+            buyer.setPurchaseHistory(tempPurchaseHistory);
+            buyers.set(UserInfo.getBuyerIndex(buyer),buyer);
+
+            UserInfo.setBuyers(buyers);
+
+            //once it has completed the saving process send the message success to the buyer
+            writer.write("success");
             writer.println();
             writer.flush();
+
         }
-
-
-        //first need to check if all the id's still exist
-        //then ned to check if all the quantities are still valid
-        //finally I can remove the elements and update the listing page info and the buyers database
-
-        for (Bike b : bikesForSale) {
-            for (PurchasedBike pb : shoppingCart) {
-                if (pb.getId() == b.getId()) {
-                    b.setQuantity(b.getQuantity() - pb.getQuantity());
-                }
-            }
-        }
-        for (Seller se : UserInfo.getSellers()) {
-            for (Bike b : se.getInventory()) {
-                for (PurchasedBike pb : shoppingCart) {
-                    b.setQuantity(b.getQuantity() - pb.getQuantity());
-                }
-            }
-        }
-        // dumping everything from shopping cart to purchased bikes
-        int len = shoppingCart.size();
-        for (int i = 0; i < len; i++) {
-            shoppingCart.add(shoppingCart.get(0));
-            shoppingCart.remove(0);
-
-            buyer.setShoppingCart(shoppingCart);
-        }
-
-        System.out.println("Checked out successfully.");
     }
 
 

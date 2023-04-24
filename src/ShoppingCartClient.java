@@ -184,8 +184,35 @@ public class ShoppingCartClient extends JComponent implements Runnable {
      * @param reader
      */
     public void checkOutBikes(PrintWriter writer, BufferedReader reader) {
-        //TODO
+        boolean stillAvailable; //keeps track of whether or not the items can be checked out or not
+        do {
+            try {
+                stillAvailable = Boolean.parseBoolean(reader.readLine());
+            } catch (Exception e) {
+                System.out.println("Error under checkoutBikes");
+                return;
+            }
+            if (stillAvailable) {
+                break;
+            }
+            int choice = JOptionPane.showConfirmDialog(null,"Error. One or more bikes are " +
+                    "unavailable.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+            if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        } while (!stillAvailable);
+        boolean success = false; //keeps track of if the user has successfully
+        try {
+            success = Boolean.parseBoolean(reader.readLine());
+        } catch (Exception e) {
+            System.out.println("Error message under successfully completing the shopping cart.");
+        }
+        if (success) {
+            JOptionPane.showMessageDialog(null,"Successful Checkout!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
+
     /*******
      * This method allows the user to add a bike to their shopping cart via the add bike button
      * @param writer writes the user input to the server
@@ -262,7 +289,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                         break;
                     }
                     int error = JOptionPane.showConfirmDialog(null, "Error. Invalid quantity " +
-                            "please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
+                                    "please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
                             JOptionPane.ERROR_MESSAGE);
                     if (error == JOptionPane.CLOSED_OPTION || error == JOptionPane.CANCEL_OPTION) {
                         return;
@@ -324,9 +351,9 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 return;
             }
             if (success) {
-                String [] options = {"OK"};
+                String[] options = {"OK"};
                 JOptionPane.showOptionDialog(null, "Bike successfully added!",
-                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,null,options,options[0]);
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                 break;
             }
 
