@@ -234,6 +234,7 @@ public class LoginClient {
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
             login.userLogin(reader, writer);
+            return;
 
         } catch (IOException e) {
             //prints an error message and exits the program

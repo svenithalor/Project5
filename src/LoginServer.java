@@ -273,74 +273,74 @@ public class LoginServer {
         return found;
     }
 
-    public static void main(String[] args) {
-        //sets up the server connection
-        try {
-            ServerSocket serverSocket = new ServerSocket(4242);
-            Socket socket = serverSocket.accept(); //waits until the client connects
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-
-            //reads the userType entered by the user and interprets it
-            String userType = reader.readLine();
-            if (userType == null) {
-                writer.close();
-                reader.close();
-            } else if (userType.equals("0")) {
-                userType = "buyer";
-                //System.out.printf("Received from the Client: %s%n", userType);
-            } else if (userType.equals("1")) {
-                userType = "seller";
-                //System.out.printf("Received from the Client: %s%n", userType);
-            }
-            //creates a login server object and goes to the login method
-            LoginServer login = new LoginServer();
-
-            //stores the user index and sends the user either to their corresponding buyer or seller page
-
-            int userIndex = login.userLogin(userType, reader, writer);
-            //System.out.println(userIndex);
-
-            //as long as the user index is valid, take the user to the buyer or seller menu
-            if (userIndex != -1) {
-                if (userType.equals("buyer")) {
-                    Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
-                    //creates a customer page object
-                    //starts the threads for the customer and client page
-                    Thread cpClient = new Thread() {
-                        public void run() {
-                            CustomerPageClient.main(null);
-                            System.out.println("thread client is running");
-                        }
-                    };
-                    Thread cpServer = new Thread() {
-                        public void run() {
-                            CustomerPageServer.main(null);
-                            System.out.println("thread server is running");
-                        }
-                    };
-                    cpClient.start();
-                    cpServer.start();
-
-                    //cpClient.join();
-                    //cpClient.join();
-
-                } else if (userType.equals("seller")) {
-                    Seller thisSeller = UserInfo.getSellers().get(userIndex);
-                    SellerPage sp = new SellerPage(thisSeller.getUsername(), thisSeller.getInventory());
-                    sp.runSellerPage(thisSeller);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void run() {
-        System.out.println("Thread: Running");
-    }
-
-
 }
+
+
+    /**************
+     *     public static void main(String[] args) {
+     *         //sets up the server connection
+     *         try {
+     *             ServerSocket serverSocket = new ServerSocket(4242);
+     *             Socket socket = serverSocket.accept(); //waits until the client connects
+     *             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+     *             PrintWriter writer = new PrintWriter(socket.getOutputStream());
+     *
+     *             //reads the userType entered by the user and interprets it
+     *             String userType = reader.readLine();
+     *             if (userType == null) {
+     *                 writer.close();
+     *                 reader.close();
+     *             } else if (userType.equals("0")) {
+     *                 userType = "buyer";
+     *                 //System.out.printf("Received from the Client: %s%n", userType);
+     *             } else if (userType.equals("1")) {
+     *                 userType = "seller";
+     *                 //System.out.printf("Received from the Client: %s%n", userType);
+     *             }
+     *             //creates a login server object and goes to the login method
+     *             LoginServer login = new LoginServer();
+     *
+     *             //stores the user index and sends the user either to their corresponding buyer or seller page
+     *
+     *             int userIndex = login.userLogin(userType, reader, writer);
+     *             //System.out.println(userIndex);
+     *
+     *             //as long as the user index is valid, take the user to the buyer or seller menu
+     *             if (userIndex != -1) {
+     *                 if (userType.equals("buyer")) {
+     *                     socket.close();
+     *                     Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
+     *                     //creates a customer page object
+     *                     //starts the threads for the customer and client page
+     *                     Thread cpClient = new Thread() {
+     *                         public void run() {
+     *                             CustomerPageClient.main(null);
+     *                             System.out.println("thread client is running");
+     *                         }
+     *                     };
+     *                     Thread cpServer = new Thread() {
+     *                         public void run() {
+     *                             CustomerPageServer.main(null);
+     *                             System.out.println("thread server is running");
+     *                         }
+     *                     };
+     *                     cpClient.start();
+     *                     cpServer.start();
+     *
+     *                     //cpClient.join();
+     *                     //cpClient.join();
+     *
+     *                 } else if (userType.equals("seller")) {
+     *                     Seller thisSeller = UserInfo.getSellers().get(userIndex);
+     *                     socket.close();
+     *                 }
+     *             }
+     *
+     *         } catch (IOException e) {
+     *             e.printStackTrace();
+     *         }
+     *
+     *     }
+     * @param args
+     */
+
