@@ -13,7 +13,7 @@ import java.net.Socket;
  * items to their shopping cart and checkout all the items in their shopping cart.
  *
  * @author Christina Joslin and Duoli Chen, lab sec 4427
- * @version 4/20/2023
+ * @version 4/24/2023
  */
 public class ShoppingCartClient extends JComponent implements Runnable {
     JButton addItemButton; //allows the user to add a bike to their shopping cart
@@ -178,6 +178,14 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
     }
 
+    /********
+     * Need to fill this in
+     * @param writer
+     * @param reader
+     */
+    public void checkOutBikes(PrintWriter writer, BufferedReader reader) {
+        //TODO
+    }
     /*******
      * This method allows the user to add a bike to their shopping cart via the add bike button
      * @param writer writes the user input to the server

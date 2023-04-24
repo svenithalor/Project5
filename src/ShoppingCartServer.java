@@ -7,7 +7,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**************
- *This class processes the user input of adding, removing, and checking out items from the shopping cart
+ *This class processes the user input of adding, removing, and checking out items from the shopping cart.
+ *
+ * @author Christina Joslin and Duoli Chen, lab sec 4427
+ * @version 4/24/2023
  */
 public class ShoppingCartServer {
     private ArrayList<PurchasedBike> shoppingCart; //a copy of the buyer's current shopping cart
@@ -101,11 +104,11 @@ public class ShoppingCartServer {
             int existingQuantity = shoppingCart.get(bikeIndex).getQuantity();
             shoppingCart.get(bikeIndex).setQuantity(existingQuantity + quantity);
             buyer.setShoppingCart(shoppingCart);
-            buyers.set(UserInfo.getBuyerIndex(buyer),buyer);
+            buyers.set(UserInfo.getBuyerIndex(buyer), buyer);
             UserInfo.setBuyers(buyers);
-            for (Buyer b: UserInfo.getBuyers()) {
-                System.out.println(b.toString());
-            }
+            //for (Buyer b : UserInfo.getBuyers()) {
+               // System.out.println(b.toString());
+            //}
 
             //lets the client know that it has been successfully added to the shopping cart
             writer.write("true");
@@ -156,7 +159,7 @@ public class ShoppingCartServer {
                 PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
                 shoppingCart.add(newPurchase);
                 buyer.setShoppingCart(shoppingCart);
-                buyers.set(UserInfo.getBuyerIndex(buyer),buyer);
+                buyers.set(UserInfo.getBuyerIndex(buyer), buyer);
                 UserInfo.setBuyers(buyers);
 
 
@@ -175,8 +178,14 @@ public class ShoppingCartServer {
 
     }
 
-  //TODO I need to fill this in
+    //TODO need to fill this in
     public void checkout() {
+
+        //first need to check if all the id's still exist
+        //then ned to check if all the quantities are still valid
+        //finally I can remove the elements and update the listing page info and the buyers database
+
+
         for (Bike b : bikesForSale) {
             for (PurchasedBike pb : shoppingCart) {
                 if (pb.getId() == b.getId()) {
@@ -204,7 +213,7 @@ public class ShoppingCartServer {
     }
 
 
-  //TODO...Duoli I need you to work on this portion
+    //TODO...Duoli I need you to work on this portion
     public void removeBike(int id) {
         //need to integrate this into our existing methods
         PurchasedBike bikeToRemove = null;
