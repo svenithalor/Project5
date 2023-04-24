@@ -111,10 +111,10 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 writer.flush();
             }
             if (e.getSource() == checkoutButton) {
-                System.out.println("checkout");
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
+                c.checkOutBikes(writer,reader);
                 //tells the server that the user wants to check out
                 //do something
                 //remove elements from the shopping cart and putting it in the purchase history

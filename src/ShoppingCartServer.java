@@ -107,7 +107,7 @@ public class ShoppingCartServer {
             buyers.set(UserInfo.getBuyerIndex(buyer), buyer);
             UserInfo.setBuyers(buyers);
             //for (Buyer b : UserInfo.getBuyers()) {
-               // System.out.println(b.toString());
+            // System.out.println(b.toString());
             //}
 
             //lets the client know that it has been successfully added to the shopping cart
@@ -185,7 +185,7 @@ public class ShoppingCartServer {
      * @param writer
      */
 
-    public void checkout(BufferedReader reader,PrintWriter writer) {
+    public void checkout(BufferedReader reader, PrintWriter writer) {
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
@@ -207,14 +207,16 @@ public class ShoppingCartServer {
                     stillAvailable = false;
                     break;
                 }
+                System.out.println(bikeEquivalent.toString());
+                System.out.println(pb.toString());
 
                 if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
                     stillAvailable = false;
                     break;
                 }
 
-                }
             }
+        }
 
         /******
          * Sends the status of the availability of the bike to the client
@@ -263,7 +265,7 @@ public class ShoppingCartServer {
             }
             buyer.setShoppingCart(tempShoppingCart);
             buyer.setPurchaseHistory(tempPurchaseHistory);
-            buyers.set(UserInfo.getBuyerIndex(buyer),buyer);
+            buyers.set(UserInfo.getBuyerIndex(buyer), buyer);
 
             UserInfo.setBuyers(buyers);
 
@@ -326,6 +328,11 @@ public class ShoppingCartServer {
         } catch (Exception e) {
             return false;
         }
+        //checks if the quantity equals 0
+        if (purchaseQuantity == 0) {
+            return false;
+        }
+
         //adjusts the quantity if the cart the buyer wants to add on to an already exists in the shopping cart
         if (inCart) {
             purchaseQuantity += buyer.getShoppingCart().get(cartIndex).getQuantity();
@@ -410,34 +417,19 @@ public class ShoppingCartServer {
                 //waits for what button the user presses
                 String input = reader.readLine();
 
-                String[] is = input.split(",");
-                String tempTp = is[0];
-
-
                 if (input.equals("add")) {
 
-                   s.addBike(reader,writer,s);
+                    s.addBike(reader, writer, s);
 
                 } else if (input.equals("delete")) {
 
-                    /********
-                     * Checks if the user entered a valid Bike ID or not
-                     */
-                    String tempReturn = "false";
-                    String tempId = is[1];
-                    if (s.checkBikeID(tempId, tempTp)) {
-                        tempReturn = "true";
-                        s.removeBike(Integer.parseInt(tempId));
-                    }
-                    writer.write(tempReturn);
-                    writer.println();
-                    writer.flush();
+                    //s.removeBike(reader,writer,s);
 
 
                 } else if (input.equals("checkout")) {
 
+                    s.checkout(reader, writer);
 
-                    //do something
 
                 } else if (input.equals("backHome")) {
 

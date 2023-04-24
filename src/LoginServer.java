@@ -305,8 +305,26 @@ public class LoginServer {
             if (userIndex != -1) {
                 if (userType.equals("buyer")) {
                     Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
-                    CustomerPage cp = new CustomerPage(UserInfo.getBikes(), thisBuyer);
-                    cp.open(thisBuyer);
+                    //creates a customer page object
+                    //starts the threads for the customer and client page
+                    Thread cpClient = new Thread() {
+                        public void run() {
+                            CustomerPageClient.main(null);
+                            System.out.println("thread client is running");
+                        }
+                    };
+                    Thread cpServer = new Thread() {
+                        public void run() {
+                            CustomerPageServer.main(null);
+                            System.out.println("thread server is running");
+                        }
+                    };
+                    cpClient.start();
+                    cpServer.start();
+
+                    //cpClient.join();
+                    //cpClient.join();
+
                 } else if (userType.equals("seller")) {
                     Seller thisSeller = UserInfo.getSellers().get(userIndex);
                     SellerPage sp = new SellerPage(thisSeller.getUsername(), thisSeller.getInventory());
@@ -318,6 +336,10 @@ public class LoginServer {
             e.printStackTrace();
         }
 
+    }
+
+    public void run() {
+        System.out.println("Thread: Running");
     }
 
 
