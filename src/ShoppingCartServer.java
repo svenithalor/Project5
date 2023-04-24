@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**************
- *This
+ *This class processes the user input of adding, removing, and checking out items from the shopping cart
  */
 public class ShoppingCartServer {
     private ArrayList<PurchasedBike> shoppingCart; //a copy of the buyer's current shopping cart
@@ -34,8 +34,6 @@ public class ShoppingCartServer {
      */
     public void addToCart(int id, int quantity, int insurance) {
 
-        //TODO: we will need to edit this accordingly...for instance we still neeed to ask if they want bike insurance
-        //and integrate network i/o into this
         boolean alreadyInCart = false;
         for (PurchasedBike pb : shoppingCart) {
             if (pb.getId() == id) {
@@ -71,18 +69,17 @@ public class ShoppingCartServer {
     /*****
      * This method iterates through the shopping cart and adds all of them to purchased bikes. It also updates the list
      * of available bikes by searching for the corresponding bike based on id and reducing the quantity by the amount
-     * being purchased.
+     * being purchased. ONLY if the quantities are valid
      */
     public void checkout() {
         for (Bike b : bikesForSale) {
             for (PurchasedBike pb : shoppingCart) {
                 if (pb.getId() == b.getId()) {
                     b.setQuantity(b.getQuantity() - pb.getQuantity());
-                    System.out.println("hello world");
                 }
             }
         }
-        for (Seller se: UserInfo.getSellers()) {
+        for (Seller se : UserInfo.getSellers()) {
             for (Bike b : se.getInventory()) {
                 for (PurchasedBike pb : shoppingCart) {
                     b.setQuantity(b.getQuantity() - pb.getQuantity());
@@ -127,6 +124,50 @@ public class ShoppingCartServer {
         }
     }
 
+    /**********
+     * This method checks if the user entered a bike quantity that is an integer is still in stock (so the quantity on
+     * the listing page is not equal to 0 and/or has not been removed), and the quantity requested is not more than the
+     * quantity available
+     * @author Christina Joslin
+     *
+     * @param input the quantity of bikes to be entered by the buyer
+     * @param bikeId the unique 4-digit id of the bike that the buyer wants to purchase
+     * @return true if the quantity is valid (meets the conditions above) and false if hte quantity is not valid
+     * (does not meet the conditions above)
+     * @author Christina Joslin
+     */
+    public boolean checkBikeQuantity(String input, int bikeId) {
+        int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
+        boolean found = false; //checks if the bikeId they would like to purchase is found in the list
+
+        //checks if the input is an integer
+        try {
+            purchaseQuantity = Integer.parseInt(input);
+        } catch (Exception e) {
+            return false;
+        }
+        //checks if the bikeID they want to purchase exists on the listing page
+        for (Bike b : UserInfo.getBikes()) {
+            //finds the corresponding bike id they want to add or purchase
+            if (b.getId() == bikeId) {
+                found = true;
+                //finds the quantity for the bike id they want to remove and if it is equal to 0 then return false
+                if (b.getQuantity() == 0) {
+                    return false;
+                }
+                //if the quantity available of this bike id is less than the quantity they want to purchase, return false
+                if (b.getQuantity() < purchaseQuantity) {
+                    return false;
+                }
+            }
+        }
+        //if the bike id they want to purchase does not exist at all then return false
+        if (!found) {
+            return false;
+        }
+        return found;
+    }
+
     /********
      * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart (add)
      * or is already in the listing page (delete). If meets these requirements, then return true. If it does not,
@@ -136,7 +177,7 @@ public class ShoppingCartServer {
      * @param buttonType the type of button (add or delete) to be used by the user
      * @return true or false indicating is the user input is valid
      */
-    public boolean checkBikeID(String input,String buttonType) {
+    public boolean checkBikeID(String input, String buttonType) {
         int bikeId = -1; //saves the bike ID entered by the user
 
         //checks if the bike id consists of 4 digits
@@ -153,14 +194,14 @@ public class ShoppingCartServer {
         //checks if the bike id is either found on the listing page ("add") or in the shopping cart ("delete")
         switch (buttonType) {
             case "add":
-                for (Bike b: UserInfo.getBikes()) {
+                for (Bike b : UserInfo.getBikes()) {
                     if (b.getId() == bikeId) {
                         return true;
                     }
                 }
                 break;
             case "delete":
-                for (PurchasedBike pb: buyer.getShoppingCart()) {
+                for (PurchasedBike pb : buyer.getShoppingCart()) {
                     if (pb.getId() == bikeId) {
                         return true;
                     }
@@ -170,7 +211,6 @@ public class ShoppingCartServer {
         }
         return false;
     }
-
 
 
     public static void main(String[] args) {
@@ -188,25 +228,70 @@ public class ShoppingCartServer {
                 String input = reader.readLine();
 
                 if (input.equals("add")) {
-                    boolean validInput = false;
+                    /*******
+                     * Checks if the user entered a valid Bike ID or not
+                     */
+                    boolean validId = false;
+                    String d = ""; //temporarily saves the bike id entered by the user and if valid converts it to an integer
                     do {
-                        String d = reader.readLine();
-                        //Sample Buyer for now...
-                        validInput = s.checkBikeID(d,"add");
+                        d = reader.readLine();
+                        validId = s.checkBikeID(d, "add");
                         //lets the client know if the user input is valid or not
-                        writer.write("" + validInput);
+                        writer.write("" + validId);
                         writer.println();
                         writer.flush();
 
-                    } while (!validInput);
+                    } while (!validId);
+                    //saves the bike Id entered
+                    int bikeId = Integer.parseInt(d);
+
+                    /****
+                     * Checks if the user entered a valid Bike Quantity to add
+                     */
+                    boolean validQuantity = false;
+                    String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+                    do {
+                        q = reader.readLine();
+                        validQuantity = s.checkBikeQuantity(q,bikeId);
+                        writer.write("" + validQuantity);
+                        writer.println();
+                        writer.flush();
+                    } while (!validQuantity);
+                    //saves the quantity entered
+                    int quantity = Integer.parseInt(q);
+
+                    double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+
+
+                    /********
+                     * Checks if the user wants $50 insurance added to their bike
+                     */
+                    Bike bikeToAdd = UserInfo.searchBike(bikeId);
+
+                    boolean insured = Boolean.parseBoolean(reader.readLine());
+                    if (!insured) {
+                        finalPrice = bikeToAdd.getPrice() * quantity;
+                    } else {
+                        finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+                    }
+
+                    /******
+                     * Adds the purchased bike to the buyer's shopping cart
+                     */
+                    PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
+                    //shoppingCart.add(newPurchase);
 
 
                 } else if (input.equals("delete")) {
+
+                    /********
+                     * Checks if the user entered a valid Bike ID or not
+                     */
                     boolean validInput = false;
                     do {
                         String d = reader.readLine();
                         //Sample Buyer for now...
-                        validInput = s.checkBikeID(d,"delete");
+                        validInput = s.checkBikeID(d, "delete");
                         //lets the client know if the user input is valid or not
                         System.out.println(validInput);
                         writer.write("" + validInput);
@@ -215,7 +300,8 @@ public class ShoppingCartServer {
 
                     } while (!validInput);
 
-                    //do something
+
+
 
                 } else if (input.equals("checkout")) {
 
