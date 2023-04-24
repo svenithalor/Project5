@@ -27,7 +27,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new ShoppingCartClient());
 
-
     }
 
     @Override
@@ -187,7 +186,10 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         do {
             String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
             boolean validId = false; //confirms that the user has enterred a validBikeId
-            //Checks if the Bike ID is valid
+
+            /********
+             * Checks if the bike ID is valid
+             */
             do {
                 bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
                         "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
@@ -214,55 +216,87 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
             } while (!validId);
 
-            //checks if the bike quantity is valid
-            String quantity = "";
-            boolean validQuantity = false;
+            /************
+             * Checks if the bikeID is already in the shopping cart. If it is already there, then just have the buyer add
+             * on to the existing quantity
+             */
+            boolean inCart;
+            try {
+                inCart = Boolean.parseBoolean(reader.readLine());
 
-            do {
-                quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
-                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-                writer.write(quantity);
-                writer.println();
-                writer.flush();
-                try {
-                    validQuantity = Boolean.parseBoolean(reader.readLine());
-                } catch (Exception e) {
-                    System.out.println("Error under bike quantity in AddBike");
-                    break;
-                }
-                if (validQuantity) {
-                    break;
-                }
-                int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                //allows the user to exit at any point using exit button
-
-                if (choice == JOptionPane.CLOSED_OPTION) {
-                    break;
-                }
-
-            } while (!validQuantity);
-
-            //asks the user if they would like bike insurance added to their total
-            int x = JOptionPane.showConfirmDialog(null, "Enter bike insurance ",
-                    "Click a button",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
-            if (x == JOptionPane.YES_OPTION) {
-                writer.write("yes");
-                writer.println();
-                writer.flush();
-            } else if (x == JOptionPane.NO_OPTION) {
-                writer.write("no");
-                writer.println();
-                writer.flush();
-            } else {
+            } catch (Exception e) {
+                System.out.println("error when trying to find out if already in shopping cart");
                 return;
             }
 
+            if (inCart) {
+                //checks if the bike quantity is valid
+                String quantity = "";
+                boolean validQuantity = false;
+                do {
+                    quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
+                                    "shopping cart. Enter bike quantity to add: ",
+                            "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    writer.write(quantity);
+                    writer.println();
+                    writer.flush();
+
+
+                } while (!validQuantity);
+
+
+
+            } else if (!inCart) {
+                //checks if the bike quantity is valid
+                String quantity = "";
+                boolean validQuantity = false;
+
+                do {
+                    quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
+                            "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    writer.write(quantity);
+                    writer.println();
+                    writer.flush();
+                    try {
+                        validQuantity = Boolean.parseBoolean(reader.readLine());
+                    } catch (Exception e) {
+                        System.out.println("Error under bike quantity in AddBike");
+                        break;
+                    }
+                    if (validQuantity) {
+                        break;
+                    }
+                    int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    //allows the user to exit at any point using exit button
+
+                    if (choice == JOptionPane.CLOSED_OPTION) {
+                        break;
+                    }
+
+                } while (!validQuantity);
+
+                //asks the user if they would like bike insurance added to their total
+                int x = JOptionPane.showConfirmDialog(null, "Enter bike insurance ",
+                        "Boilermaker Bikes",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+                if (x == JOptionPane.YES_OPTION) {
+                    writer.write("yes");
+                    writer.println();
+                    writer.flush();
+                } else if (x == JOptionPane.NO_OPTION) {
+                    writer.write("no");
+                    writer.println();
+                    writer.flush();
+                } else {
+                    return;
+                }
+            }
+            JOptionPane.showConfirmDialog(null,"Bike successfully added!",
+                    "Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 
 
         } while (true);
-
 
     }
 

@@ -31,7 +31,7 @@ public class UserInfo {
      * Updates the buyers database
      * @param buyers of Boilermaker Bikes
      */
-    public static void setBuyers(ArrayList<Buyer> buyers) {
+    synchronized public static void setBuyers(ArrayList<Buyer> buyers) {
         UserInfo.buyers = buyers;
     }
 
@@ -47,7 +47,7 @@ public class UserInfo {
      * Updates the sellers database
      * @param sellers of Boilermaker Bikes
      */
-    public static void setSellers(ArrayList<Seller> sellers) {
+    synchronized public static void setSellers(ArrayList<Seller> sellers) {
         UserInfo.sellers = sellers;
     }
 
@@ -71,7 +71,7 @@ public class UserInfo {
      * Updates the available bikes for sale
      * @param bikes available for sale
      */
-    public static void setBikes(ArrayList<Bike> bikes) {
+    synchronized public static void setBikes(ArrayList<Bike> bikes) {
         UserInfo.bikes = bikes;
     }
 
@@ -80,7 +80,7 @@ public class UserInfo {
      * seller arraylist. If the user is a seller, then the bikes associated with their account will be put into the
      * bikes arraylist to be made available to the user .
      */
-    public static void readUsers() {
+    synchronized public static void readUsers() {
 
         String line = ""; //empty line to reach through each file
 
@@ -252,7 +252,7 @@ public class UserInfo {
     /*********
      * This method writes existing user information into both buyer.csv and seller.csv
      */
-    public static void writeUsers() {
+    synchronized public static void writeUsers() {
         //Writes each buyer back into buyer.csv using the same format
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("buyer.csv", false));

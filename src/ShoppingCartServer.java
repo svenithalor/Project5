@@ -48,99 +48,100 @@ public class ShoppingCartServer {
         int bikeId = Integer.parseInt(d);
 
         /*******
-         * Searches for the bike ID in the existing shopping cart
+         * Searches for the bike ID in the existing shopping cart. If it is already in the cart then simply request
+         * that the buyer add to the quantity they entered
          */
-        //if the bikeId is ALREADY in the cart...then return false you cannot add to the existing quantity
+        boolean inCart = false;
+        int bikeIndex = -1; //saves the bikeId that you want to add on to in the shopping cart
+        int i = 0;
+        for (PurchasedBike p: shoppingCart) {
+            if (p.getId() == bikeId) {
+                inCart = true;
+                bikeIndex = i;
+                i++;
+                break;
+            }
+        }
+        writer.write("" + inCart);
+        writer.println();
+        writer.flush();
 
-        /****
-         * Checks if the user entered a valid Bike Quantity to add
-         */
-        boolean validQuantity = false;
-        String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
-        do {
+        if (inCart) {
+            /****
+             * Checks if the user entered a valid Bike Quantity to add on to the existing total
+             */
+            boolean validQuantity = false;
+            String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+            do {
+                try {
+                    q = reader.readLine();
+                } catch (Exception e) {
+                    System.out.println("addBike method error under quantity");
+                    return;
+                }
+                q += "" + buyer.getShoppingCart().get(bikeIndex).getQuantity(); //adds on the quantity entered by the user to the quantity
+                validQuantity = s.checkBikeQuantity(q, bikeId);
+                writer.write("" + validQuantity);
+                writer.println();
+                writer.flush();
+            } while (!validQuantity);
+            int quantity = Integer.parseInt(q);  //saves the quantity entered if valid
+            //sets the quantity and price of the c
+
+
+        } else if (!inCart) {
+
+            /****
+             * Checks if the user entered a valid Bike Quantity to add
+             */
+            boolean validQuantity = false;
+            String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+            do {
+                try {
+                    q = reader.readLine();
+                } catch (Exception e) {
+                    System.out.println("addBike method error under quantity");
+                    return;
+                }
+                validQuantity = s.checkBikeQuantity(q, bikeId);
+                writer.write("" + validQuantity);
+                writer.println();
+                writer.flush();
+            } while (!validQuantity);
+            //saves the quantity entered
+            int quantity = Integer.parseInt(q);
+
+            double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+
+
+            /********
+             * Checks if the user wants $50 insurance added to their bike
+             */
+            Bike bikeToAdd = UserInfo.searchBike(bikeId);
             try {
-                q = reader.readLine();
+                boolean insured = Boolean.parseBoolean(reader.readLine());
+                if (!insured) {
+                    finalPrice = bikeToAdd.getPrice() * quantity;
+                } else {
+                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+                }
+
+                /******
+                 * Adds the purchased bike to the buyer's shopping cart
+                 */
+                PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
+                shoppingCart.add(newPurchase);
+                buyer.setShoppingCart(shoppingCart);
+
+
             } catch (Exception e) {
-                System.out.println("addBike method error under quantity");
+                System.out.println("Error under adding insurance in AddBike");
                 return;
             }
-            validQuantity = s.checkBikeQuantity(q, bikeId);
-            writer.write("" + validQuantity);
-            writer.println();
-            writer.flush();
-        } while (!validQuantity);
-        //saves the quantity entered
-        int quantity = Integer.parseInt(q);
-
-        double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
-
-
-        /********
-         * Checks if the user wants $50 insurance added to their bike
-         */
-        Bike bikeToAdd = UserInfo.searchBike(bikeId);
-        try {
-            boolean insured = Boolean.parseBoolean(reader.readLine());
-            if (!insured) {
-                finalPrice = bikeToAdd.getPrice() * quantity;
-            } else {
-                finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
-            }
-
-            /******
-             * Adds the purchased bike to the buyer's shopping cart
-             */
-            PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
-            shoppingCart.add(newPurchase);
-            //need to somehow set the shopping cart
-
-        } catch (Exception e) {
-            System.out.println("Error under adding insurance in AddBike");
-            return;
         }
+
+
     }
-
-    /*****
-     * This method searches the available bikes for the one with the given id number. It creates a new PurchasedBike
-     * and adds it to the ShoppingCart arraylist if a sufficient quantity of the desired Bike is available.
-     *
-     * @param id id of the cart being added
-     * @param insurance whether the user wants to buy insurance
-     * @param quantity how many of the bike the user wants to buy
-     */
-    public void addToCart(int id, int quantity, int insurance) {
-
-        boolean alreadyInCart = false;
-        for (PurchasedBike pb : shoppingCart) {
-            if (pb.getId() == id) {
-                pb.setQuantity(pb.getQuantity() + quantity);
-                alreadyInCart = true;
-            }
-        }
-        if (!alreadyInCart) {
-            Bike bikeToAdd = null;
-            for (Bike bike : UserInfo.getBikes()) {
-                if (bike.getId() == id) {
-                    bikeToAdd = bike;
-                }
-            }
-            if (bikeToAdd == null || bikeToAdd.getQuantity() < quantity) {
-                System.out.println("Error: unavailable");
-            } else {
-                double purchasePrice = quantity * bikeToAdd.getPrice();
-                boolean insured = false;
-                if (insurance == 1) {
-                    insured = true;
-                    purchasePrice += 50.0;
-                }
-                bikeToAdd.setQuantity(quantity);
-                PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, purchasePrice, insured);
-                shoppingCart.add(newPurchase);
-                System.out.println("Added to cart!");
-            }
-        }
-    }
-
 
     /*****
      * This method iterates through the shopping cart and adds all of them to purchased bikes. It also updates the list
@@ -304,59 +305,8 @@ public class ShoppingCartServer {
                 String input = reader.readLine();
 
                 if (input.equals("add")) {
-                    /*******
-                     * Checks if the user entered a valid Bike ID or not
-                     */
-                    boolean validId = false;
-                    String d = ""; //temporarily saves the bike id entered by the user and if valid converts it to an integer
-                    do {
-                        d = reader.readLine();
-                        validId = s.checkBikeID(d, "add");
-                        //lets the client know if the user input is valid or not
-                        writer.write("" + validId);
-                        writer.println();
-                        writer.flush();
 
-                    } while (!validId);
-                    //saves the bike Id entered
-                    int bikeId = Integer.parseInt(d);
-
-                    /****
-                     * Checks if the user entered a valid Bike Quantity to add
-                     */
-                    boolean validQuantity = false;
-                    String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
-                    do {
-                        q = reader.readLine();
-                        validQuantity = s.checkBikeQuantity(q, bikeId);
-                        writer.write("" + validQuantity);
-                        writer.println();
-                        writer.flush();
-                    } while (!validQuantity);
-                    //saves the quantity entered
-                    int quantity = Integer.parseInt(q);
-
-                    double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
-
-
-                    /********
-                     * Checks if the user wants $50 insurance added to their bike
-                     */
-                    Bike bikeToAdd = UserInfo.searchBike(bikeId);
-
-                    boolean insured = Boolean.parseBoolean(reader.readLine());
-                    if (!insured) {
-                        finalPrice = bikeToAdd.getPrice() * quantity;
-                    } else {
-                        finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
-                    }
-
-                    /******
-                     * Adds the purchased bike to the buyer's shopping cart
-                     */
-                    PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
-                    //shoppingCart.add(newPurchase);
-
+                    s.addBike(reader,writer,s);
 
                 } else if (input.equals("delete")) {
 
