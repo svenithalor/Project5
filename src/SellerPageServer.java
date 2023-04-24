@@ -155,6 +155,11 @@ public class SellerPageServer {
                 
 
             } while (option != 8);
+
+            writer.close();
+            reader.close();
+            ss.close();
+            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

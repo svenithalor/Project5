@@ -64,25 +64,49 @@ public class SellerPageClient {
     // Both classes will need them because they are sending and recieving data back and forth.
    
 
+    public static void main(String[] args) {
+        String bike1 = "blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,10,1078";
+        String bike2 = "black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,20,1081";
+        String bike3 = "red,25,329.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,2,1080";
+        
+
+        ArrayList<Bike> inv = new ArrayList<>();
+        inv.add(parseBike(bike1));
+        inv.add(parseBike(bike2));
+        inv.add(parseBike(bike3));
+        // inv.add(parseBike(bike4));
+        // inv.add(parseBike(bike5));
+
+        // ALL OF THE ABOVE STUFF IS TEMPORARY FOR TESTING PURPOSES
+
+        SellerPageClient spc = new SellerPageClient("test", inv);
+        spc.runSellerPageClient();
+    }
     
-    
-    public void runSellerPageClient(Seller seller) {
+    public void runSellerPageClient() {
         try {
-            SellerPageClient C = new SellerPageClient(seller.getUsername(), seller.getInventory()); //creates an object to be used to navigate the menu
+            SellerPageClient C = new SellerPageClient(name, inventory); //creates an object to be used to navigate the menu
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-            writer.write(seller.getUsername());
+            writer.write(name);
             writer.println();
             writer.flush(); // sends the seller name
+
+            String sendInventory = sendArrayList(inventory);
+
+            writer.write(sendInventory);
+            writer.println();
+            writer.flush();
+
             int o = -1;
             do {
                 o = C.displayMainMenu(writer, reader); // writer and reader have already been created
                 
                 // server processing is done here
 
-                String type = reader.readLine(); // gets back type of output
+                //String type = reader.readLine(); // gets back type of output
 
             } while (o != 8);
 
@@ -114,11 +138,13 @@ public class SellerPageClient {
                 "7. View analytics","8. Exit"});
 
         panel.add(dropdown);
-        int option = dropdown.getSelectedIndex() + 1;
+        
         int confirmOption = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int option = dropdown.getSelectedIndex() + 1;
         if (confirmOption == JOptionPane.OK_OPTION) {
-            writer.write(option);
+            System.out.println(option);
+            writer.write(Integer.toString(option));
             writer.println();
             writer.flush();
 
