@@ -15,81 +15,71 @@ public class CustomerPageServer {
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
                 int repeat = 1;
                 while (repeat == 1) {
+                    UserInfo.readUsers();
+                    ArrayList<Bike> bikes = UserInfo.getBikes();
+                    ArrayList<String> bikeNames = new ArrayList<>();
+                    for (Bike bike : bikes) {
+                        String format = "%s | $%.2f";
+                        bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
+                    }
+                    writer.println(bikeNames);
+                    writer.flush();
+
                     String input = reader.readLine();
                     int choice = Integer.parseInt(input);
-                    //if the user attempts to exit the website, then end the program.
-                    if (choice == -1) {
-                        //UserInfo.writeUsers();  Commented this out for now but need to remember to save the user's info between sessions
-                        reader.close();
-                        writer.close();
-                        return;
-                    }
-                    UserInfo.readUsers(); //this is just a temporary value for reading new bikes in without using the login
-                    ArrayList<Bike> bikes = UserInfo.getBikes();
+
+
                     switch (choice) {
-                        case 1: // main menu switch case 1: view available bikes
-                            ArrayList<String> bikeNames = new ArrayList<>();
-                            for (Bike bike : bikes) {
-                                String format = "%s | $%.2f";
-                                bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
-                            }
-                            writer.println(bikeNames);
-                            writer.flush();
+                        case -1:
+                            reader.close();
+                            writer.close();
+                            repeat = 0;
+                            return;
+                        case 1: // main menu switch case 1: view available bike
                             int choice1 = Integer.parseInt(reader.readLine());
-                            if (choice1 == -1) {
-                                reader.close();
-                                writer.close();
-                                return;
-                            }
-                            Bike chosenBike = bikes.get(choice1);
-                            writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
-                            writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
-                            writer.println(String.format("Description: %s", chosenBike.getDescription()));
-                            writer.flush();
+
                             switch (choice1) {
-                                case 1: // sort by quantity
+                                default: // writing description of selected bike
+                                    Bike chosenBike = bikes.get(choice1);
+                                    writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
+                                    writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
+                                    writer.println(String.format("Description: %s", chosenBike.getDescription()));
+                                    writer.flush();
+                                case -3: // sort by quantity
                                     ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
+                                    ArrayList<String> sortedNames = new ArrayList<>();
                                     for (Bike bike : quantitySorted) {
-                                        writer.println(bike.toString());
-                                        writer.flush();
+                                        String format = "%s | $%.2f";
+                                        sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
                                     }
+                                    writer.println(sortedNames);
+                                    writer.flush();
                                     break;
-                                case 2: // sort by price
+                                case -2: // sort by price
                                     ArrayList<Bike> priceSorted = sortByPrice(bikes);
+                                    ArrayList<String> priceSortedNames = new ArrayList<>();
                                     for (Bike bike : priceSorted) {
-                                        writer.println(bike.toString());
-                                        writer.flush();
+                                        String format = "%s | $%.2f";
+                                        priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
                                     }
+                                    writer.println(priceSortedNames);
+                                    writer.flush();
                                     break;
-                                case 3: // view bike listing
-                                    int id = Integer.parseInt(reader.readLine());
-                                    Bike bikeToView = null;
-                                    for (Bike bike : bikes) {
-                                        if (bike.getId() == id) {
-                                            bikeToView = bike;
-                                            break; // breaks out of for loop not switch case
-                                        }
-                                    }
-                                    if (bikeToView == null) {
-                                        writer.println("No bike found!");
-                                        writer.flush();
-                                    } else {
-                                        writer.println(bikeToView.toString());
-                                        writer.flush();
-                                    }
-                                    break;
-                                case 4:
+                                case -1:
                                     break; // go back to main menu
-                                case 5: // search
+                                case -4: // search
                                     String searchTerm = reader.readLine();
                                     ArrayList<Bike> matches = search(searchTerm, bikes);
+                                    ArrayList<String> matchNames = new ArrayList<>();
                                     if (matches != null) {
                                         for (Bike bike : matches) {
-                                            writer.println(bike.toString());
-                                            writer.flush();
+                                            String format = "%s | $%.2f";
+                                            matchNames.add(String.format(format, bike.getModelName(), bike.getPrice()));
                                         }
+                                        writer.println(matchNames);
+                                        writer.flush();
                                     } else {
-                                        writer.println("No matches!");
+                                        writer.println(-1);
                                         writer.flush();
                                     }
                                     break;
@@ -101,7 +91,8 @@ public class CustomerPageServer {
 
                         case 3: // main menu option 3: export file with purchase history
                             String fileName = reader.readLine();
-                            writer.println(getPurchaseHistory(fileName));
+                            boolean success = getPurchaseHistory(fileName);
+                            writer.println(success);
                             writer.flush();
                             break;
                         case 4: // logout -- do we need processing on the server side for this?
@@ -195,8 +186,9 @@ public class CustomerPageServer {
         try {
             File file = new File(fileName);
             PrintWriter pw = new PrintWriter(file); // TODO: purchased bike error
-            /*for (PurchasedBike b : purchasedBikes) {
-                pw.println(b.toString());
+            /*ArrayList<PurchasedBike> purchasedBikes = UserInfo.getBuyers().get(userIndex).getPurchaseHistory();
+            for (PurchasedBike b : purchasedBikes) {
+               pw.println(b.toString());
             }*/
             return true;
         } catch (FileNotFoundException e) {

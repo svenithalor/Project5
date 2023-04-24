@@ -5,7 +5,7 @@ import java.util.Scanner;
 import javax.swing.*;
 
 public class CustomerPageClient {
-    //TODO
+    private String searchTerm;
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
@@ -15,65 +15,49 @@ public class CustomerPageClient {
             int repeat = 1;
             CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
             do {
-               //I created a method called displayMenu that would just consistently display
-                //the menu and return the choice made by the user
+                String bikeNames = reader.readLine();
                 int choice = C.displayMainMenu(writer,reader);
-
-                //checks if the user attempts to exit. If they do, then end the program
-                if (choice == -1) {
-                    repeat = 0;
-                }
+                writer.println(choice);
+                writer.flush();
 
                 switch (choice) {
-                    case 1:
-                        int choice1 = C.displayBikesMenu(writer, reader); // main menu option 1: display bikes
-                        if (choice1 == -1) {
-                            break;
-                        }
+                    case -1: repeat = 0;
+                        break;
+                    case 1: // main menu option 1: display bikes
+                        int choice1 = C.displayBikesMenu(writer, reader, bikeNames);
+
                         writer.println(choice1);
                         writer.flush();
-                        String bikeDescription = reader.readLine();
-                        bikeDescription += "\n" + reader.readLine();
-                        bikeDescription += "\n" + reader.readLine();
-                        bikeDescription += "\nAdd bike to cart?";
-                        int option = JOptionPane.showConfirmDialog(null, bikeDescription, "Boilermaker Bikes",
-                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        System.out.println("1. Sort bikes by quantity available");
-                        System.out.println("2. Sort bikes by price");
-                        System.out.println("5. Search products");
 
                         switch (choice1) { // switch of choices within view bikes
-                            case 1, 2: // sorting bikes
+                            default: // when index of a selected bike is returned
+                                String bikeDescription = reader.readLine();
+                                bikeDescription += "\n" + reader.readLine();
+                                bikeDescription += "\n" + reader.readLine();
+                                String[] buttons = {"Go Back", "Add to cart"};
+                                int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
+                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
+                                if (option == 0) {
+                                    break;
+                                } else {
+                                    // TODO: add to cart
+
+                                    break;
+                                }
+                            case -2, -3: // sorting bikes
                                 String sortedBikeInfo = reader.readLine();
-                                while (sortedBikeInfo != null) {
-                                    System.out.println(sortedBikeInfo);
-                                    sortedBikeInfo = reader.readLine();
-                                }
+                                C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
                                 break;
-                            case 3: // view bike listing
-                                System.out.println("Enter id of bike to view");
-                                int id = scanner.nextInt();
-                                scanner.nextLine();
-                                writer.println(id);
-                                System.out.println(reader.readLine());
-                                System.out.println("1. Add to cart");
-                                System.out.println("2. Go back");
-                                int cart = Integer.parseInt(scanner.nextLine());
-                                if (cart == 1) {
-                                    // TODO: add to cart implementation
-                                }
+                            case -1: // go back
                                 break;
-                            case 4: // go back
-                                break;
-                            case 5: // search
-                                System.out.println("Enter search"); // TODO: search box text field
-                                String search = scanner.nextLine();
-                                writer.println(search);
+                            case -4: // search
+                                writer.println(C.searchTerm);
                                 writer.flush();
                                 String result = reader.readLine();
-                                while (result != null) {
-                                    System.out.println(result);
-                                    result = reader.readLine();
+                                if (!result.equals("-1")) {
+                                    C.displayBikesMenu(writer, reader, result); //TODO: processing because of different indexes in matches arraylist
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No matches found!");
                                 }
                                 break;
                         }
@@ -83,15 +67,14 @@ public class CustomerPageClient {
                         //Takes them to the shopping cart...
                         break;
                     case 3: // option 3: view purchase history
-                        System.out.println("Enter name of file to export data to");
-                        String fileName = scanner.nextLine();
+                        String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
                         writer.println(fileName);
                         writer.flush();
                         String success = reader.readLine();
                         if (success.equals("true")) {
-                            System.out.println("Success!");
+                            JOptionPane.showMessageDialog(null, "Success!");
                         } else if (success.equals("false")) {
-                            System.out.println("An error occurred, try again!");
+                            JOptionPane.showMessageDialog(null, "An error occurred, try again!");
                         }
                         break;
                     case 4: // option 4: logout
@@ -99,17 +82,16 @@ public class CustomerPageClient {
                         LoginClient.userLogout();
                         break;
                     case 5: // option 5: delete account
-                        System.out.println("Enter username to confirm account deletion or enter 1 to cancel");
-                        String confirm = scanner.nextLine();
-                        writer.println(confirm);
-                        String deleted = reader.readLine();
-                        if (confirm.equals("1")) {
-                            break;
-                        } else if (deleted.equals("true")) {
-                            System.out.println("Account deleted successfully!");
-                            repeat = 0;
-                        } else if (deleted.equals("false")) {
-                            System.out.println("Try again!");
+                        String confirm = JOptionPane.showInputDialog("Enter username to confirm account deletion");
+                        if (confirm != null) {
+                            writer.println(confirm);
+                            String deleted = reader.readLine();
+                            if (deleted.equals("true")) {
+                                JOptionPane.showMessageDialog(null, "Account deleted successfully!");
+                                repeat = 0;
+                            } else if (deleted.equals("false")) {
+                                JOptionPane.showMessageDialog(null, "Try again!");
+                            }
                         }
                         break;
                 }
@@ -144,20 +126,17 @@ public class CustomerPageClient {
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (option == JOptionPane.OK_OPTION) {
             //sends the chosen option to the server to be processed and then returns this index to the user
-            writer.write("" + dropdown.getSelectedIndex() + 1);
-            writer.println();
-            writer.flush();
             return dropdown.getSelectedIndex() + 1;
         } else {
             return -1;
         }
     }
 
-    public int displayBikesMenu(PrintWriter writer, BufferedReader reader) throws IOException {
+    public int displayBikesMenu(PrintWriter writer, BufferedReader reader, String bikeNames) throws IOException {
 
-        String bikeNames = reader.readLine(); // main menu option 1: display bikes
+        // main menu option 1: display bikes
         String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
-        String[] buttons = {"Search","Sort by price", "Sort by quantity", "View bike", " Go back"};
+        String[] buttons = {"Search", "Sort by price", "Sort by quantity", "View bike", " Go back"};
         JPanel panel = new JPanel();
         JTextField searchField = new JTextField("Enter search", 10);
         JComboBox dropdown = new JComboBox(bikeNamesArray);
@@ -166,21 +145,21 @@ public class CustomerPageClient {
         panel.add(searchField);
         int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-        System.out.println("option: " + option); // view bike = 3, sort quantity = 2, price = 1, search = 0
-        switch(option) {
-            case 0:
-                String search = searchField.getText();
-                return 10;
-            case 1:
-                return 10;
-            case 2:
-                return 10;
-            case 3:
+
+        switch (option) {
+            case 0: // search
+                this.searchTerm = searchField.getText();
+                return -4;
+            case 1: // sort by price
+                return -2;
+            case 2: // sort by quantity
+                return -3;
+            case 3: // view bike
                 return dropdown.getSelectedIndex();
-            case 4:
+            case 4: // go back
                 return -1;
             default:
-                return 10;
+                return -1;
         }
     }
 
