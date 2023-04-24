@@ -23,9 +23,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     JButton refreshButton; //allows the user to refresh their screen and see any updates made by other users
     Container content; //where the shopping cart items will be displayed
     JFrame frame; //the content page for the shopping cart
-
     static JTable table;
-    JFrame frame;
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
@@ -94,14 +92,23 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     }
 
     ActionListener actionListener = new ActionListener() {
+        //creates a ShoppingCartClient object to navigate the buttons
         @Override
         public void actionPerformed(ActionEvent e) {
+
             //creates an shopping cart client object to navigate to each method
+            ShoppingCartClient c = new ShoppingCartClient();
+
             if (e.getSource() == addItemButton) {
-                addCart();
+                writer.write("add");
+                writer.println();
+                writer.flush();
+                c.addBike(writer, reader);
             }
             if (e.getSource() == deleteItemButton) {
-                deleteCart();
+                writer.write("delete");
+                writer.println();
+                writer.flush();
             }
             if (e.getSource() == checkoutButton) {
                 System.out.println("checkout");
@@ -332,34 +339,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
         } while (true);
 
-    }
-
-    private void addCart() {
-        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
-                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-        String quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
-                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-        String[] options = {"No", "Yes"};
-        int x = JOptionPane.showOptionDialog(null, "Do you want insurance ",
-                "Click a button",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-        System.out.println(x);
-
-        String temp = "add," + bikeId + "," + quantity + "," + x;
-        writer.write(temp);
-        writer.println();
-        writer.flush();
-        String valid = null;
-        try {
-            valid = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (valid.equals("false")) {
-            JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.",
-                    "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     private void deleteCart() {

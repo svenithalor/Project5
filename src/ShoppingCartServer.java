@@ -276,8 +276,13 @@ public class ShoppingCartServer {
     }
 
 
-    //TODO...Duoli I need you to work on this portion
     public void removeBike(int id) {
+        //ask for valid bike id
+        //ask for valid quantity (check in the shopping cart)
+        //remove quantity from bike
+        //add to the listing page (incrementing existing quantity or adding a new completely
+
+
         //need to integrate this into our existing methods
         PurchasedBike bikeToRemove = null;
         for (PurchasedBike bike : shoppingCart) {
