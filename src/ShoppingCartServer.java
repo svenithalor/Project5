@@ -408,24 +408,10 @@ public class ShoppingCartServer {
                 String[] is = input.split(",");
                 String tempTp = is[0];
 
-                /******
-                 * Add button completed
-                 */
+
                 if (input.equals("add")) {
-                    String tempReturn = "false";
 
-                    String tempId = is[1];
-                    String quantity = is[2];
-                    String insurance = is[3];
-                    if (s.checkBikeID(tempId, tempTp)) {
-                        tempReturn = "true";
-                        s.addToCart(Integer.parseInt(tempId), Integer.parseInt(quantity), Integer.parseInt(insurance));
-                    }
-                    writer.write(tempReturn);
-                    writer.println();
-                    writer.flush();
-
-
+                   s.addBike(reader,writer,s);
 
                 } else if (input.equals("delete")) {
 
