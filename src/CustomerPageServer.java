@@ -10,6 +10,7 @@ public class CustomerPageServer {
         try {
             ServerSocket serverSocket = new ServerSocket(4242);
             while (true) {
+                System.out.println("hello world");
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
