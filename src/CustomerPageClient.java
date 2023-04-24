@@ -9,6 +9,7 @@ public class CustomerPageClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
+            System.out.println("hello world");
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
