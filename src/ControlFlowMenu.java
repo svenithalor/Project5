@@ -21,6 +21,7 @@ public class ControlFlowMenu {
             }
         };
         loginClient.start();
+
         //sets up the server connection
         try {
             ServerSocket serverSocket = new ServerSocket(4242);
@@ -51,30 +52,15 @@ public class ControlFlowMenu {
             //as long as the user index is valid, take the user to the buyer or seller menu
             if (userIndex != -1) {
                 if (userType.equals("buyer")) {
-                    socket.close();
                     Buyer thisBuyer = UserInfo.getBuyers().get(userIndex);
-                    //creates a customer page object
 
-                    //starts the threads for the customer and client page
-                    Thread cpClient = new Thread() {
-                        public void run() {
-                            CustomerPageClient.main(null);
-                            System.out.println("thread client is running");
-                        }
-                    };
-                    Thread cpServer = new Thread() {
-                        public void run() {
-                            CustomerPageServer.main(null);
-                            System.out.println("thread server is running");
-                        }
-                    };
-                    cpClient.start();
-                    cpServer.start();
+                    //creates a customer page object
+                    CustomerPageClient.run(thisBuyer);
 
 
                 } else if (userType.equals("seller")) {
                     Seller thisSeller = UserInfo.getSellers().get(userIndex);
-                    socket.close();
+
                 }
             }
 
