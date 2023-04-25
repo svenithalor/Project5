@@ -7,12 +7,13 @@ public class CustomerPageServer {
     static Buyer thisBuyer;
     //Methods
     public static void run(Buyer buyer) {
-        thisBuyer = buyer; //makes a shallow copy of the buyer currently navigating the customer page
         try {
+            //System.out.println("Hello world");
             ServerSocket serverSocket = new ServerSocket(1234);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            thisBuyer = buyer; //makes a shallow copy of the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
                 while (repeat == 1) {
