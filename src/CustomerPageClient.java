@@ -197,6 +197,13 @@ public class CustomerPageClient extends JComponent implements Runnable {
      * @author Christina Joslin
      *
      */
+
+
+    /*******
+     * This method runs the complex GUI for the shopping cart page and the buttons add bike,remove bike,checkout,
+     * return to home, and refresh
+     * @author Christina Joslin
+     */
     @Override
     public void run() {
         //Creates the JFrame
@@ -283,7 +290,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 return;
 
             }
-            if (e.getSource() == refreshButton) { //TODO need to fix this; not working
+            if (e.getSource() == refreshButton) { //TODO need to fix this
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
@@ -315,11 +322,14 @@ public class CustomerPageClient extends JComponent implements Runnable {
     }
 
     /********
-     * Need to fill this in
-     * @param writer
-     * @param reader
+     * Allows the buyer to checkout all of the bikes in their current shopping cart and move them to their purchase
+     * history by first checking if the bikes in their cart are still available. If the bikes are not available, then
+     * the checkout is not performed and an error message is shown. If a checkout is successfully performed then a
+     * successful checkout message will be shown.
+     * @param reader readers the input from the server regarding whether the checkout successfully took place
+     * @author Christina Joslin
      */
-    public void checkOutBikes(PrintWriter writer, BufferedReader reader) {
+    public void checkOutBikes(BufferedReader reader) {
         boolean stillAvailable; //keeps track of whether or not the items can be checked out or not
         do {
             try {
@@ -496,9 +506,6 @@ public class CustomerPageClient extends JComponent implements Runnable {
         } while (true);
 
     }
-
-
-
 
 
 }
