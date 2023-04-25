@@ -106,9 +106,9 @@ public class ShoppingCartServer {
             buyer.setShoppingCart(shoppingCart);
             buyers.set(UserInfo.getBuyerIndex(buyer), buyer);
             UserInfo.setBuyers(buyers);
-            //for (Buyer b : UserInfo.getBuyers()) {
-            // System.out.println(b.toString());
-            //}
+            for (Buyer b : UserInfo.getBuyers()) {
+             System.out.println(b.toString());
+            }
 
             //lets the client know that it has been successfully added to the shopping cart
             writer.write("true");
@@ -525,7 +525,5 @@ public class ShoppingCartServer {
             e.printStackTrace();
 
         }
-
-
     }
 }

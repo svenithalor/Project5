@@ -4,10 +4,10 @@ import java.net.*;
 import java.util.ArrayList;
 
 public class CustomerPageServer {
-
+    static Buyer thisBuyer;
     //Methods
     public static void run(Buyer buyer) {
-
+        thisBuyer = buyer; //makes a shallow copy of the buyer currently navigating the customer page
         try {
             ServerSocket serverSocket = new ServerSocket(1234);
             Socket socket = serverSocket.accept(); //waits until the client connects
@@ -90,9 +90,9 @@ public class CustomerPageServer {
                                     break;
                             }
                             break;
-                        case 2:
-                            break; // main menu option 2: view cart
-                        // TODO: shopping cart implementation
+                        case 2: // main menu option 2: view cart
+                            runShoppingCart(reader,writer,thisBuyer);  //runs the shopping cart
+                            break;
 
                         case 3: // main menu option 3: export file with purchase history
                             String fileName = reader.readLine();
@@ -218,13 +218,209 @@ public class CustomerPageServer {
         return deleted;
     }
     /*****
-     * This method will display the shopping cart contents to the user and allow them to add/delete
-     * items accordingly and check out items
+     * The following methods update shopping cart contents for the buyer and allow them to add/delete/checkout
+     * items accordingly
      */
-    public void shoppingCart(PrintWriter writer,BufferedReader reader) {
-        //displays each bike in their shopping cart
-        //complex gui for this...each
-        //four buttons -+ add (simple gui textfield), delete (simple GUI textfield),
-        // checkout (simple GUI messagedialog), and return (have them return)
+
+    //Methods
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer,Buyer buyer) {
+        //creates a Shopping Cart object to navigate the additional shopping cart methods in ShoppingCart.java
+        ShoppingCart cart = new ShoppingCart(buyer);
+        CustomerPageServer s = new CustomerPageServer();
+            do {
+                String input = ""; //stores the button input enterred by the user of where they want to navigate to
+                try {
+                    //waits for what button the user presses
+                    input = reader.readLine();
+                } catch (Exception e) {
+                    System.out.println("Button error");
+                    return;
+                }
+
+                if (input.equals("add")) {
+
+                    s.addBike(reader, writer,cart);
+
+                } else if (input.equals("delete")) {
+
+                    //cart.removeBike(reader,writer,s); TODO
+
+
+                } else if (input.equals("checkout")) {
+
+                    //cart.checkout(reader, writer); TODO
+
+
+                } else if (input.equals("backHome")) {
+
+                    return;
+
+                } else if (input.equals("refresh")) {
+                    //TODO
+
+                    //do something *we may or may not need this if statement*
+                }
+
+            } while (true);
+
     }
+
+
+    /*************
+     * This method allows the buyer to add a bike to their shopping cart
+     * @param reader
+     * @param writer
+     */
+    public void addBike(BufferedReader reader, PrintWriter writer,ShoppingCart cart) {
+        /*******
+         * Checks if the user entered a valid Bike ID or not
+         */
+        boolean validId = false;
+        String d = ""; //temporarily saves the bike id entered by the user and if valid converts it to an integer
+        do {
+            try {
+                d = reader.readLine();
+            } catch (Exception e) {
+                System.out.println("addBike method error under id");
+                return;
+            }
+            validId = cart.checkBikeID(d, "add");
+            //lets the client know if the user input is valid or not
+            writer.write("" + validId);
+            writer.println();
+            writer.flush();
+
+        } while (!validId);
+        //saves the bike Id entered
+        int bikeId = Integer.parseInt(d);
+
+        /*******
+         * Searches for the bike ID in the existing shopping cart. If it is already in the cart AND is on hte listing page
+         * then simply request that the buyer add to the quantity they entered
+         */
+        boolean inCart = false;
+        int bikeIndex = -1; //saves the bikeId that you want to add on to in the shopping cart
+        int i = 0;
+        for (PurchasedBike p : thisBuyer.getShoppingCart()) {
+            if (p.getId() == bikeId) {
+                inCart = true;
+                bikeIndex = i;
+                i++;
+                break;
+            }
+        }
+        writer.write("" + inCart);
+        writer.println();
+        writer.flush();
+
+        if (inCart) {
+            /****
+             * Checks if the user entered a valid Bike Quantity to add on to the existing total
+             */
+            boolean validQuantity = false;
+            String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+            do {
+                try {
+                    q = reader.readLine();
+                } catch (Exception e) {
+                    System.out.println("addBike method error under quantity");
+                    return;
+                }
+                validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                writer.write("" + validQuantity);
+                writer.println();
+                writer.flush();
+            } while (!validQuantity);
+            int quantity = Integer.parseInt(q);  //saves the quantity entered if valid
+            /******
+             * Updates the current bike in the buyer's shopping cart
+             */
+
+            int existingQuantity = thisBuyer.getShoppingCart().get(bikeIndex).getQuantity();
+
+            //updates the quantity for the buyer
+            ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+            tempShoppingCart.get(bikeIndex).setQuantity(existingQuantity + quantity);
+            thisBuyer.setShoppingCart(tempShoppingCart);
+
+            //updates the entire buyer database
+            ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
+            tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
+            UserInfo.setBuyers(tempBuyers);
+            for (Buyer b : UserInfo.getBuyers()) {
+                System.out.println(b.toString());
+            }
+            //lets the client know that it has been successfully added to the shopping cart
+            writer.write("true");
+            writer.println();
+            writer.flush();
+
+
+        } else if (!inCart) {
+
+            /****
+             * Checks if the user entered a valid Bike Quantity to add
+             */
+            boolean validQuantity = false;
+            String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
+            do {
+                try {
+                    q = reader.readLine();
+                } catch (Exception e) {
+                    System.out.println("addBike method error under quantity");
+                    return;
+                }
+                validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                writer.write("" + validQuantity);
+                writer.println();
+                writer.flush();
+            } while (!validQuantity);
+            //saves the quantity entered
+            int quantity = Integer.parseInt(q);
+
+            double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+
+
+            /********
+             * Checks if the user wants $50 insurance added to their bike
+             */
+            Bike bikeToAdd = UserInfo.searchBike(bikeId);
+            try {
+                boolean insured = Boolean.parseBoolean(reader.readLine());
+                if (!insured) {
+                    finalPrice = bikeToAdd.getPrice() * quantity;
+                } else {
+                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+                }
+
+                /******
+                 * Adds the purchased bike to the buyer's shopping cart
+                 */
+                PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
+                ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+                ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
+                tempShoppingCart.add(newPurchase);
+                thisBuyer.setShoppingCart(tempShoppingCart);
+                tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
+                UserInfo.setBuyers(tempBuyers);
+
+
+                //lets the client know that it has been successfully added to the shopping cart
+                writer.write("true");
+                writer.println();
+                writer.flush();
+
+
+            } catch (Exception e) {
+                System.out.println("Error under adding insurance in AddBike");
+                return;
+            }
+        }
+
+
+    }
+
+
+
+
 }

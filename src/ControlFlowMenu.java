@@ -52,14 +52,16 @@ public class ControlFlowMenu {
             return;
 
         }
-        //as long as the user index is valid, make buyer client/server threads or seller client/server threads
+        /*******
+         * As long as the user index is valid, make buyer client/server threads or seller client/server threads
+         */
 
         if (userIndex != -1) {
             if (userType.equals("buyer")) {
                 thisBuyer = UserInfo.getBuyers().get(userIndex);
                 Thread buyerClient = new Thread() {
                     public void run() {
-                        CustomerPageClient.run(thisBuyer);
+                        CustomerPageClient.runClient(thisBuyer);
                     }
                 };
 
@@ -86,6 +88,31 @@ public class ControlFlowMenu {
             } else if (userType.equals("seller")) {
                 thisSeller = UserInfo.getSellers().get(userIndex);
 
+                Thread sellerClient = new Thread() {
+                    public void run() {
+                        SellerPageClient C = new SellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
+                        C.runSellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
+                    }
+                };
+
+                Thread sellerServer = new Thread() {
+                    public void run() {
+                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(),thisSeller.getInventory());
+                        //TODO
+                    }
+                };
+
+                sellerClient.start();
+
+                try {
+                    sellerClient.join();
+
+                } catch (Exception e) {
+                    String[] options = {"OK"};
+                    JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
+                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+
+                }
 
             }
         } else {

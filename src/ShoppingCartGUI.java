@@ -15,7 +15,7 @@ import java.net.Socket;
  * @author Christina Joslin and Duoli Chen, lab sec 4427
  * @version 4/24/2023
  */
-public class ShoppingCartClient extends JComponent implements Runnable {
+public class ShoppingCartGUI extends JComponent implements Runnable {
     JButton addItemButton; //allows the user to add a bike to their shopping cart
     JButton deleteItemButton; //allows the user to delete a bike from their shopping cart
     JButton checkoutButton; //allows the user to checkout all of the items in their shopping cart
@@ -28,14 +28,8 @@ public class ShoppingCartClient extends JComponent implements Runnable {
     BufferedReader reader;
     PrintWriter writer;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new ShoppingCartClient());
-
-    }
-
     @Override
     public void run() {
-
         //Creates the JFrame
         frame = new JFrame("Boilermaker Bikes");
         content = frame.getContentPane();
@@ -82,13 +76,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         panelBottom.add(refreshButton);
         content.add(panelBottom, BorderLayout.SOUTH);
 
-        try {
-            socket = new Socket("localhost", 4242);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 

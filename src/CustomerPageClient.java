@@ -1,12 +1,33 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
-
+/*******
+ * This class..
+ *
+ */
 public class CustomerPageClient {
     private String searchTerm;
-    public static void run(Buyer buyer) {
+    private Socket socket;
+    private BufferedReader reader;
+    private PrintWriter writer;
+
+    //Shopping Cart Fields
+    private JButton addItemButton; //allows the user to add a bike to their shopping cart
+    private JButton deleteItemButton; //allows the user to delete a bike from their shopping cart
+    private JButton checkoutButton; //allows the user to checkout all of the items in their shopping cart
+    private JButton returnToHomeButton; //allows the user to return back to hte main menu
+    private JButton refreshButton; //allows the user to refresh their screen and see any updates made by other users
+    private Container content; //where the shopping cart items will be displayed
+    private JFrame frame; //the content page for the shopping cart
+    static JTable table; //displays the contents of the shopping cart
+
+
+    public static void runClient(Buyer buyer) {
         try {
             Socket socket = new Socket("localhost", 1234);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -41,8 +62,8 @@ public class CustomerPageClient {
                                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
                                 if (option == 0) {
                                     break;
-                                } else {
-                                    // TODO: add to cart
+                                } else { //takes the buyer to the shopping cart to add a bike
+                                    SwingUtilities.invokeLater(new ShoppingCartGUI());
 
                                     break;
                                 }
@@ -66,8 +87,7 @@ public class CustomerPageClient {
                         } } while (repeat1 == 1);
                         break;
                     case 2: // option 2: view cart
-                        // TODO: view/edit cart and checkout
-                        //Takes them to the shopping cart...
+                        SwingUtilities.invokeLater(new ShoppingCartGUI());
                         break;
                     case 3: // option 3: view purchase history
                         String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
@@ -170,6 +190,16 @@ public class CustomerPageClient {
                 return -1;
         }
     }
+
+    /*******
+     * The following methods are used to display the shopping cart and allow the user to add,remove, or checkout items
+     * @author Christina Joslin
+     *
+     */
+
+
+
+
 
 
 }
