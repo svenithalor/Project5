@@ -63,7 +63,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                                 if (option == 0) {
                                     break;
                                 } else { //takes the buyer to the shopping cart to add a bike
-                                    SwingUtilities.invokeLater(new CustomerPageClient());
+                                    //TODO
 
                                     break;
                                 }
@@ -260,18 +260,18 @@ public class CustomerPageClient extends JComponent implements Runnable {
             //creates a shopping cart client object to navigate to each method
             CustomerPageClient c = new CustomerPageClient();
 
-            if (e.getSource() == addItemButton) { //TODO might want to remove the bike ID part and just have a dropdown?
+            if (e.getSource() == addItemButton) { //TODO need to fix this will work on tomorrow
                 writer.write("add");
                 writer.println();
                 writer.flush();
                 c.addBike(writer, reader);
             }
-            if (e.getSource() == deleteItemButton) { //TODO not complete yet (maybe a dropdown for this as well...)
+            if (e.getSource() == deleteItemButton) { //TODO not complete yet
                 writer.write("delete");
                 writer.println();
                 writer.flush();
             }
-            if (e.getSource() == checkoutButton) { //TODO need to fix this
+            if (e.getSource() == checkoutButton) { //TODO need to fix this will work on tomorrow
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
@@ -289,7 +289,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 return;
 
             }
-            if (e.getSource() == refreshButton) { //TODO need to fix this
+            if (e.getSource() == refreshButton) { //TODO need to fix this will work on tomorrow
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
