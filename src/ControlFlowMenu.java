@@ -1,16 +1,11 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 /***************
- *The ControlFlowMenu class allows the user to navigate to the buyer or seller pages on the Boilermaker Bikes site
+ *The ControlFlowMenu class allows the user to navigate to the login and the buyer or seller pages on the
+ *Boilermaker Bikes site.
  *
  * @author Christina Joslin, lab sec 4427
- * @version 4/7/2023
+ * @version 4/25/2023
  */
 public class ControlFlowMenu {
     private static int userIndex; //the current location of the user in the buyer or seller arraylist database
@@ -118,7 +113,6 @@ public class ControlFlowMenu {
         } else {
             JOptionPane.showOptionDialog(null, "Connection interrupted. Exiting Boilermaker Bikes.",
                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
-            return;
         }
 
 

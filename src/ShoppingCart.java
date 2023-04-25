@@ -1,3 +1,6 @@
+/*********************
+ * This class contains methods used to check bike quantity and
+ */
 public class ShoppingCart {
     private Buyer thisBuyer; //the buyer currently navigating the buyer shopping cart
 
