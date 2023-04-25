@@ -254,18 +254,18 @@ public class CustomerPageClient extends JComponent implements Runnable {
             //creates a shopping cart client object to navigate to each method
             ShoppingCartClient c = new ShoppingCartClient();
 
-            if (e.getSource() == addItemButton) {
+            if (e.getSource() == addItemButton) { //TODO might want to remove the bike ID part and just have a dropdown?
                 writer.write("add");
                 writer.println();
                 writer.flush();
                 c.addBike(writer, reader);
             }
-            if (e.getSource() == deleteItemButton) {
+            if (e.getSource() == deleteItemButton) { //TODO not complete yet (maybe a dropdown for this as well...)
                 writer.write("delete");
                 writer.println();
                 writer.flush();
             }
-            if (e.getSource() == checkoutButton) {
+            if (e.getSource() == checkoutButton) { //TODO need to fix this
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
@@ -283,9 +283,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 return;
 
             }
-            if (e.getSource() == refreshButton) {
-                //refreshes the page for the user
-                //need to fix this
+            if (e.getSource() == refreshButton) { //TODO need to fix this; not working
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
@@ -301,6 +299,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
     /*******
      * This method displays the bikes in a certain buyer's shopping cart using a JTable
      * @param b the buyer who wants to view their shopping cart
+     * @param content the container of bikes the usr wants to display
      */
     public static void displayBikes(Buyer b, Container content) {
         String[] columnNames = {"Bike ID", "Model Name", "Price", "Quantity"};
