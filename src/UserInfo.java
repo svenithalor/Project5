@@ -314,12 +314,27 @@ public class UserInfo {
         int index = -1;
         for (Seller s : sellers) {
             if (s.equals(seller)) {
-                index = buyers.indexOf(s);
+                index = sellers.indexOf(s);
                 break;
             }
         }
         return index;
     }
 
-
+    /**********
+     * Overloaded method that returns index of master seller list given the Seller name String
+     * @param sellerName
+     * @return the index of the seller they are looking for in the sellers database. If the seller is not found, then
+     * return an index of -1
+     */
+    public static int getSellerIndex(String sellerName) {
+        int index = -1;
+        for (Seller s : sellers) {
+            if (s.getUsername().equals(sellerName)) {
+                index = sellers.indexOf(s);
+                break;
+            }
+        }
+        return index;
+    }
 }

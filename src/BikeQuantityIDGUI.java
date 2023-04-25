@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.CountDownLatch;
 
 public class BikeQuantityIDGUI extends JComponent implements Runnable {
     
@@ -9,10 +10,15 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
     private JLabel option2NoQuantity;
     private JTextField QuantityInput;
     private JButton option2SubmitButton;
+    private CountDownLatch latch;
+    private int[] result;
+    private boolean success;
 
     
 
-    public BikeQuantityIDGUI() {
+    public BikeQuantityIDGUI(CountDownLatch latch) {
+        this.latch = latch;
+        this.success = true;
         option2No = new JPanel();
         option2NoIDLabel = new JLabel("Enter the ID of the bike.");
         IDinput = new JTextField(10);
@@ -26,8 +32,9 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
             } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(null, "Invalid ID or Quantity.", "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
+                this.success = false;
             }
-
+            latch.countDown();
             Window window = SwingUtilities.windowForComponent(this);
             if (window != null) {
                 window.dispose();
@@ -58,9 +65,9 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
         o2Frame.setVisible(true);
 
     }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new BikeQuantityIDGUI());
-    }
+   // public static void main(String[] args) {
+       // SwingUtilities.invokeLater(new BikeQuantityIDGUI());
+    //}
 
     public int[] sendIDandQuantity() {
         int id = Integer.valueOf(IDinput.getText());
@@ -68,9 +75,24 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
 
         int[] vtr = {id, quantity};
 
+        this.result = vtr;
+
         return vtr;
     }
 
-    
+    public int[] returnResult() {
+        try {
+            latch.await();
+        } catch (InterruptedException ie) {
+            JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                JOptionPane.ERROR_MESSAGE);
+            
+        }
+        return result;
+    }
+
+    public boolean returnSuccess() {
+        return success;
+    }
 }
 

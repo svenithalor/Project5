@@ -45,12 +45,45 @@ public class SellerPageServer {
         return bike;
     }
 
+    public static PurchasedBike parsePurchasedBike(String part) {
+        String[] bikeElements = part.split(",");
+        String color = bikeElements[0];
+        int wheelSize = Integer.parseInt(bikeElements[1]);
+        double price = Double.parseDouble(bikeElements[2]);
+        double finalPrice = Double.parseDouble(bikeElements[3]);
+        String modelName = bikeElements[4];
+        Boolean used = Boolean.parseBoolean(bikeElements[5]);
+        String description = bikeElements[6];
+        String sellerName = bikeElements[7];
+        int quantity = Integer.parseInt(bikeElements[8]);
+        boolean insured = Boolean.parseBoolean(bikeElements[9]);
+        int id = Integer.parseInt(bikeElements[10]);
+        PurchasedBike pb = new PurchasedBike(color, wheelSize, price, finalPrice, modelName, used, description, 
+            sellerName, quantity, insured, id);
+
+        return pb;
+    }
+
     /******
      * Method to send arrayList from client to server or vice versa.
      */
     public static String sendArrayList(ArrayList<Bike> bike) {
         StringBuilder sb = new StringBuilder();
         for (Bike b : bike) {
+            sb.append(b.toString() + "]");
+        }
+
+        if (sb.length() != 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        String vtr = sb.toString();
+        return vtr;
+    }
+
+    public static String sendPurchasedBikes(ArrayList<PurchasedBike> bike) {
+        StringBuilder sb = new StringBuilder();
+        for (PurchasedBike b : bike) {
             sb.append(b.toString() + "]");
         }
 
@@ -117,6 +150,8 @@ public class SellerPageServer {
 
             String sellerName = reader.readLine(); // reads seller name first
 
+            System.out.println("Name: " + sellerName);
+
             String sellerInventory = reader.readLine(); // reads the inventory immediately after
 
             ArrayList<Bike> inv = recieveArrayList(sellerInventory);
@@ -131,6 +166,7 @@ public class SellerPageServer {
             do {
                 strOption = reader.readLine(); // will read the input from client
                 option = Integer.parseInt(strOption);
+                System.out.println(strOption);
                 // Options 1-3 are taken care of within client
                 if (option == 4) {
                     String term = reader.readLine();
@@ -151,10 +187,79 @@ public class SellerPageServer {
                     writer.println();
                     writer.flush();
 
+                } else if (option == 6) {
+                    // System.out.println("testn");
+                    String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,test,1,false,1090";
+                    String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,test,2,false,1101";
+                    String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
+
+                    ArrayList<PurchasedBike> bruh = new ArrayList<>();
+
+                    bruh.add(parsePurchasedBike(testb1));
+                    bruh.add(parsePurchasedBike(testb2));
+                    bruh.add(parsePurchasedBike(testb3));
+                    System.out.println("test2" + bruh.get(2).getSellerName());
+                    ArrayList<PurchasedBike> matches = new ArrayList<>();
+                    
+                    for (PurchasedBike pb : bruh) {
+                        if (sp.getName().equals(pb.getSellerName())) {
+                            matches.add(pb);
+                            
+                        }
+                    }
+                    //TODO: IT IS SEARCHING 'bikes' RIGHT NOW. THIS IS ONLY FOR TESTING
+                    //TODO: CHANGE THIS TO LOOK AT THE GLOBAL ARRAYLIST OF BUYERS 
+
+                    String vtr = sendPurchasedBikes(matches);
+                    
+                    System.out.println(vtr);
+
+                    writer.write(vtr);
+                    writer.println();
+                    writer.flush();
+                } else if (option == 7) {
+
+                    ArrayList<PurchasedBike> matches = new ArrayList<>();
+                    for (Buyer buyer : UserInfo.getBuyers()) {
+                        for (PurchasedBike pb : buyer.getPurchaseHistory()) {
+
+                            if (pb.getSellerName().equals(sp.getName())) {
+                                matches.add(pb);
+                            }
+                        }
+                    }
+
+                    String vtr = sendPurchasedBikes(matches);
+                    writer.write(vtr);
+                    writer.println();
+                    writer.flush();
+                } else if (option == 8) {
+                    boolean success = true;
+                    try {
+                        String iString = reader.readLine();
+
+                        ArrayList<Bike> invArrayList = recieveArrayList(iString);
+
+                        sp.setInventory(invArrayList);
+
+                        int sellerIndex = UserInfo.getSellerIndex(sellerName);
+
+                        UserInfo.getSellers().get(sellerIndex).setInventory(sp.getInventory());
+                    } catch (Exception e) {
+                        success = false;
+                    }
+
+                    writer.write(Boolean.toString(success));
+                    writer.println();
+                    writer.flush();
+                    
                 }
                 
 
             } while (option != 8);
+
+            String fiString = reader.readLine();
+            sp.setInventory(recieveArrayList(fiString));
 
             writer.close();
             reader.close();
