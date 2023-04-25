@@ -1,11 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.concurrent.CountDownLatch;
 
 public class BikeDetailsGUI extends JComponent implements Runnable {
     private JTextField nameField, wheelSizeField, colorField, priceField, descriptionField, idField, usedOrNoField, quantityField, sellerNameField;
+    private Bike result;
+    private CountDownLatch latch;
+    private boolean success;
 
-    public BikeDetailsGUI() {
+    public BikeDetailsGUI(CountDownLatch latch) {
         // Create the labels and text fields
+        this.latch = latch;
+        this.success = true;
         nameField = new JTextField(20);
         wheelSizeField = new JTextField(20);
         colorField = new JTextField(20);
@@ -40,7 +47,15 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         // Create the button
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
-            this.sendBike();
+            try {
+                result = this.sendBike();
+            } catch(NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(null, "At least one of the components is invalid.", "Boilermaker Bikes",
+                JOptionPane.ERROR_MESSAGE);
+                this.success = false;
+            } 
+            
+            latch.countDown();
             
             // Close the window
             Window window = SwingUtilities.windowForComponent(this);
@@ -70,9 +85,9 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
     }
     // I'm pretty sure this main method wont do anything besides allow 
     // you to run this on its own (which is useful for testing)
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new BikeDetailsGUI());
-    }
+    // public static void main(String[] args) {
+        // SwingUtilities.invokeLater(new BikeDetailsGUI());
+    // }
 
     public Bike sendBike() {
         String name = nameField.getText();
@@ -88,5 +103,20 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         Bike vtr = new Bike(color, wheelSize, price, name, usedOrNo, description, sellerName, quantity, id);
 
         return vtr;
+    }
+
+    public Bike getBike() {
+        try {
+            latch.await();
+        } catch (InterruptedException ie) {
+            JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return result;
+    }
+
+    public boolean returnSuccess() {
+        return success;
     }
 }

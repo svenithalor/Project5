@@ -223,8 +223,8 @@ public class Bike {
      * @return String containing only some attributes, with spacing, etc
      */
     public String toNiceString() {
-        String vtr = String.format("Name: %s | Price: $%.2f | Wheel size: %d | '%s'", modelName, price,
-            wheelSize, description);
+        String vtr = String.format("Name: %s | Price: $%.2f | Wheel size: %d | Quantity: %d", modelName, price,
+            wheelSize, quantity);
         return vtr;
     }
 }

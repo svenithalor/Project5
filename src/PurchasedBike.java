@@ -65,5 +65,9 @@ public class PurchasedBike extends Bike {
                 getId());
         return message;
     }
+
+    public String toNiceString() {
+        return super.toNiceString();
+    }
 }
 
