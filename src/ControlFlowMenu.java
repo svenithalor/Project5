@@ -93,14 +93,16 @@ public class ControlFlowMenu {
                 Thread sellerServer = new Thread() {
                     public void run() {
                         SellerPageServer S = new SellerPageServer(thisSeller.getUsername(),thisSeller.getInventory());
-                        //TODO
+                        S.run();
                     }
                 };
 
                 sellerClient.start();
+                sellerServer.start();
 
                 try {
                     sellerClient.join();
+                    sellerServer.join();
 
                 } catch (Exception e) {
                     String[] options = {"OK"};

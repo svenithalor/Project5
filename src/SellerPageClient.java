@@ -121,7 +121,7 @@ public class SellerPageClient {
     public void runSellerPageClient(String rName, ArrayList<Bike> rInventory) {
         try {
             SellerPageClient C = new SellerPageClient(rName, rInventory); //creates an object to be used to navigate the menu
-            Socket socket = new Socket("localhost", 4242);
+            Socket socket = new Socket("localhost", 1212);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 

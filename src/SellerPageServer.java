@@ -139,9 +139,9 @@ public class SellerPageServer {
         return true;
         
     }
-    public static void main(String[] args) {
+    public void run() {
         try {
-            ServerSocket ss = new ServerSocket(4242); // change this port later
+            ServerSocket ss = new ServerSocket(1212); // change this port later
 
             Socket socket = ss.accept();
 
