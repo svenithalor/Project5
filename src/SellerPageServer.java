@@ -188,7 +188,7 @@ public class SellerPageServer {
                     writer.flush();
 
                 } else if (option == 6) {
-                    // System.out.println("testn");
+                    // BELOW CODE IS FOR TESTING SELLERPAGE ALONE
                     String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,test,1,false,1090";
                     String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,test,2,false,1101";
                     String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
@@ -201,18 +201,20 @@ public class SellerPageServer {
                     System.out.println("test2" + bruh.get(2).getSellerName());
                     ArrayList<PurchasedBike> matches = new ArrayList<>();
                     
-                    for (PurchasedBike pb : bruh) {
-                        if (sp.getName().equals(pb.getSellerName())) {
-                            matches.add(pb);
-                            
+                    // ABOVE CODE IS FOR TESTING SELLERPAGE ALONE
+                    for (Buyer b : UserInfo.getBuyers()) {
+                        for (PurchasedBike pb : b.getShoppingCart()) {
+                            if (sp.getName().equals(pb.getSellerName())) {
+                                matches.add(pb);
+                                
+                            }
                         }
                     }
-                    //TODO: IT IS SEARCHING 'bikes' RIGHT NOW. THIS IS ONLY FOR TESTING
-                    //TODO: CHANGE THIS TO LOOK AT THE GLOBAL ARRAYLIST OF BUYERS 
+                    
 
                     String vtr = sendPurchasedBikes(matches);
                     
-                    System.out.println(vtr);
+                    // System.out.println(vtr);
 
                     writer.write(vtr);
                     writer.println();

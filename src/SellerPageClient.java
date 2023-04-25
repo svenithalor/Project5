@@ -97,8 +97,9 @@ public class SellerPageClient {
     // The above 3 methods are the same as the SellerPageServer.
     // Both classes will need them because they are sending and recieving data back and forth.
    
-
+    // This method is only for testing seller page on its own
     public static void main(String[] args) {
+        
         String bike1 = "blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,10,1078";
         String bike2 = "black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,20,1081";
         String bike3 = "red,25,329.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,2,1080";
@@ -114,12 +115,12 @@ public class SellerPageClient {
         // ALL OF THE ABOVE STUFF IS TEMPORARY FOR TESTING PURPOSES
 
         SellerPageClient spc = new SellerPageClient("test", inv);
-        spc.runSellerPageClient();
+        spc.runSellerPageClient("test", inv);
     }
     
-    public void runSellerPageClient() {
+    public void runSellerPageClient(String rName, ArrayList<Bike> rInventory) {
         try {
-            SellerPageClient C = new SellerPageClient(name, inventory); //creates an object to be used to navigate the menu
+            SellerPageClient C = new SellerPageClient(rName, rInventory); //creates an object to be used to navigate the menu
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -338,7 +339,7 @@ public class SellerPageClient {
                         JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
-                        JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
                 }
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
