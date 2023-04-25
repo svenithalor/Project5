@@ -12,7 +12,6 @@ import javax.swing.*;
  */
 public class CustomerPageClient extends JComponent implements Runnable {
     private String searchTerm;
-    private Socket socket;
     private static BufferedReader reader;
     private static PrintWriter writer;
 
@@ -219,7 +218,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
         frame.setVisible(true);
 
 
-        ShoppingCartClient.displayBikes(CustomerPageServer.thisBuyer, frame); //NOTE* temporary input
+        displayBikes(CustomerPageServer.thisBuyer, frame); //NOTE* temporary input
         //Creates the list of items in the buyer's shopping cart
         JLabel l = new JLabel("Shopping Cart");
         content.add(l, BorderLayout.NORTH);
@@ -259,7 +258,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
         public void actionPerformed(ActionEvent e) {
 
             //creates a shopping cart client object to navigate to each method
-            ShoppingCartClient c = new ShoppingCartClient();
+            CustomerPageClient c = new CustomerPageClient();
 
             if (e.getSource() == addItemButton) { //TODO might want to remove the bike ID part and just have a dropdown?
                 writer.write("add");
@@ -276,7 +275,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
-                c.checkOutBikes(writer,reader);
+               // c.checkOutBikes(writer,reader);
                 //tells the server that the user wants to check out
                 //do something
                 //remove elements from the shopping cart and putting it in the purchase history
@@ -294,7 +293,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
-                ShoppingCartClient.displayBikes(UserInfo.getBuyers().get(0), frame); //NOTE* temporary input
+                displayBikes(UserInfo.getBuyers().get(0), frame); //NOTE* temporary input
                 frame.setVisible(false);
                 frame.setVisible(true);
             }
@@ -306,7 +305,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
     /*******
      * This method displays the bikes in a certain buyer's shopping cart using a JTable
      * @param b the buyer who wants to view their shopping cart
-     * @param content the container of bikes the usr wants to display
+     * @param content the container of bikes the user wants to display
+     * @author Christina Joslin
      */
     public static void displayBikes(Buyer b, Container content) {
         String[] columnNames = {"Bike ID", "Model Name", "Price", "Quantity"};
@@ -367,37 +367,40 @@ public class CustomerPageClient extends JComponent implements Runnable {
      */
     public void addBike(PrintWriter writer, BufferedReader reader) {
         do {
-            String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
+            int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
             boolean validId = false; //confirms that the user has enterred a validBikeId
+            String [] listingPageOptions = new String[UserInfo.getBikes().size()];
+            int i = 0;
 
             /********
-             * Checks if the bike ID is valid
+             * Iterates through the available bikes in the shopping cart database and displays them to the user
              */
-            do {
-                bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
-                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-                //sends the bike ID to the server and confirms that is a valid input
-                writer.write(bikeId);
-                writer.println();
-                writer.flush();
-                try {
-                    validId = Boolean.parseBoolean(reader.readLine());
-                } catch (IOException e) {
-                    System.out.println("Error under bike ID in AddBike"); //TEMP value
+            for (Bike b: UserInfo.getBikes()) {
+                listingPageOptions[i] = b.toNiceString();
+                i++;
+            }
+            String bikeMessage = (String) JOptionPane.showInputDialog(null,"Choose Bike to Add","Boilermaker Bikes",
+                    JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
+
+            System.out.println(bikeMessage);
+            //if the user does not choose an option then set the bike message to null
+            if (bikeMessage.isEmpty() || bikeMessage == null) {
+                return;
+            }
+
+            /********
+             * Retrieves the corresponding bikeID
+             */
+            for (Bike b: UserInfo.getBikes()) {
+                if (b.toNiceString().equals(bikeMessage)) {
+                    bikeId = b.getId();
+                    writer.write(bikeId + "");
+                    writer.println();
+                    writer.flush();
                     break;
                 }
+            }
 
-                if (validId) {
-                    break;
-                }
-                int choice = JOptionPane.showConfirmDialog(null, "Invalid Bike ID. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                //allows the user to exit at any point using exit button
-
-                if (choice == JOptionPane.CLOSED_OPTION) {
-                    break;
-                }
-
-            } while (!validId);
 
             /************
              * Checks if the bikeID is already in the shopping cart. If it is already there, then just have the buyer add

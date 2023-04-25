@@ -274,26 +274,19 @@ public class CustomerPageServer {
      */
     public void addBike(BufferedReader reader, PrintWriter writer,ShoppingCart cart) {
         /*******
-         * Checks if the user entered a valid Bike ID or not
+         * Saves the bikeID chosen by the user
          */
-        boolean validId = false;
-        String d = ""; //temporarily saves the bike id entered by the user and if valid converts it to an integer
-        do {
-            try {
-                d = reader.readLine();
-            } catch (Exception e) {
-                System.out.println("addBike method error under id");
-                return;
-            }
-            validId = cart.checkBikeID(d, "add");
-            //lets the client know if the user input is valid or not
-            writer.write("" + validId);
-            writer.println();
-            writer.flush();
+        //saves the bike ID retrieved from the server
+        int bikeId = -1;
 
-        } while (!validId);
-        //saves the bike Id entered
-        int bikeId = Integer.parseInt(d);
+        try {
+            bikeId = Integer.parseInt(reader.readLine());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error under addBike in CustomerPageServer");
+            return;
+        }
+
 
         /*******
          * Searches for the bike ID in the existing shopping cart. If it is already in the cart AND is on hte listing page
