@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.CountDownLatch;
+
 
 public class SellerPageClient {
     // fields
@@ -27,6 +29,26 @@ public class SellerPageClient {
         Bike bike = new Bike(sNB[0], wS, p, sNB[3], u, sNB[5], sNB[6], q, tempID);
 
         return bike;
+    }
+
+    public static PurchasedBike parsePurchasedBike(String part) {
+        System.out.println(part);
+        String[] bikeElements = part.split(",");
+        String color = bikeElements[0];
+        int wheelSize = Integer.parseInt(bikeElements[1]);
+        double price = Double.parseDouble(bikeElements[2]);
+        double finalPrice = Double.parseDouble(bikeElements[3]);
+        String modelName = bikeElements[4];
+        Boolean used = Boolean.parseBoolean(bikeElements[5]);
+        String description = bikeElements[6];
+        String sellerName = bikeElements[7];
+        int quantity = Integer.parseInt(bikeElements[8]);
+        boolean insured = Boolean.parseBoolean(bikeElements[9]);
+        int id = Integer.parseInt(bikeElements[10]);
+        PurchasedBike pb = new PurchasedBike(color, wheelSize, price, finalPrice, modelName, used, description, 
+            sellerName, quantity, insured, id);
+
+        return pb;
     }
 
     /******
@@ -55,6 +77,18 @@ public class SellerPageClient {
 
         for (String bike : bikes) {
             vtr.add(parseBike(bike));
+        }
+
+        return vtr;
+    }
+
+    public static ArrayList<PurchasedBike> recievePurchasedBikes(String s) {
+        System.out.println(s);
+        String[] bikes = s.split("]");
+        ArrayList<PurchasedBike> vtr = new ArrayList<>();
+
+        for (String bike : bikes) {
+            vtr.add(parsePurchasedBike(bike));
         }
 
         return vtr;
@@ -110,6 +144,12 @@ public class SellerPageClient {
 
             } while (o != 8);
 
+            String finalInventory = sendArrayList(inventory);
+
+            writer.write(finalInventory);
+            writer.println();
+            writer.flush();
+
             reader.close();
             writer.close();
             socket.close();
@@ -140,10 +180,10 @@ public class SellerPageClient {
         panel.add(dropdown);
         
         int confirmOption = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
         int option = dropdown.getSelectedIndex() + 1;
         if (confirmOption == JOptionPane.OK_OPTION) {
-            System.out.println(option);
+            // System.out.println(option);
             writer.write(Integer.toString(option));
             writer.println();
             writer.flush();
@@ -153,47 +193,82 @@ public class SellerPageClient {
                 
             } else if (option == 2) {
                 
-
+                
                 int response = JOptionPane.showConfirmDialog(null, "Are you updating the stock of an existing bike?", 
                     "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
                 if (response == 0) {
-                    BikeQuantityIDGUI bqig = new BikeQuantityIDGUI();
-                    bqig.run();
-                    int[] idq = bqig.sendIDandQuantity();
-                    int tempID = idq[0];
-                    int tempQuant = idq[1];
-                    if (this.checkValidID(tempID)) {
-                        Bike tempBike = this.getBikeWithID(tempID);
-                        tempBike.setQuantity(tempBike.getQuantity() + tempQuant);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
-                        JOptionPane.ERROR_MESSAGE);
+                    CountDownLatch latch = new CountDownLatch(1);
+                    BikeQuantityIDGUI bqig = new BikeQuantityIDGUI(latch);
+                    SwingUtilities.invokeLater(bqig);
+                    try {
+                        latch.await();
+                    } catch (InterruptedException ie) {
+                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                            JOptionPane.ERROR_MESSAGE);
+                        
+                    }
+                    boolean success = bqig.returnSuccess();
+                    if (success) {
+                        int[] idq = bqig.returnResult();
+                        int tempID = idq[0];
+                        int tempQuant = idq[1];
+                        if (this.checkValidID(tempID)) {
+                            Bike tempBike = this.getBikeWithID(tempID);
+                            tempBike.setQuantity(tempBike.getQuantity() + tempQuant);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                            JOptionPane.ERROR_MESSAGE);
 
+                        }
                     }
 
 
 
                 } else {
-                    BikeDetailsGUI bdg = new BikeDetailsGUI();
-                    bdg.run();
-                    Bike tempBike = bdg.sendBike();
-                    inventory.add(tempBike);
+                    CountDownLatch latch = new CountDownLatch(1);
+                    BikeDetailsGUI bdg = new BikeDetailsGUI(latch);
+                    SwingUtilities.invokeLater(bdg);
+                    try {
+                        latch.await();
+                    } catch (InterruptedException ie) {
+                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                    boolean success = bdg.returnSuccess();
+                    if (success) {
+                        Bike tempBike = bdg.getBike();
+                        inventory.add(tempBike);
+                    }
+                    
                 }
             } else if (option == 3) {
+                
+                CountDownLatch latch = new CountDownLatch(1);
 
-                BikeQuantityIDGUI bqig = new BikeQuantityIDGUI();
-                bqig.run();
-                int[] idq = bqig.sendIDandQuantity();
-                int tempID = idq[0];
-                int tempQuant = idq[1];
-                if (this.checkValidID(tempID)) {
-                    Bike tempBike = this.getBikeWithID(tempID);
-                    tempBike.setQuantity(tempBike.getQuantity() - tempQuant);
-                } else {
-                    JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
-                    JOptionPane.ERROR_MESSAGE);
-
+                BikeQuantityIDGUI bqig = new BikeQuantityIDGUI(latch);
+                SwingUtilities.invokeLater(bqig);
+                try {
+                    latch.await();
+                } catch (InterruptedException ie) {
+                    JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
+                    
                 }
+                boolean success = bqig.returnSuccess();
+                if (success) {
+                    int[] idq = bqig.returnResult();
+                    int tempID = idq[0];
+                    int tempQuant = idq[1];
+                    if (this.checkValidID(tempID)) {
+                        Bike tempBike = this.getBikeWithID(tempID);
+                        tempBike.setQuantity(tempBike.getQuantity() - tempQuant);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
+
+                    }
+                }
+                
 
             } else if (option == 4) {
                 String term = JOptionPane.showInputDialog(null, "Enter a search term",
@@ -226,11 +301,50 @@ public class SellerPageClient {
                }
                 
 
+            } else if (option == 6) {
+                String cCarts = reader.readLine();
+
+                if (cCarts.length() == 0) {
+                    JOptionPane.showMessageDialog(null, "No Bikes Found.", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
+                } else {
+                    ArrayList<PurchasedBike> customerCarts = recievePurchasedBikes(cCarts);
+
+               
+                    basicViewPurchasedBikes(customerCarts);
+                }
+                
+
+
+
+            } else if (option == 7) {
+                String analyticsString = reader.readLine();
+
+                ArrayList<PurchasedBike> analytics = recievePurchasedBikes(analyticsString);
+                
+                viewAnalytics(analytics);
+            } else {
+                String vtr = sendArrayList(inventory);
+
+                writer.write(vtr);
+                writer.println();
+                writer.flush();
+
+                String strSuccess = reader.readLine();
+                boolean success = Boolean.parseBoolean(strSuccess);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Successfully saved data. Exiting now...", "Boilermaker Bikes", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
+                }
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
-            writer.write("" + Integer.toString(option));
-            writer.println();
-            writer.flush();
+           // writer.write("" + Integer.toString(option));
+            //writer.println();
+            //writer.flush();
             return option;
         } else {
             JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
@@ -252,6 +366,46 @@ public class SellerPageClient {
         }
         // sb.deleteCharAt(sb.length() - 1);
 
+        String vtr = sb.toString();
+
+        JOptionPane.showMessageDialog(null, vtr, "Boilermaker Bikes", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+
+    }
+
+    public static void basicViewPurchasedBikes(ArrayList<PurchasedBike> bikes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Bikes: \n");
+        
+        // ArrayList<JLabel> displayBikes = new ArrayList<>();
+        for (PurchasedBike b : bikes) {
+            sb.append(b.toNiceString() + "\n");
+
+        }
+        // sb.deleteCharAt(sb.length() - 1);
+
+        String vtr = sb.toString();
+
+        JOptionPane.showMessageDialog(null, vtr, "Boilermaker Bikes", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+
+    }
+
+    public static void viewAnalytics(ArrayList<PurchasedBike> bikes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Bikes: \n");
+        
+        int total = 0;
+        // ArrayList<JLabel> displayBikes = new ArrayList<>();
+        for (PurchasedBike b : bikes) {
+            sb.append(String.format(b.toNiceString() + " | Revenue: $%.2f\n", (b.getPrice() * b.getQuantity())));
+            total += b.getQuantity();
+        }
+        // sb.deleteCharAt(sb.length() - 1);
+
+        sb.append(String.format("Total bikes purchased: %d\n", total));
         String vtr = sb.toString();
 
         JOptionPane.showMessageDialog(null, vtr, "Boilermaker Bikes", 
