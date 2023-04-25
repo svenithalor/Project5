@@ -6,13 +6,14 @@ import java.util.ArrayList;
 public class CustomerPageServer {
 
     //Methods
-    public static void main(String[] args) {
+    public static void run(Buyer buyer) {
+
         try {
-            ServerSocket serverSocket = new ServerSocket(4242);
+            ServerSocket serverSocket = new ServerSocket(1234);
+            Socket socket = serverSocket.accept(); //waits until the client connects
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
             while (true) {
-                Socket socket = serverSocket.accept();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter writer = new PrintWriter(socket.getOutputStream());
                 int repeat = 1;
                 while (repeat == 1) {
                     UserInfo.readUsers();

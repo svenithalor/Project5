@@ -7,11 +7,11 @@ import javax.swing.*;
 public class CustomerPageClient {
     private String searchTerm;
     public static void run(Buyer buyer) {
-        Scanner scanner = new Scanner(System.in);
         try {
-            Socket socket = new Socket("localhost", 4242);
+            Socket socket = new Socket("localhost", 1234);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
             int repeat = 1;
             CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
             do {

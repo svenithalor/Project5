@@ -278,7 +278,7 @@ public class ShoppingCartServer {
     }
 
 
-    public void removeBike(int id) {
+    public void removeBike(int id,BufferedReader reader,PrintWriter writer) {
         //ask for valid bike id
         //ask for valid quantity (check in the shopping cart)
         //remove quantity from bike
@@ -294,7 +294,7 @@ public class ShoppingCartServer {
                 System.out.println("removeBike method error under id");
                 return;
             }
-            validId = s.checkBikeID(d, "delete");
+           // validId = s.checkBikeID(d, "delete");
             writer.write("" + validId);
             writer.println();
             writer.flush();
@@ -325,12 +325,12 @@ public class ShoppingCartServer {
                     break;
                 }
             }
-            validQuantity = s.checkCartBikeQuantity(q, bikeId, cartIndex);
+            //validQuantity = s.checkCartBikeQuantity(q, bikeId, cartIndex);
             writer.write("" + validQuantity);
             writer.println();
             writer.flush();
         } while (!validQuantity);
-        int remainQuantity = quantity - Integer.parseInt(q);
+       // int remainQuantity = quantity - Integer.parseInt(q);
 
 
         //need to integrate this into our existing methods
@@ -369,10 +369,10 @@ public class ShoppingCartServer {
         int existQuantity = buyer.getShoppingCart().get(cartIndex).getQuantity();
 
         if (removeQuantity < existQuantity) {
-            buyer.getShoppingCart().get(cartIndex).getQuantity -= removeQuantity;
+           // buyer.getShoppingCart().get(cartIndex).getQuantity -= removeQuantity;
             valid = true;
         } else if (removeQuantity == existQuantity) {
-            buyer.getShoppingCart().removeBike(bikeId);
+            //buyer.getShoppingCart().removeBike(bikeId);
             valid = true;
         } else {
             return false;

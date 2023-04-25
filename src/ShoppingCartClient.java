@@ -39,6 +39,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
         //Creates the JFrame
         frame = new JFrame("Boilermaker Bikes");
         content = frame.getContentPane();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         content.setLayout(new BorderLayout());
 
         //Configures the JFrame by setting up the size, location, close operation, and visibility
@@ -130,6 +131,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             }
             if (e.getSource() == refreshButton) {
                 //refreshes the page for the user
+                //need to fix this
                 writer.write("refresh");
                 writer.println();
                 writer.flush();

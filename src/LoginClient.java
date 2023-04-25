@@ -126,7 +126,7 @@ public class LoginClient {
                     String input = reader.readLine();
                     //System.out.printf("Successfully Created an Account: %s%n", input);
                     usernameSuccess = Boolean.parseBoolean(input);
-                    System.out.println("Username Success " + usernameSuccess);
+                    //System.out.println("Username Success " + usernameSuccess);
                     if (!usernameSuccess) {
                         JOptionPane.showConfirmDialog(null, "Error, this username is already " +
                                         "taken. Try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
@@ -185,15 +185,15 @@ public class LoginClient {
         }
     }
 
-    public static void main(String[] args) {
-
-        //sets up the output stream for the user to use
+    public static void run() {
         try {
+            //use localhost because we are having the server and client run on the same machine
             Socket socket = new Socket("localhost", 4242);
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            String userType = ""; //saves the usertype selected by this user
 
+            String userType = ""; //saves the usertype selected by this user
             // welcome message
            int welcome =  JOptionPane.showConfirmDialog(null, "Welcome to the Boilermaker Bikes Shop!",
                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -234,6 +234,7 @@ public class LoginClient {
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
             login.userLogin(reader, writer);
+            socket.close(); //closes the socket for the next connection to be make with the buyer/customer pages
             return;
 
         } catch (IOException e) {
