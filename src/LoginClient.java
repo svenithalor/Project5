@@ -195,7 +195,7 @@ public class LoginClient {
 
             String userType = ""; //saves the usertype selected by this user
             // welcome message
-           int welcome =  JOptionPane.showConfirmDialog(null, "Welcome to the Boilermaker Bikes Shop!",
+           int welcome =  JOptionPane.showConfirmDialog(null, "Welcome to the Boilermaker Bikes!",
                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
            //allows the user to exit if they press the x button
            if (welcome == JOptionPane.CLOSED_OPTION) {

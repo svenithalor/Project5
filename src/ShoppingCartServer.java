@@ -181,11 +181,10 @@ public class ShoppingCartServer {
     /******
      * This method allows the buyer to check out all of the items in their shopping cart and updates
      * the listing page to correspond with this purchase
-     * @param reader
-     * @param writer
+     * @param writer lets the customer page client know if all the items have been successfully checked out of the shopping cart
      */
 
-    public void checkout(BufferedReader reader, PrintWriter writer) {
+    public void checkout(PrintWriter writer) {
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
@@ -457,7 +456,7 @@ public class ShoppingCartServer {
 
                 } else if (input.equals("checkout")) {
 
-                    s.checkout(reader, writer);
+                    s.checkout(writer);
 
 
                 } else if (input.equals("backHome")) {

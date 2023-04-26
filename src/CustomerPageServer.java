@@ -256,7 +256,6 @@ public class CustomerPageServer {
 
 
             } else if (input.equals("backHome")) {
-
                 return;
 
             } else if (input.equals("refresh")) {

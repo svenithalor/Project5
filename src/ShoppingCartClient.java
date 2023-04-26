@@ -345,13 +345,17 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
     }
 
+    /**********
+     * Delete shopping cart
+     * @param writer
+     * @param reader
+     */
     private void deleteCart(PrintWriter writer, BufferedReader reader) {
-
         do {
             String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
             boolean validId = false; //confirms that the user has entered a validBikeId
 
-            // check id
+            //
             do {
                 bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
                         "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
@@ -405,7 +409,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             } while (!validQuantity);
             if (validQuantity) {
                 String[] options = {"OK"};
-                JOptionPane.showOptionDialog(null, "Bike successfully delete!",
+                JOptionPane.showOptionDialog(null, "Bike successfully deleted!",
                         "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                 break;
             }
