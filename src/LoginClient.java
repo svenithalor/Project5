@@ -234,6 +234,8 @@ public class LoginClient {
             //creates a login client object and goes to the login method
             LoginClient login = new LoginClient();
             login.userLogin(reader, writer);
+            reader.close();
+            writer.close();
             socket.close(); //closes the socket for the next connection to be make with the buyer/customer pages
             return;
 

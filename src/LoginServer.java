@@ -305,6 +305,8 @@ public class LoginServer {
             int userIndex = login.userLogin(userType, reader, writer);
             //creates a string containing the usertype and index to send to the Control Flow menu
             userInfo = "" + userIndex + "," + userType;
+            reader.close();
+            writer.close();
             socket.close();
 
         } catch (IOException e) {

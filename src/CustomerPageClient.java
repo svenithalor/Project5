@@ -157,7 +157,9 @@ public class CustomerPageClient extends JComponent implements Runnable {
         if (option == JOptionPane.OK_OPTION) {
             //sends the chosen option to the server to be processed and then returns this index to the user
             return dropdown.getSelectedIndex() + 1;
+
         } else {
+            JOptionPane.getRootFrame().dispose();
             return -1;
         }
     }
@@ -292,12 +294,11 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 return;
 
             }
-            if (e.getSource() == refreshButton) { //TODO need to fix this will work on tomorrow
+            if (e.getSource() == refreshButton) { //TODO need to fix this
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
-                displayBikes(CustomerPageServer.thisBuyer,content);
-                frame.repaint();
+                frame.repaint();  //at the moment repaint() is not working
             }
 
         }
@@ -388,8 +389,6 @@ public class CustomerPageClient extends JComponent implements Runnable {
             String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
                     JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
 
-
-            System.out.println(bikeMessage);
             //if the user does not choose an option then set the bike message to null
             if (bikeMessage.isEmpty() || bikeMessage == null) {
                 return;
@@ -418,6 +417,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
             try {
                 if (reader.ready()) {
                     input = reader.readLine();
+                    JOptionPane.getRootFrame().dispose();
                 }
                 //System.out.println("Client input received");
                 inCart = Boolean.parseBoolean(input);
