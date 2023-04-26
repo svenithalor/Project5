@@ -248,7 +248,7 @@ public class CustomerPageServer {
 
                 } else if (input.equals("checkout")) {
 
-                    //cart.checkout(reader, writer); TODO
+                    s.checkout(reader, writer); //TODO
 
 
                 } else if (input.equals("backHome")) {
@@ -302,9 +302,12 @@ public class CustomerPageServer {
                 break;
             }
         }
+        System.out.println("Server side it is " + inCart);
         writer.write("" + inCart);
         writer.println();
         writer.flush();
+        System.out.println("Server message sent");
+
 
         if (inCart) {
             /****
@@ -410,7 +413,99 @@ public class CustomerPageServer {
             }
         }
 
+    }
 
+    public void checkout(BufferedReader reader, PrintWriter writer) {
+        /********
+         * Checks if all the bikes in the shopping cart still exist on the listing page
+         */
+        boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
+        int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
+
+        for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            if (!UserInfo.getBikes().contains(pb)) {
+                stillAvailable = false;
+                break;
+            } else {
+                /*******
+                 * Checks if all the quantities in the shopping cart are still valid
+                 */
+                bikeEquivalentIndex = UserInfo.getBikes().indexOf(pb);
+                Bike bikeEquivalent = UserInfo.getBikes().get(bikeEquivalentIndex);
+
+                if (bikeEquivalent.getQuantity() == 0) {
+                    stillAvailable = false;
+                    break;
+                }
+                System.out.println(bikeEquivalent.toString());
+                System.out.println(pb.toString());
+
+                if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
+                    stillAvailable = false;
+                    break;
+                }
+
+            }
+        }
+
+        /******
+         * Sends the status of the availability of the bike to the client
+         */
+        writer.write(stillAvailable + "");
+        writer.println();
+        writer.flush();
+
+        if (stillAvailable) {
+            /******
+             * Updates the listing Page
+             */
+            ArrayList<Bike> tempBikes = UserInfo.getBikes();
+            for (Bike bike : tempBikes) {
+                for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+                    if (pb.getId() == bike.getId()) {
+                        bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+                    }
+                }
+            }
+            UserInfo.setBikes(tempBikes);
+
+            /******
+             * Updates the seller inventory
+             */
+            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+            for (Seller se : tempSellers) {
+                for (Bike bike : se.getInventory()) {
+                    for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+                        bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+                    }
+                }
+            }
+            UserInfo.setSellers(tempSellers);
+
+            /*******
+             * Moves everything in the shopping cart to the purchase history
+             */
+            ArrayList<PurchasedBike> tempPurchaseHistory = thisBuyer.getPurchaseHistory();
+            ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+
+            int len = thisBuyer.getShoppingCart().size();
+            for (int i = 0; i < len; i++) {
+                tempPurchaseHistory.add(tempShoppingCart.get(0));
+                tempShoppingCart.remove(0);
+
+            }
+            thisBuyer.setShoppingCart(tempShoppingCart);
+            thisBuyer.setPurchaseHistory(tempPurchaseHistory);
+            ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
+            tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
+            UserInfo.setBuyers(tempBuyers);
+
+            //once it has completed the saving process send the message success to the buyer
+            writer.write("success");
+            writer.println();
+            writer.flush();
+
+        }
     }
 
 
