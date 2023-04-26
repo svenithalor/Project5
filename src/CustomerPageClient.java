@@ -3,8 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
 import javax.swing.*;
+
 /*******
  * This class..
  * @author Sveni Thalor and Christina Joslin
@@ -37,54 +37,56 @@ public class CustomerPageClient extends JComponent implements Runnable {
             CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
             do {
                 String bikeNames = reader.readLine();
-                int choice = C.displayMainMenu(writer,reader);
+                int choice = C.displayMainMenu(writer, reader);
                 writer.println(choice);
                 writer.flush();
 
                 switch (choice) {
-                    case -1: repeat = 0;
+                    case -1:
+                        repeat = 0;
                         break;
                     case 1: // main menu option 1: display bikes
                         int repeat1 = 1;
                         do {
-                        int choice1 = C.displayBikesMenu(writer, reader, bikeNames);
+                            int choice1 = C.displayBikesMenu(writer, reader, bikeNames);
 
-                        writer.println(choice1);
-                        writer.flush();
+                            writer.println(choice1);
+                            writer.flush();
 
-                        switch (choice1) { // switch of choices within view bikes
-                            default: // when index of a selected bike is returned
-                                String bikeDescription = reader.readLine();
-                                bikeDescription += "\n" + reader.readLine();
-                                bikeDescription += "\n" + reader.readLine();
-                                String[] buttons = {"Go back", "Add to cart"};
-                                int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
-                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-                                if (option == 0) {
+                            switch (choice1) { // switch of choices within view bikes
+                                default: // when index of a selected bike is returned
+                                    String bikeDescription = reader.readLine();
+                                    bikeDescription += "\n" + reader.readLine();
+                                    bikeDescription += "\n" + reader.readLine();
+                                    String[] buttons = {"Go back", "Add to cart"};
+                                    int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
+                                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
+                                    if (option == 0) {
+                                        break;
+                                    } else { //takes the buyer to the shopping cart to add a bike
+                                        //TODO
+
+                                        break;
+                                    }
+                                case -2, -3: // sorting bikes
+                                    String sortedBikeInfo = reader.readLine();
+                                    C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
                                     break;
-                                } else { //takes the buyer to the shopping cart to add a bike
-                                    //TODO
-
+                                case -1: // go back
+                                    repeat1 = 0;
                                     break;
-                                }
-                            case -2, -3: // sorting bikes
-                                String sortedBikeInfo = reader.readLine();
-                                C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
-                                break;
-                            case -1: // go back
-                                repeat1 = 0;
-                                break;
-                            case -4: // search
-                                writer.println(C.searchTerm);
-                                writer.flush();
-                                String result = reader.readLine();
-                                if (!result.equals("-1")) {
-                                    C.displayBikesMenu(writer, reader, result); //TODO: processing because of different indexes in matches arraylist
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "No matches found!");
-                                }
-                                break;
-                        } } while (repeat1 == 1);
+                                case -4: // search
+                                    writer.println(C.searchTerm);
+                                    writer.flush();
+                                    String result = reader.readLine();
+                                    if (!result.equals("-1")) {
+                                        C.displayBikesMenu(writer, reader, result); //TODO: processing because of different indexes in matches arraylist
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "No matches found!");
+                                    }
+                                    break;
+                            }
+                        } while (repeat1 == 1);
                         break;
                     case 2: // option 2: view cart
                         SwingUtilities.invokeLater(new CustomerPageClient());
@@ -124,7 +126,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
                         break;
                 }
             } while (repeat == 1);
-            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
+            JOptionPane.showMessageDialog(null, "Thank you for visiting Boilermaker Bikes!",
                     "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
         } catch (UnknownHostException uhe) {
             uhe.printStackTrace(); //temporary messure just to make sure everything is working
@@ -147,8 +149,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
         JPanel panel = new JPanel();
         JLabel label1 = new JLabel("Select an option: ");
         panel.add(label1);
-        JComboBox dropdown = new JComboBox(new String[]{"1. View all available bikes","2. Review cart",
-                "3. Get purchase history","4. Logout","5. Delete account"});
+        JComboBox dropdown = new JComboBox(new String[]{"1. View all available bikes", "2. Review cart",
+                "3. Get purchase history", "4. Logout", "5. Delete account"});
         panel.add(dropdown);
         int option = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -275,7 +277,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
-               // c.checkOutBikes(writer,reader);
+                System.out.println("checkout");
+                c.checkOutBikes(reader);
                 //tells the server that the user wants to check out
                 //do something
                 //remove elements from the shopping cart and putting it in the purchase history
@@ -293,9 +296,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 writer.write("refresh");
                 writer.println();
                 writer.flush();
-                displayBikes(UserInfo.getBuyers().get(0), frame); //NOTE* temporary input
-                frame.setVisible(false);
-                frame.setVisible(true);
+                displayBikes(CustomerPageServer.thisBuyer,content);
+                frame.repaint();
             }
 
         }
@@ -309,6 +311,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
      * @author Christina Joslin
      */
     public static void displayBikes(Buyer b, Container content) {
+
         String[] columnNames = {"Bike ID", "Model Name", "Price", "Quantity"};
         JTable table = new JTable(b.shoppingCartInfo(), columnNames);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -341,8 +344,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
             if (stillAvailable) {
                 break;
             }
-            int choice = JOptionPane.showConfirmDialog(null,"Error. One or more bikes are " +
-                    "unavailable.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+            int choice = JOptionPane.showConfirmDialog(null, "Error. One or more bikes are " +
+                    "unavailable.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION) {
                 return;
             }
@@ -354,7 +357,10 @@ public class CustomerPageClient extends JComponent implements Runnable {
             System.out.println("Error message under successfully completing the shopping cart.");
         }
         if (success) {
-            JOptionPane.showMessageDialog(null,"Successful Checkout!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Successful Checkout!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+        }
+        for (PurchasedBike pb:CustomerPageServer.thisBuyer.getShoppingCart()) {
+            System.out.println(pb.toNiceString());
         }
 
     }
@@ -369,18 +375,19 @@ public class CustomerPageClient extends JComponent implements Runnable {
         do {
             int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
             boolean validId = false; //confirms that the user has enterred a validBikeId
-            String [] listingPageOptions = new String[UserInfo.getBikes().size()];
+            String[] listingPageOptions = new String[UserInfo.getBikes().size()];
             int i = 0;
 
             /********
              * Iterates through the available bikes in the shopping cart database and displays them to the user
              */
-            for (Bike b: UserInfo.getBikes()) {
+            for (Bike b : UserInfo.getBikes()) {
                 listingPageOptions[i] = b.toNiceString();
                 i++;
             }
-            String bikeMessage = (String) JOptionPane.showInputDialog(null,"Choose Bike to Add","Boilermaker Bikes",
+            String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
                     JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
+
 
             System.out.println(bikeMessage);
             //if the user does not choose an option then set the bike message to null
@@ -391,7 +398,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
             /********
              * Retrieves the corresponding bikeID
              */
-            for (Bike b: UserInfo.getBikes()) {
+            for (Bike b : UserInfo.getBikes()) {
                 if (b.toNiceString().equals(bikeMessage)) {
                     bikeId = b.getId();
                     writer.write(bikeId + "");
@@ -407,12 +414,21 @@ public class CustomerPageClient extends JComponent implements Runnable {
              * on to the existing quantity
              */
             boolean inCart;
+            String input = "";
             try {
-                inCart = Boolean.parseBoolean(reader.readLine());
+                if (reader.ready()) {
+                    input = reader.readLine();
+                }
+                //System.out.println("Client input received");
+                inCart = Boolean.parseBoolean(input);
+                //System.out.println("Client side it is" + inCart + "");
 
             } catch (Exception e) {
                 System.out.println("error when trying to find out if already in shopping cart");
                 return;
+            }
+            if (inCart == true || inCart == false) {
+                JOptionPane.getRootFrame().dispose();
             }
 
             if (inCart) {
@@ -420,9 +436,12 @@ public class CustomerPageClient extends JComponent implements Runnable {
                 String quantity = "";
                 boolean validQuantity = false;
                 do {
+                    System.out.println("Hello world");
+                    JOptionPane.getRootFrame().dispose();
                     quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
                                     "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+
                     writer.write(quantity);
                     writer.println();
                     writer.flush();

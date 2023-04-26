@@ -176,7 +176,7 @@ public class UserInfo {
                 }
 
             }
-            System.out.println("Size of Buyers: " + buyers.size());
+            //System.out.println("Size of Buyers: " + buyers.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
