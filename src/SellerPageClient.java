@@ -147,9 +147,9 @@ public class SellerPageClient {
 
             String finalInventory = sendArrayList(inventory);
 
-            writer.write(finalInventory);
-            writer.println();
-            writer.flush();
+            //writer.write(finalInventory);
+            //writer.println();
+            //writer.flush();
 
             reader.close();
             writer.close();
@@ -279,6 +279,7 @@ public class SellerPageClient {
                 writer.write(term);
                 writer.println();
                 writer.flush();
+                System.out.println("option 4 test");
 
                 String matchesString = reader.readLine();
                 ArrayList<Bike> matches = recieveArrayList(matchesString);
@@ -346,14 +347,27 @@ public class SellerPageClient {
            // writer.write("" + Integer.toString(option));
             //writer.println();
             //writer.flush();
+            String vtr = sendArrayList(inventory);
+
+            writer.write(vtr);
+            writer.println();
+            writer.flush();
             return option;
         } else {
             JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
                     "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+                    String vtr = sendArrayList(inventory);
+
+            writer.write(vtr);
+            writer.println();
+            writer.flush();
             writer.close();
             reader.close();
             return -1;
         }
+
+       
+
     }
 
     public static void basicViewOnly(ArrayList<Bike> bikes) {
