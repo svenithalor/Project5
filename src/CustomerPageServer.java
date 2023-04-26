@@ -17,7 +17,6 @@ public class CustomerPageServer {
             while (true) {
                 int repeat = 1;
                 while (repeat == 1) {
-                    UserInfo.readUsers();
                     ArrayList<Bike> bikes = UserInfo.getBikes();
                     ArrayList<String> bikeNames = new ArrayList<>();
                     for (Bike bike : bikes) {

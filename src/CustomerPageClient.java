@@ -4,10 +4,10 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.swing.*;
 /*******
  * This class..
+ * @author Sveni Thalor and Christina Joslin
  *
  */
 public class CustomerPageClient extends JComponent implements Runnable {
