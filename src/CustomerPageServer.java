@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.File;
 import java.io.*;
 import java.net.*;
@@ -16,16 +17,17 @@ public class CustomerPageServer {
             thisBuyer = buyer; //makes a shallow copy of the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
+                ArrayList<Bike> bikes = UserInfo.getBikes();
+                ArrayList<String> bikeNames = new ArrayList<>();
+                for (Bike bike : bikes) {
+                    String format = "%s | $%.2f | Quantity: %d";
+                    bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
+                }
+                writer.println("Line 26 "+ bikeNames);
+                writer.flush();
+                bikeNames.clear();
+
                 while (repeat == 1) {
-                    ArrayList<Bike> bikes = UserInfo.getBikes();
-                    ArrayList<String> bikeNames = new ArrayList<>();
-                    for (Bike bike : bikes) {
-                        String format = "%s | $%.2f | Quantity: %d";
-                        bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
-                    }
-                    writer.println(bikeNames);
-                    writer.flush();
-                    bikeNames.clear();
 
                     String input = reader.readLine();
                     int choice = Integer.parseInt(input);
@@ -35,20 +37,20 @@ public class CustomerPageServer {
                             reader.close();
                             writer.close();
                             repeat = 0;
-                            return;
+                            break;
                         case 1: // main menu switch case 1: view available bike
                             int repeat1 = 1;
                             do {
                                 int choice1 = Integer.parseInt(reader.readLine());
-                                System.out.println("Server choice1 = " + choice1);
+                                System.out.println("Server reading choice1 from client: " + choice1);
                                 switch (choice1) {
                                     default: // writing description of selected bike
-                                        //String bikeName = reader.readLine();
                                         Bike chosenBike = bikes.get(choice1);
-                                        writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
+                                        writer.println(String.format("Line 49 Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
                                         writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
+                                        System.out.println("Server printed bike display info to client");
                                     case -3: // sort by quantity
                                         ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
                                         ArrayList<String> sortedNames = new ArrayList<>();
@@ -56,8 +58,9 @@ public class CustomerPageServer {
                                             String format = "%s | $%.2f | Quantity: %d";
                                             sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                         }
-                                        writer.println(sortedNames);
+                                        writer.println("Line 60 " + sortedNames);
                                         writer.flush();
+                                        System.out.println("Server printed quantity sorted list to client: " + sortedNames);
                                         sortedNames.clear();
                                         break;
                                     case -2: // sort by price
@@ -67,8 +70,9 @@ public class CustomerPageServer {
                                             String format = "%s | $%.2f | Quantity: %d";
                                             priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                         }
-                                        writer.println(priceSortedNames);
+                                        writer.println("Line 71" + priceSortedNames);
                                         writer.flush();
+                                        System.out.println("Server printed price sorted names to client" + priceSortedNames);
                                         priceSortedNames.clear();
                                         break;
                                     case -1:
@@ -76,6 +80,7 @@ public class CustomerPageServer {
                                         break; // go back to main menu
                                     case -4: // search
                                         String searchTerm = reader.readLine();
+                                        System.out.println("Server search term: " + searchTerm);
                                         ArrayList<Bike> matches = search(searchTerm, bikes);
                                         ArrayList<String> matchNames = new ArrayList<>();
                                         if (matches != null) {
@@ -83,8 +88,9 @@ public class CustomerPageServer {
                                                 String format = "%s | $%.2f | Quantity: %d";
                                                 matchNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                             }
-                                            writer.println(matchNames);
+                                            writer.println("Line 89" + matchNames);
                                             writer.flush();
+                                            System.out.println("Server printed search results to client: " + matchNames);
                                             matchNames.clear();
                                         } else {
                                             writer.println(-1);
@@ -178,12 +184,17 @@ public class CustomerPageServer {
         ArrayList<Bike> matches = new ArrayList<Bike>();
         String term = searchTerm.toLowerCase();
         for (Bike bike : bikes) {
-            if (bike.getModelName().contains(term)) {
+            if (bike.getModelName().toLowerCase().contains(term)) {
+                System.out.println("Bike added");
                 matches.add(bike);
-            } else if (bike.getSellerName().contains(term)) {
+            } else if (bike.getSellerName().toLowerCase().contains(term)) {
+                System.out.println("Bike added");
                 matches.add(bike);
-            } else if (bike.getDescription().contains(term)) {
+            } else if (bike.getDescription().toLowerCase().contains(term)) {
+                System.out.println("Bike added");
                 matches.add(bike);
+            } else {
+                System.out.println(bike.getModelName() + ": No match");
             }
         }
         if (matches.size() == 0) {
@@ -203,7 +214,7 @@ public class CustomerPageServer {
             }*/
             return true;
         } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+            JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } catch (Exception e) {
             e.printStackTrace();
