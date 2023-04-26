@@ -239,7 +239,7 @@ public class CustomerPageClient {
         // main menu option 1: display bikes
         String[] buttons = {"Add Item", "Delete Item", "Checkout", "Back To Home", "Refresh Screen"};
         JPanel panel = new JPanel();
-        JComboBox dropdown = new JComboBox(bikeNames);
+        JList dropdown = new JList(bikeNames);
         String message = "";
 
         panel.add(dropdown);
