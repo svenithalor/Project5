@@ -344,9 +344,11 @@ public class CustomerPageClient extends JComponent implements Runnable {
      * @param content the container of bikes the user wants to display
      * @author Christina Joslin
      */
-    public static void displayBikes(Buyer b, Container content) {
+    public static void displayBikes(Buyer b, Container content) {    //TODO need to update this and change it into a JList (I think the whole JTable is not working out)
 
         String[] columnNames = {"Bike ID", "Model Name", "Price", "Quantity"};
+        //go through the shopping cart and convert to nice string
+
         JTable table = new JTable(b.shoppingCartInfo(), columnNames);
         JScrollPane scrollPane = new JScrollPane(table);
 
