@@ -325,7 +325,6 @@ public class ShoppingCartServer {
                 }
             }
 
-//            validQuantity = s.checkCartBikeQuantity(q, bikeId, bikeIndex);
             writer.write("" + validQuantity);
             writer.println();
             writer.flush();

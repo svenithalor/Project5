@@ -349,7 +349,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
         do {
             String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
-            boolean validId = false; //confirms that the user has enterred a validBikeId
+            boolean validId = false; //confirms that the user has entered a validBikeId
 
             // check id
             do {
@@ -389,7 +389,6 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 writer.flush();
                 try {
                     validQuantity = Boolean.parseBoolean(reader.readLine());
-                    //System.out.println(validQuantity);
                 } catch (Exception e) {
                     System.out.println("Error invalid quantity in DeleteBike");
                     return;
