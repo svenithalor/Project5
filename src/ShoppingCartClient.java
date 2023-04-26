@@ -110,6 +110,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 writer.write("delete");
                 writer.println();
                 writer.flush();
+                c.deleteCart(writer, reader);
             }
             if (e.getSource() == checkoutButton) {
                 writer.write("checkout");
@@ -344,25 +345,72 @@ public class ShoppingCartClient extends JComponent implements Runnable {
 
     }
 
-    private void deleteCart() {
-        String bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
-                "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+    private void deleteCart(PrintWriter writer, BufferedReader reader) {
 
-        String tempStr = "delete," + bikeId;
-        writer.write(tempStr);
-        writer.println();
-        writer.flush();
+        do {
+            String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
+            boolean validId = false; //confirms that the user has enterred a validBikeId
 
-        String valid = null;
-        try {
-            valid = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (valid.equals("false")) {
-            JOptionPane.showMessageDialog(null, "Invalid Input. Please try again.",
-                    "Boilermaker Bikes", JOptionPane.ERROR_MESSAGE);
-        }
+            /********
+             * Checks if the bike ID is valid
+             */
+            do {
+                bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
+                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                //sends the bike ID to the server and confirms that is a valid input
+                writer.write(bikeId);
+                writer.println();
+                writer.flush();
+                try {
+                    validId = Boolean.parseBoolean(reader.readLine());
+                } catch (IOException e) {
+                    System.out.println("Error under bike ID in AddBike"); //TEMP value
+                    break;
+                }
+
+                if (validId) {
+                    break;
+                }
+                int choice = JOptionPane.showConfirmDialog(null, "Invalid Input. Please try again.",
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                if (choice == JOptionPane.CLOSED_OPTION) {
+                    break;
+                }
+
+            } while (!validId);
+
+            //checks if the bike quantity is valid
+            String quantity = "";
+            boolean validQuantity = false;
+            do {
+                quantity = JOptionPane.showInputDialog(null, "Enter bike quantity to delete: ",
+                        "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                writer.write(quantity);
+                writer.println();
+                writer.flush();
+                try {
+                    validQuantity = Boolean.parseBoolean(reader.readLine());
+                    //System.out.println(validQuantity);
+                } catch (Exception e) {
+                    System.out.println("Error invalid quantity in AddBike");
+                    return;
+                }
+
+            } while (!validQuantity);
+            if (validQuantity) {
+                String[] options = {"OK"};
+                JOptionPane.showOptionDialog(null, "Bike successfully delete!",
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                break;
+            } else {
+                int error = JOptionPane.showConfirmDialog(null, "Invalid quantity. Please try again.",
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                if (error == JOptionPane.CLOSED_OPTION || error == JOptionPane.CANCEL_OPTION) {
+                    return;
+                }
+            }
+        } while (true);
     }
 
 
