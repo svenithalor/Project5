@@ -47,9 +47,15 @@ public class CustomerPageClient extends JComponent implements Runnable {
                         break;
                     case 1: // main menu option 1: display bikes
                         int repeat1 = 1;
+                        int choice2 = -5;
                         do {
-                            int choice1 = C.displayBikesMenu(writer, reader, bikeNames);
-
+                            int choice1;
+                            if  (choice2 != -5) {
+                                choice1 = choice2;
+                                choice2 = -5;
+                            } else {
+                                choice1 = C.displayBikesMenu(writer, reader, bikeNames);
+                            }
                             writer.println(choice1);
                             writer.flush();
 
@@ -70,7 +76,18 @@ public class CustomerPageClient extends JComponent implements Runnable {
                                     }
                                 case -2, -3: // sorting bikes
                                     String sortedBikeInfo = reader.readLine();
-                                    C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
+                                    choice2 = C.displayBikesMenu(writer, reader, sortedBikeInfo); //TODO: processing because of different indexes in matches arraylist
+                                    if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
+                                        String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
+                                        String[] sortedBikesArray = sortedBikeInfo.substring(1, bikeNames.length() - 1).split(",");
+                                        String sortedChoice = sortedBikesArray[choice2].strip();
+                                        for (int i = 0; i < bikeNamesArray.length; i++) {
+                                            if (sortedChoice.equals(bikeNamesArray[i].strip())) {
+                                                choice2 = i;
+                                                break;
+                                            }
+                                        }
+                                    }
                                     break;
                                 case -1: // go back
                                     repeat1 = 0;
