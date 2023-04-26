@@ -278,11 +278,7 @@ public class ShoppingCartServer {
     }
 
 
-    public void removeBike(int id,BufferedReader reader,PrintWriter writer) {
-        //ask for valid bike id
-        //ask for valid quantity (check in the shopping cart)
-        //remove quantity from bike
-        //add to the listing page (incrementing existing quantity or adding a new completely
+    public void removeBike(BufferedReader reader, PrintWriter writer, ShoppingCartServer s) {
 
         // check id
         boolean validId = false;
@@ -294,20 +290,18 @@ public class ShoppingCartServer {
                 System.out.println("removeBike method error under id");
                 return;
             }
-           // validId = s.checkBikeID(d, "delete");
+            validId = s.checkBikeID(d, "delete");
             writer.write("" + validId);
             writer.println();
             writer.flush();
 
         } while (!validId);
         //saves the bike Id entered
+
         int bikeId = Integer.parseInt(d);
-
-
         // check quantity
         boolean validQuantity = false;
         String q = "";
-        int quantity;
         int bikeIndex = -1;
         do {
             try {
@@ -316,69 +310,28 @@ public class ShoppingCartServer {
                 System.out.println("removeBike method error under quantity");
                 return;
             }
-            int i = 0;
-            for (PurchasedBike b : shoppingCart) {
-                if (b.getId() == bikeId) {
-                    quantity = b.getQuantity();
-                    bikeIndex = i;
-                    i++;
+
+            for (PurchasedBike purchasedBike : shoppingCart) {
+                if (purchasedBike.getId() == bikeId) {
+                    int quantity = purchasedBike.getQuantity();
+                    if (quantity >= Integer.parseInt(q)) {
+                        purchasedBike.setQuantity(quantity - Integer.parseInt(q));
+                        if (purchasedBike.getQuantity() == 0) {
+                            shoppingCart.remove(purchasedBike);
+                        }
+                        validQuantity = true;
+                    }
                     break;
                 }
             }
-            //validQuantity = s.checkCartBikeQuantity(q, bikeId, cartIndex);
+
+//            validQuantity = s.checkCartBikeQuantity(q, bikeId, bikeIndex);
             writer.write("" + validQuantity);
             writer.println();
             writer.flush();
         } while (!validQuantity);
-       // int remainQuantity = quantity - Integer.parseInt(q);
 
 
-        //need to integrate this into our existing methods
-//        PurchasedBike bikeToRemove = null;
-//        for (PurchasedBike bike : shoppingCart) {
-//            if (bike.getId() == id) {
-//                shoppingCart.remove(bike);
-//                bikeToRemove = bike;
-//                System.out.println("Bike removed!");
-//                break;
-//            }
-//        }
-//        if (bikeToRemove == null) {
-//            System.out.println("No bike found!");
-//        } else {
-//            Bike bike = new Bike(bikeToRemove);
-//            bikesForSale.add(bike);
-//            UserInfo.setBikes(bikesForSale);
-//        }
-    }
-
-    public boolean checkCartBikeQuantity(String input, int bikeId, int cartIndex) {
-        int removeQuantity = -1;
-        boolean valid = false;
-
-        try {
-            removeQuantity = Integer.parseInt(input);
-        } catch (Exception e) {
-            return false;
-        }
-
-        if (removeQuantity == 0) {
-            return false;
-        }
-
-        int existQuantity = buyer.getShoppingCart().get(cartIndex).getQuantity();
-
-        if (removeQuantity < existQuantity) {
-           // buyer.getShoppingCart().get(cartIndex).getQuantity -= removeQuantity;
-            valid = true;
-        } else if (removeQuantity == existQuantity) {
-            //buyer.getShoppingCart().removeBike(bikeId);
-            valid = true;
-        } else {
-            return false;
-        }
-
-        return valid;
     }
 
     /**********
