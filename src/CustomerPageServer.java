@@ -9,7 +9,7 @@ public class CustomerPageServer {
     //Methods
     public static void run(Buyer buyer) {
         try {
-            //System.out.println("Hello world");
+            System.out.println("Hello world");
             ServerSocket serverSocket = new ServerSocket(1234);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

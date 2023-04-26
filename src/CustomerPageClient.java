@@ -28,7 +28,7 @@ public class CustomerPageClient extends JComponent implements Runnable {
 
     public static void runClient(Buyer buyer) {
         try {
-            //System.out.println("Run client");
+            System.out.println("hello world");
             Socket socket = new Socket("localhost", 1234);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
