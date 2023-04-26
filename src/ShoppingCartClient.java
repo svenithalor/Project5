@@ -116,7 +116,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
-                c.checkOutBikes(writer,reader);
+                c.checkOutBikes(writer, reader);
                 //tells the server that the user wants to check out
                 //do something
                 //remove elements from the shopping cart and putting it in the purchase history
@@ -179,8 +179,8 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             if (stillAvailable) {
                 break;
             }
-            int choice = JOptionPane.showConfirmDialog(null,"Error. One or more bikes are " +
-                    "unavailable.","Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+            int choice = JOptionPane.showConfirmDialog(null, "Error. One or more bikes are " +
+                    "unavailable.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION) {
                 return;
             }
@@ -192,7 +192,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             System.out.println("Error message under successfully completing the shopping cart.");
         }
         if (success) {
-            JOptionPane.showMessageDialog(null,"Successful Checkout!","Boilermaker Bikes",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Successful Checkout!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
         }
 
     }
@@ -351,9 +351,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
             String bikeId = ""; //keeps track of the 4 digit bike id entered by the user
             boolean validId = false; //confirms that the user has enterred a validBikeId
 
-            /********
-             * Checks if the bike ID is valid
-             */
+            // check id
             do {
                 bikeId = JOptionPane.showInputDialog(null, "Enter bike ID: ",
                         "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
@@ -364,7 +362,7 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 try {
                     validId = Boolean.parseBoolean(reader.readLine());
                 } catch (IOException e) {
-                    System.out.println("Error under bike ID in AddBike"); //TEMP value
+                    System.out.println("Error under bike ID in DeleteBike");
                     break;
                 }
 
@@ -393,8 +391,16 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                     validQuantity = Boolean.parseBoolean(reader.readLine());
                     //System.out.println(validQuantity);
                 } catch (Exception e) {
-                    System.out.println("Error invalid quantity in AddBike");
+                    System.out.println("Error invalid quantity in DeleteBike");
                     return;
+                }
+
+                if (!validQuantity) {
+                    int error = JOptionPane.showConfirmDialog(null, "Invalid quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.ERROR_MESSAGE);
+                    if (error == JOptionPane.CLOSED_OPTION || error == JOptionPane.CANCEL_OPTION) {
+                        return;
+                    }
                 }
 
             } while (!validQuantity);
@@ -403,13 +409,8 @@ public class ShoppingCartClient extends JComponent implements Runnable {
                 JOptionPane.showOptionDialog(null, "Bike successfully delete!",
                         "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                 break;
-            } else {
-                int error = JOptionPane.showConfirmDialog(null, "Invalid quantity. Please try again.",
-                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                if (error == JOptionPane.CLOSED_OPTION || error == JOptionPane.CANCEL_OPTION) {
-                    return;
-                }
             }
+
         } while (true);
     }
 

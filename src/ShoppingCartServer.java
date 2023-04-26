@@ -453,7 +453,7 @@ public class ShoppingCartServer {
 
                 } else if (input.equals("delete")) {
 
-                    //s.removeBike(reader,writer,s);
+                    s.removeBike(reader,writer,s);
 
 
                 } else if (input.equals("checkout")) {
