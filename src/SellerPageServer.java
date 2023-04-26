@@ -154,7 +154,15 @@ public class SellerPageServer {
 
             String sellerInventory = reader.readLine(); // reads the inventory immediately after
 
-            ArrayList<Bike> inv = recieveArrayList(sellerInventory);
+            //System.out.println("check1");
+            ArrayList<Bike> inv = new ArrayList<>();
+            try {
+                inv = recieveArrayList(sellerInventory);
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(null, "New Seller? Get started by adding your first bike!", 
+                "Boilermaker Bikes - Seller Page", JOptionPane.INFORMATION_MESSAGE);
+            }
 
             
 
@@ -164,11 +172,14 @@ public class SellerPageServer {
             String strOption = null;
             int option = -1;
             do {
+                
                 strOption = reader.readLine(); // will read the input from client
+                //System.out.println("Check2");
                 option = Integer.parseInt(strOption);
                 System.out.println(strOption);
                 // Options 1-3 are taken care of within client
                 if (option == 4) {
+                    
                     String term = reader.readLine();
                     ArrayList<Bike> matches = sp.searchBike(term);
                     String vtr = sendArrayList(matches);
@@ -257,11 +268,12 @@ public class SellerPageServer {
                     
                 }
                 
-
+                String updatedInventory = reader.readLine();
+                sp.setInventory(recieveArrayList(updatedInventory));
             } while (option != 8);
 
-            String fiString = reader.readLine();
-            sp.setInventory(recieveArrayList(fiString));
+            //String fiString = reader.readLine();
+            //sp.setInventory(recieveArrayList(fiString));
 
             writer.close();
             reader.close();
