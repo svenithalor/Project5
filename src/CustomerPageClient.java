@@ -469,17 +469,17 @@ public class CustomerPageClient {
 
                 } while (true);
                 //asks the user if they would like bike insurance added to their total
-                int x = JOptionPane.showConfirmDialog(null, "Would you like $50 bike in a tree " +
-                                "insurance for each bike you are purchasing?",
+                int x = JOptionPane.showConfirmDialog(null, "Would you like one-time $50 bike in a tree " +
+                                "insurance?",
                         "Boilermaker Bikes",
                         JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
                 if (x == JOptionPane.YES_OPTION) {
-                    writer.write("yes");
+                    writer.write("true");
                     writer.println();
                     writer.flush();
                 } else if (x == JOptionPane.NO_OPTION) {
-                    writer.write("no");
+                    writer.write("false");
                     writer.println();
                     writer.flush();
                 } else {

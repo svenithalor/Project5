@@ -401,10 +401,11 @@ public class CustomerPageServer {
             Bike bikeToAdd = UserInfo.searchBike(bikeId);
             try {
                 boolean insured = Boolean.parseBoolean(reader.readLine());
+                System.out.println("Insured?" + insured);
                 if (!insured) {
                     finalPrice = bikeToAdd.getPrice() * quantity;
                 } else {
-                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00 * quantity;
+                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
                 }
                 System.out.println("finalPrice " + finalPrice);
 
