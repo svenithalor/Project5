@@ -332,7 +332,9 @@ public class CustomerPageServer {
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    q = reader.readLine();
+                    if (reader.ready()) {
+                        q = reader.readLine();
+                    }
                     System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
@@ -493,30 +495,20 @@ public class CustomerPageServer {
 
         if (stillAvailable) {
             /******
-             * Updates the listing Page
+             * Updates the listing Page and seller inventory
              */
             ArrayList<Bike> tempBikes = UserInfo.getBikes();
             for (Bike bike : tempBikes) {
                 for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+                    System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+                        System.out.println("Bike Quantity Listing Page: " + bike.getQuantity());
                     }
                 }
             }
             UserInfo.setBikes(tempBikes);
 
-            /******
-             * Updates the seller inventory
-             */
-            ArrayList<Seller> tempSellers = UserInfo.getSellers();
-            for (Seller se : tempSellers) {
-                for (Bike bike : se.getInventory()) {
-                    for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
-                        bike.setQuantity(bike.getQuantity() - pb.getQuantity());
-                    }
-                }
-            }
-            UserInfo.setSellers(tempSellers);
 
             /*******
              * Moves everything in the shopping cart to the purchase history
@@ -537,10 +529,18 @@ public class CustomerPageServer {
             UserInfo.setBuyers(tempBuyers);
 
             /****
-             * Testing only.Printing out the current buyers.
+             * Testing only.Printing out the current bikes on the listing page
              */
-            for (Buyer b: UserInfo.getBuyers()) {
-                System.out.println(b.toString());
+            System.out.println("Bikes in the Listing Page");
+            for (Bike b : UserInfo.getBikes()) {
+                System.out.println(b.toNiceString());
+            }
+            /**********
+             * Testing only. Printing out the current seller's inventory
+             */
+            System.out.println("Bikes in Seller Inventory");
+            for (Seller s : UserInfo.getSellers()) {
+                System.out.println(s.toString());
             }
             //once it has completed the saving process send the message success to the buyer
             writer.write("success");
@@ -554,3 +554,21 @@ public class CustomerPageServer {
 
 }
 
+
+/************
+ /******
+ * Updates the seller inventory
+ *ArrayList<Seller> tempSellers = UserInfo.getSellers();
+*for (Seller se : tempSellers) {
+ *for (Bike bike : se.getInventory()) {
+                    for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+                    if (pb.getId() == bike.getId()) {
+                    bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+                    System.out.println("Bike Quantity Inventory" + bike.getQuantity());
+                    }
+                    }
+                    }
+                    }
+                    UserInfo.setSellers(tempSellers);
+ *
+ */

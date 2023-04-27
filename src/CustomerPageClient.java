@@ -110,6 +110,9 @@ public class CustomerPageClient {
                         String message = "";
                         do {
                             message = C.displayShoppingCartMenu();
+                            if (message.equals("exit")) {
+                                return;
+                            }
                         } while (!message.equals("backHome"));
 
                         break;
@@ -138,7 +141,7 @@ public class CustomerPageClient {
                             JOptionPane.showMessageDialog(null, "An error occurred, try again!");
                         }
                         break;
-                    case 4: // option 4: logout
+                    case 4: // option 4: logout  //TODO need to put in the GUI for this
                         repeat = 0;
                         LoginClient.userLogout();
                         break;
@@ -195,7 +198,6 @@ public class CustomerPageClient {
             return dropdown.getSelectedIndex() + 1;
 
         } else {
-            JOptionPane.getRootFrame().dispose();
             return -1;
         }
     }
@@ -244,7 +246,6 @@ public class CustomerPageClient {
      */
     public String displayShoppingCartMenu() {
         ArrayList<PurchasedBike> shoppingCartTemp = CustomerPageServer.thisBuyer.getShoppingCart();
-        System.out.println("Size of ArrayList: " + shoppingCartTemp.size());
 
         String[] bikeNames = new String[shoppingCartTemp.size()];
         int i = 0;
@@ -283,7 +284,6 @@ public class CustomerPageClient {
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
-                System.out.println("checkout");
                 c.checkOutBikes(reader); //TODO need to fix this
                 message = "checkout";
                 break;
@@ -295,6 +295,7 @@ public class CustomerPageClient {
                 message = "backHome";
                 break;
             default:
+                message = "exit";
                 break;
         }
         return message;
@@ -314,7 +315,7 @@ public class CustomerPageClient {
             try {
                 stillAvailable = Boolean.parseBoolean(reader.readLine());
             } catch (Exception e) {
-                System.out.println("Error under checkoutBikes");
+                //System.out.println("Error under checkoutBikes");
                 return;
             }
             if (stillAvailable) {
@@ -329,6 +330,7 @@ public class CustomerPageClient {
         boolean success; //keeps track of if the user has successfully
         try {
             success = Boolean.parseBoolean(reader.readLine());
+            System.out.println("Successful checkout? " + success);
             if (success) {
                 JOptionPane.showMessageDialog(null, "Successful Checkout!",
                         "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
@@ -337,9 +339,7 @@ public class CustomerPageClient {
         } catch (Exception e) {
             System.out.println("Error message under successfully completing the shopping cart.");
         }
-        for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
-            System.out.println(pb.toNiceString());
-        }
+
 
     }
 
