@@ -594,35 +594,45 @@ public class CustomerPageServer {
         }
     }
 
-
-    public void removeBike(BufferedReader reader,PrintWriter writer, ShoppingCart cart) {
-
-        /********
-         * Check for a valid ID
-         */
-        boolean validId = false;
-        String d = "";
-        do {
-            try {
-                d = reader.readLine();
-            } catch (Exception e) {
-                System.out.println("removeBike method error under id");
-                return;
-            }
-            validId = cart.checkBikeID(d);
-            writer.write("" + validId);
-            writer.println();
-            writer.flush();
-
-        } while (!validId);
-        //saves the bike Id entered
-        int bikeId = Integer.parseInt(d);
-
+    /************
+     * This method allows the buyer to remove bikes from their current shopping cart.
+     * @param reader the user entered bikeID
+     * @param writer whether or not the shopping cart item was successfully removed
+     * @author Christina Joslin
+     */
+    public void removeBike(BufferedReader reader,PrintWriter writer) {
         /*******
-         * Removes the designated
+         * Saves the bikeID chosen by the user
          */
+        //saves the bike ID retrieved from the server
+        int bikeId = -1;
 
-        //removes the bikes from the shopping cart
+        try {
+            bikeId = Integer.parseInt(reader.readLine());
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return;
+        }
+        /*******
+         * Removes the designated bike from the shopping cart
+         */
+        ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+        Iterator<PurchasedBike> iterator = tempShoppingCart.iterator();
+        for (Iterator<PurchasedBike> it = iterator; it.hasNext();) {
+            PurchasedBike pBike = it.next();
+            if (pBike.getId() == bikeId) {
+                tempShoppingCart.remove(pBike);
+            }
+        }
+        /********
+         * Updates the buyer shopping cart and the buyer database accordingly
+         */
+        thisBuyer.setShoppingCart(tempShoppingCart);
+        ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
+        tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer),thisBuyer);
+        writer.write("true");
+        writer.println();
+        writer.flush();
 
     }
 

@@ -272,7 +272,6 @@ public class CustomerPageClient {
                 writer.println();
                 writer.flush();
                 c.addBike(writer, reader);
-                System.out.println("I am in a switch statement under case 0 line 275");
                 message = "add";
                 break;
             case 1: // Delete Item
@@ -280,14 +279,14 @@ public class CustomerPageClient {
                 writer.println();
                 writer.flush();
                 message = "delete";
+                c.removeBike(writer,reader);
                 break;
 
             case 2: // Checkout
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
-                System.out.println("I am in a switch statement under case 2 line 289");
-                c.checkOutBikes(reader); //TODO need to fix this
+                c.checkOutBikes(reader);
                 message = "checkout";
                 break;
 
@@ -509,6 +508,64 @@ public class CustomerPageClient {
         } while (true);
 
     }
+
+    /*********
+     * This method removes bikes bikes from the shopping cart
+     * @param writer
+     * @param reader
+     */
+    public void removeBike(PrintWriter writer,BufferedReader reader) {
+        int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
+        boolean validId = false; //confirms that the user has entered a validBikeId
+
+        //creates a dropdown menu of items that the user can remove from their shopping cart
+        String[] shoppingCartOptions = new String[CustomerPageServer.thisBuyer.getShoppingCart().size()];
+        int i = 0;
+
+        /********
+         * Iterates through the available bikes in the shopping cart database and displays them to the user
+         */
+        for (Bike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            shoppingCartOptions[i] = b.toNiceString();
+            i++;
+        }
+        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Remove", "Boilermaker Bikes",
+                JOptionPane.PLAIN_MESSAGE, null, shoppingCartOptions, shoppingCartOptions[0]);
+        //if the user does not choose an option then set the bike message to null
+        if (bikeMessage == null || bikeMessage.isEmpty()) {
+            System.out.println("Exit Button");
+            return;
+        }
+        /********
+         * Retrieves the corresponding bikeID
+         */
+        for (Bike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            if (b.toNiceString().equals(bikeMessage)) {
+                bikeId = b.getId();
+                writer.write(bikeId + "");
+                writer.println();
+                writer.flush();
+                break;
+            }
+        }
+        /******
+         * Prints a success message when the bike is removed from the cart
+         */
+        try {
+            boolean success = Boolean.parseBoolean(reader.readLine());
+            if (success) {
+                int x = JOptionPane.showConfirmDialog(null,"Successfully deleted!",
+                        "Boilermaker Bikes",JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error under success in removeBike");
+        }
+
+    }
+
+
 
 
 }
