@@ -129,6 +129,8 @@ public class CustomerPageClient {
                         writer.flush();
                         writer.println(buyer.getUsername());
                         writer.flush();
+                        writer.println(buyer.getUsername());
+                        writer.flush();
                         String success = reader.readLine();
                         if (success.equals("true")) {
                             JOptionPane.showMessageDialog(null, "Success!");
@@ -248,7 +250,7 @@ public class CustomerPageClient {
             bikeNames[i] = pb.toNiceString();
         }
         // main menu option 1: display bikes
-        String[] buttons = {"Add Item", "Delete Item", "Checkout", "Back To Home", "Refresh Screen"};
+        String[] buttons = {"Add Item", "Delete Item", "Checkout", "Back To Home"};
         JPanel panel = new JPanel();
         JList dropdown = new JList(bikeNames);
         String message = "";
@@ -288,12 +290,6 @@ public class CustomerPageClient {
                 writer.println();
                 writer.flush();
                 message = "backHome";
-                break;
-            case 4: //Refresh Screen
-                writer.write("refresh");
-                writer.println();
-                writer.flush();
-                message = "refresh";
                 break;
         }
         return message;

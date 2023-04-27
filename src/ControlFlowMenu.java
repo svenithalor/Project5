@@ -54,17 +54,20 @@ public class ControlFlowMenu {
         if (userIndex != -1) {
             if (userType.equals("buyer")) {
                 thisBuyer = UserInfo.getBuyers().get(userIndex);
+                Thread buyerServer = new Thread() {
+                    public void run() {
+
+                        CustomerPageServer.run(thisBuyer);
+                    }
+                };
+
                 Thread buyerClient = new Thread() {
                     public void run() {
                         CustomerPageClient.runClient(thisBuyer);
                     }
                 };
 
-                Thread buyerServer = new Thread() {
-                    public void run() {
-                        CustomerPageServer.run(thisBuyer);
-                    }
-                };
+
 
                 buyerServer.start();
 

@@ -9,11 +9,17 @@ public class CustomerPageServer {
     //Methods
     public static void run(Buyer buyer) {
         try {
-            ServerSocket serverSocket = new ServerSocket(1234);
+            ServerSocket serverSocket = new ServerSocket(1233);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            thisBuyer = buyer; //makes a shallow copy of the buyer currently navigating the customer page
+            thisBuyer = buyer; //makes a shallow copy of tc
+
+
+
+
+
+            // he buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
                 ArrayList<Bike> bikes = UserInfo.getBikes();
