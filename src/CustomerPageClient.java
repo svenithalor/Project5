@@ -366,9 +366,10 @@ public class CustomerPageClient {
             }
             String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
                     JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
-
+            System.out.println(bikeMessage);
             //if the user does not choose an option then set the bike message to null
             if (bikeMessage == null || bikeMessage.isEmpty()) {
+                System.out.println("Exit Button");
                 return;
             }
 
