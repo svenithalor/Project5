@@ -106,7 +106,8 @@ public class CustomerPageServer {
 
                         case 3: // main menu option 3: export file with purchase history
                             String fileName = reader.readLine();
-                            boolean success = getPurchaseHistory(fileName);
+                            String username = reader.readLine();
+                            boolean success = getPurchaseHistory(fileName, username);
                             writer.println(success);
                             writer.flush();
                             break;
@@ -204,14 +205,24 @@ public class CustomerPageServer {
         }
     }
 
-    public static boolean getPurchaseHistory(String fileName) {
+    public static boolean getPurchaseHistory(String fileName, String username) {
         try {
             File file = new File(fileName);
-            PrintWriter pw = new PrintWriter(file); // TODO: purchased bike error
-            /*ArrayList<PurchasedBike> purchasedBikes = UserInfo.getBuyers().get(userIndex).getPurchaseHistory();
+            PrintWriter pw = new PrintWriter(file);
+            Buyer thisBuyer = null;
+            for (int i = 0; i < UserInfo.getBuyers().size(); i++) {
+                if (username.equals(UserInfo.getBuyers().get(i).getUsername())) {
+                    thisBuyer = UserInfo.getBuyers().get(i);
+                }
+            }
+            ArrayList<PurchasedBike> purchasedBikes = thisBuyer.getPurchaseHistory();
+            System.out.println(purchasedBikes);
             for (PurchasedBike b : purchasedBikes) {
-               pw.println(b.toString());
-            }*/
+                pw.println(b.toNiceString());
+                System.out.println("Printing to file: " + b.toNiceString());
+            }
+            pw.flush();
+            pw.close();
             return true;
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
