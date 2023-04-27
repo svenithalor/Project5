@@ -49,7 +49,7 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         submitButton.addActionListener(e -> {
             try {
                 result = this.sendBike();
-            } catch(NumberFormatException nfe) {
+            } catch(Exception nfe) {
                 JOptionPane.showMessageDialog(null, "At least one of the components is invalid.", "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
                 this.success = false;
