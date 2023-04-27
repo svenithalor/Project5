@@ -73,6 +73,7 @@ public class ControlFlowMenu {
 
                 buyerClient.start();
 
+
                 try {
                     buyerClient.join();
                     buyerServer.join();

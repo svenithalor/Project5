@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class CustomerPageServer {
     static Buyer thisBuyer;
+
     //Methods
     public static void run(Buyer buyer) {
         try {
@@ -14,9 +15,6 @@ public class CustomerPageServer {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             thisBuyer = buyer; //makes a shallow copy of tc
-
-
-
 
 
             // he buyer currently navigating the customer page
@@ -101,7 +99,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader,writer,thisBuyer);  //runs the shopping cart
+                            runShoppingCart(reader, writer, thisBuyer);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
@@ -236,13 +234,14 @@ public class CustomerPageServer {
         }
         return deleted;
     }
+
     /*****
      * The following methods update shopping cart contents for the buyer and allow them to add/delete/checkout
      * items accordingly
      */
 
     //Methods
-    public static void runShoppingCart(BufferedReader reader, PrintWriter writer,Buyer buyer) {
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer, Buyer buyer) {
         //creates a Shopping Cart object to navigate the additional shopping cart methods in ShoppingCart.java
         ShoppingCart cart = new ShoppingCart(buyer);
         CustomerPageServer s = new CustomerPageServer();
@@ -258,7 +257,7 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer,cart); //TODO
+                s.addBike(reader, writer, cart); //TODO
 
             } else if (input.equals("delete")) {
 
@@ -289,7 +288,7 @@ public class CustomerPageServer {
      * @param reader
      * @param writer
      */
-    public void addBike(BufferedReader reader, PrintWriter writer,ShoppingCart cart) {
+    public void addBike(BufferedReader reader, PrintWriter writer, ShoppingCart cart) {
         /*******
          * Saves the bikeID chosen by the user
          */
@@ -452,32 +451,36 @@ public class CustomerPageServer {
         int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
 
         for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
-            if (!UserInfo.getBikes().contains(pb)) {
-                stillAvailable = false;
-                break;
-            } else {
-                /*******
-                 * Checks if all the quantities in the shopping cart are still valid
-                 */
-                bikeEquivalentIndex = UserInfo.getBikes().indexOf(pb);
-                Bike bikeEquivalent = UserInfo.getBikes().get(bikeEquivalentIndex);
-
-                if (bikeEquivalent.getQuantity() == 0) {
+            for (Bike b : UserInfo.getBikes()) {
+                if (!pb.equals(b)) {
+                    System.out.println("Bike is not available on listing page");
                     stillAvailable = false;
                     break;
-                }
+                } else {
+                    /*****
+                     * If the quantity of this bike in the listing page equals zero, then remove it from the listing page altogether
+                     * and return stillAvailable as false
+                     */
+                    if (b.getQuantity() == 0) {
+                        System.out.println("Bike equivalent equals 0");
+                        stillAvailable = false;
+                        ArrayList<Bike> tempBikes = UserInfo.getBikes();
+                        tempBikes.remove(b);
+                        break;
+                    }
+                    if (b.getQuantity() < pb.getQuantity()) {
+                        System.out.println("Bike quantity is less than purchase quantity");
+                        stillAvailable = false;
+                        break;
+                    }
 
-                if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
-                    stillAvailable = false;
-                    break;
                 }
-
             }
         }
 
-        /******
-         * Sends the status of the availability of the bike to the client
-         */
+/******
+ * Sends the status of the availability of the bike to the client
+ */
         writer.write(stillAvailable + "");
         writer.println();
         writer.flush();
@@ -532,10 +535,10 @@ public class CustomerPageServer {
             writer.println();
             writer.flush();
 
+
         }
     }
 
 
-
-
 }
+
