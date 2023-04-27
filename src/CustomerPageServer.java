@@ -2,8 +2,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-
+import java.util.*;
 public class CustomerPageServer {
     static Buyer thisBuyer;
 
@@ -11,13 +10,11 @@ public class CustomerPageServer {
     public static void run(Buyer buyer) {
         try {
             thisBuyer = buyer; //makes a shallow copy of the buyer
-            System.out.println("Running this page!");
             ServerSocket serverSocket = new ServerSocket(1233);
 
             //opens up the customer page client thread
             Thread buyerClient = new Thread() {
                 public void run() {
-                    System.out.println("Run the Buyer Client!");
                     CustomerPageClient.runClient(thisBuyer);
                 }
             };
@@ -29,14 +26,18 @@ public class CustomerPageServer {
 
 
 
-
-
             //the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
-                ArrayList<Bike> bikes = UserInfo.getBikes();
+                /*****
+                 * Testing ONLY prints the bikes in the inventory
+                 */
+                System.out.println("Updated inventory");
+                for (Bike b: UserInfo.getBikes()) {
+                    System.out.println(b.toNiceString());
+                }
                 ArrayList<String> bikeNames = new ArrayList<>();
-                for (Bike bike : bikes) {
+                for (Bike bike : UserInfo.getBikes()) {
                     String format = "%s | $%.2f | Quantity: %d";
                     bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                 }
@@ -61,14 +62,14 @@ public class CustomerPageServer {
                                 int choice1 = Integer.parseInt(reader.readLine());
                                 switch (choice1) {
                                     default: // writing description of selected bike
-                                        Bike chosenBike = bikes.get(choice1);
+                                        Bike chosenBike = UserInfo.getBikes().get(choice1);
                                         writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
                                         writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
                                         break;
                                     case -3: // sort by quantity
-                                        ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
+                                        ArrayList<Bike> quantitySorted = sortByQuantity(UserInfo.getBikes());
                                         ArrayList<String> sortedNames = new ArrayList<>();
                                         for (Bike bike : quantitySorted) {
                                             String format = "%s | $%.2f | Quantity: %d";
@@ -79,7 +80,7 @@ public class CustomerPageServer {
                                         sortedNames.clear();
                                         break;
                                     case -2: // sort by price
-                                        ArrayList<Bike> priceSorted = sortByPrice(bikes);
+                                        ArrayList<Bike> priceSorted = sortByPrice(UserInfo.getBikes());
                                         ArrayList<String> priceSortedNames = new ArrayList<>();
                                         for (Bike bike : priceSorted) {
                                             String format = "%s | $%.2f | Quantity: %d";
@@ -94,7 +95,7 @@ public class CustomerPageServer {
                                         break; // go back to main menu
                                     case -4: // search
                                         String searchTerm = reader.readLine();
-                                        ArrayList<Bike> matches = search(searchTerm, bikes);
+                                        ArrayList<Bike> matches = search(searchTerm, UserInfo.getBikes());
                                         ArrayList<String> matchNames = new ArrayList<>();
                                         if (matches != null) {
                                             for (Bike bike : matches) {
@@ -271,8 +272,7 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer, cart); //TODO
-                System.out.println("Returning to the main menu");
+                s.addBike(reader, writer, cart);
 
             } else if (input.equals("delete")) {
 
@@ -469,7 +469,7 @@ public class CustomerPageServer {
                 System.out.println(b.getId());
                 System.out.println(pb.getId());
                 if (pb.getId() != b.getId()) {
-                    System.out.println("Bike is not available on listing page");
+                    //System.out.println("Bike is not available on listing page");
                     stillAvailable = false;
                 } else {
                     stillAvailable = true;
@@ -480,8 +480,6 @@ public class CustomerPageServer {
                     if (b.getQuantity() == 0) {
                         System.out.println("Bike equivalent equals 0");
                         stillAvailable = false;
-                        ArrayList<Bike> tempBikes = UserInfo.getBikes();
-                        tempBikes.remove(b);
                         break;
                     }
                     if (b.getQuantity() < pb.getQuantity()) {
@@ -517,8 +515,20 @@ public class CustomerPageServer {
                     }
                 }
             }
+            /*****
+             * If any bike quantity are equal to 0 then remove them from the listing page
+             *
+             */
+            Iterator <Bike> itr = tempBikes.iterator();
+            for (Iterator<Bike> it = itr; it.hasNext();) {
+                Bike i = it.next();
+                if (i.getQuantity() == 0) {
+                    tempBikes.remove(i);
+                }
+            }
             UserInfo.setBikes(tempBikes);
-            System.out.println("Bike Listing Page");
+
+            System.out.println("Bike Listing Page - Post Checkout");
             for (Bike b: UserInfo.getBikes()) {
                 System.out.println(b.toString());
             }
@@ -541,6 +551,8 @@ public class CustomerPageServer {
             tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
             UserInfo.setBuyers(tempBuyers);
 
+
+
             /****
              * Testing only.Printing out the current bikes on the listing page
              */
@@ -559,8 +571,6 @@ public class CustomerPageServer {
             writer.write("true");
             writer.println();
             writer.flush();
-
-
         }
     }
 

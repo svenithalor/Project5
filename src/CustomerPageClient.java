@@ -321,9 +321,9 @@ public class CustomerPageClient {
             if (stillAvailable) {
                 break;
             }
-            int choice = JOptionPane.showConfirmDialog(null, "Error. One or more bikes are " +
+            int choice = JOptionPane.showConfirmDialog(null, "Error. One or more bikes in your cart are " +
                     "unavailable.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION) {
+            if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.OK_OPTION) {
                 return;
             }
         } while (!stillAvailable);
