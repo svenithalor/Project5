@@ -277,7 +277,7 @@ public class CustomerPageServer {
 
             } else if (input.equals("delete")) {
 
-                //s.removeBike(reader,writer,cart);  //TODO
+                s.removeBike(reader,writer);  //TODO
 
 
             } else if (input.equals("checkout")) {
@@ -362,9 +362,10 @@ public class CustomerPageServer {
 
             int existingQuantity = CustomerPageServer.thisBuyer.getShoppingCart().get(bikeIndex).getQuantity();
 
-            //updates the quantity for the buyer
+            //updates the quantity and purchasing price for the buyer
             ArrayList<PurchasedBike> tempShoppingCart = CustomerPageServer.thisBuyer.getShoppingCart();
             tempShoppingCart.get(bikeIndex).setQuantity(existingQuantity + quantity);
+            tempShoppingCart.get(bikeIndex).setFinalPrice(tempShoppingCart.get(bikeIndex).getFinalPrice() * quantity);
             thisBuyer.setShoppingCart(tempShoppingCart);
 
             //updates the entire buyer database
@@ -600,7 +601,7 @@ public class CustomerPageServer {
      * @param writer whether or not the shopping cart item was successfully removed
      * @author Christina Joslin
      */
-    public void removeBike(BufferedReader reader,PrintWriter writer) {
+    public void removeBike(BufferedReader reader, PrintWriter writer) {
         /*******
          * Saves the bikeID chosen by the user
          */
@@ -608,7 +609,10 @@ public class CustomerPageServer {
         int bikeId = -1;
 
         try {
-            bikeId = Integer.parseInt(reader.readLine());
+            if (reader.ready()) {
+                bikeId = Integer.parseInt(reader.readLine());
+                System.out.println(bikeId);
+            }
         } catch (Exception e) {
             //e.printStackTrace();
             return;
@@ -618,10 +622,11 @@ public class CustomerPageServer {
          */
         ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
         Iterator<PurchasedBike> iterator = tempShoppingCart.iterator();
-        for (Iterator<PurchasedBike> it = iterator; it.hasNext();) {
+        for (Iterator<PurchasedBike> it = iterator; it.hasNext(); ) {
             PurchasedBike pBike = it.next();
             if (pBike.getId() == bikeId) {
                 tempShoppingCart.remove(pBike);
+                break;
             }
         }
         /********
@@ -629,7 +634,7 @@ public class CustomerPageServer {
          */
         thisBuyer.setShoppingCart(tempShoppingCart);
         ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
-        tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer),thisBuyer);
+        tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
         writer.write("true");
         writer.println();
         writer.flush();
