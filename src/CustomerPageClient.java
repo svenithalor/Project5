@@ -128,6 +128,8 @@ public class CustomerPageClient extends JComponent implements Runnable {
                         String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
                         writer.println(fileName);
                         writer.flush();
+                        writer.println(buyer.getUsername());
+                        writer.flush();
                         String success = reader.readLine();
                         if (success.equals("true")) {
                             JOptionPane.showMessageDialog(null, "Success!");
