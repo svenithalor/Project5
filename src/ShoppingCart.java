@@ -32,7 +32,6 @@ public class ShoppingCart {
             purchaseQuantity = Integer.parseInt(input);
             System.out.println("Purchase Quantity: " + purchaseQuantity);
         } catch (Exception e) {
-            System.out.println("Input cannot be parsed" + input);
             return false;
         }
         //checks if the quantity equals 0

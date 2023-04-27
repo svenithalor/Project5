@@ -258,11 +258,11 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer,cart);
+                s.addBike(reader, writer,cart); //TODO
 
             } else if (input.equals("delete")) {
 
-                //s.removeBike(reader,writer,cart); 
+                //s.removeBike(reader,writer,cart);  //TODO
 
 
             } else if (input.equals("checkout")) {
@@ -349,10 +349,10 @@ public class CustomerPageServer {
              * Updates the current bike in the buyer's shopping cart
              */
 
-            int existingQuantity = thisBuyer.getShoppingCart().get(bikeIndex).getQuantity();
+            int existingQuantity = CustomerPageServer.thisBuyer.getShoppingCart().get(bikeIndex).getQuantity();
 
             //updates the quantity for the buyer
-            ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+            ArrayList<PurchasedBike> tempShoppingCart = CustomerPageServer.thisBuyer.getShoppingCart();
             tempShoppingCart.get(bikeIndex).setQuantity(existingQuantity + quantity);
             thisBuyer.setShoppingCart(tempShoppingCart);
 
@@ -392,7 +392,7 @@ public class CustomerPageServer {
             //saves the quantity entered
             int quantity = Integer.parseInt(q);
 
-            double finalPrice = 0.0; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+            double finalPrice; //saves the price (including quantity and insurance that the user wants to purchase a bike)
 
 
             /********
@@ -415,14 +415,19 @@ public class CustomerPageServer {
                 newPurchase.setQuantity(quantity); //sets the new purchase to a new quantity
                 newPurchase.setFinalPrice(finalPrice);
 
-                System.out.println("New Bike: " + newPurchase.toNiceString());
+                System.out.println("New Bike: " + newPurchase.shoppingCartToString());
                 ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
+                System.out.println("Size of temp shopping cart: " + thisBuyer.getShoppingCart().size());
                 ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
                 tempShoppingCart.add(newPurchase);
                 thisBuyer.setShoppingCart(tempShoppingCart);
                 tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
                 UserInfo.setBuyers(tempBuyers);
 
+
+                for (Buyer b : UserInfo.getBuyers()) {
+                    System.out.println(b.toString());
+                }
 
                 //lets the client know that it has been successfully added to the shopping cart
                 writer.write("true");

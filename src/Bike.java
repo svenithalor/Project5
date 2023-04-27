@@ -162,51 +162,6 @@ public class Bike {
         System.out.println(message);
     }
 
-    /*****************
-     * Displays the detailed product page of a specific bike including model name, price, quantity, color, wheel size,
-     * seller name, and the full description
-     * @return the product details for a bike
-     */
-    public String viewFullProduct() {
-        String details = String.format("Model Name:%s%nPrice:%.2f%nQuantity Remaining:%d   Color: %s%nWheel Size: %d-inch%n" +
-                        "Seller:%s%nFull Description: %s%n", getModelName(), getPrice(), getQuantity(), getColor(),
-                getWheelSize(), getSellerName(), getDescription());
-
-        return details;
-
-    }
-
-
-    /*********
-     * Checks if the quantity that is being request for purchase by the Buyer is not greater than the
-     * quantity available and is an integer. If both conditions are met, then lower the quantity of this bike
-     * available for purchase
-     * @param request the quantity of bikes requested by the buyer
-     * @return whether or not the user entered quantity for purchase is an integer and is not greater than the
-     * quantity available for purchase
-     */
-    public boolean validQuantity(String request) {
-        boolean valid; //checks whether the buyer-inputted quantity is valid or not
-        try {
-            int quantityRequested = Integer.parseInt(request);
-            if (quantityRequested <= getQuantity()) {
-                setQuantity(getQuantity() - quantityRequested);
-                valid = true;
-            } else {
-                valid = false;
-            }
-
-
-        } catch (Exception e) {
-            valid = false;
-        }
-        if (!valid) {
-            System.out.println("Invalid input! Please try again!");
-        }
-        return valid;
-    }
-
-
     /***********
      * This method is used to read and write in information about specific bikes on Boilermaker Bikes
      * @return string containing the parameters for a Bike object

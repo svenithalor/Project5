@@ -69,5 +69,16 @@ public class PurchasedBike extends Bike {
     public String toNiceString() {
         return super.toNiceString();
     }
-}
 
+
+    /******
+     * This method is used to display the model name, final price (quantity * price per bike + quantity * $50 if
+     * applicable, wheel size, and quantity to be purchased and or that has already been purchased and put in the
+     * shopping cart/purchasing history
+     * @return message containing the key attributes of a bike in a buyer's shopping cart or purchase history
+     */
+    public String shoppingCartToString() {
+        String message = String.format("Name %s | Price: %.2f | Wheel size: %d | Quantity: %d", getModelName(), getFinalPrice(), getWheelSize(), getQuantity());
+        return message;
+    }
+}

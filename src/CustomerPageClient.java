@@ -244,10 +244,13 @@ public class CustomerPageClient {
      */
     public String displayShoppingCartMenu() {
         ArrayList<PurchasedBike> shoppingCartTemp = CustomerPageServer.thisBuyer.getShoppingCart();
+        System.out.println("Size of ArrayList: " + shoppingCartTemp.size());
+
         String[] bikeNames = new String[shoppingCartTemp.size()];
         int i = 0;
         for (PurchasedBike pb : shoppingCartTemp) {
-            bikeNames[i] = pb.toNiceString();
+            bikeNames[i] = pb.shoppingCartToString();
+            i++;
         }
         // main menu option 1: display bikes
         String[] buttons = {"Add Item", "Delete Item", "Checkout", "Back To Home"};
