@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
+
 /*******
  * This class..
  * @author Sveni Thalor and Christina Joslin
@@ -18,7 +19,6 @@ public class CustomerPageClient {
 
     public static void runClient(Buyer buyer) {
         try {
-            System.out.println("hello world");
             Socket socket = new Socket("localhost", 1234);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
@@ -41,7 +41,7 @@ public class CustomerPageClient {
                         int choice2 = -5;
                         do {
                             int choice1;
-                            if  (choice2 != -5) {
+                            if (choice2 != -5) {
                                 choice1 = choice2;
                                 choice2 = -5;
                             } else {
@@ -63,7 +63,7 @@ public class CustomerPageClient {
                                     if (option == 0) {
                                         break;
                                     } else { //takes the buyer to the shopping cart to add a bike
-                                        //TODO
+                                        //TODO Need to take the buyer to the shopping cart
 
                                         break;
                                     }
@@ -111,8 +111,12 @@ public class CustomerPageClient {
                             }
                         } while (repeat1 == 1);
                         break;
-                    case 2: // option 2: view cart
-                        displayShoppingCartMenu();
+                    case 2: // TODO option 2: view cart
+                        String message = "";
+                        do {
+                            message = C.displayShoppingCartMenu();
+                        } while (!message.equals("backHome"));
+
                         break;
                     case 3: // option 3: view purchase history
                         String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
@@ -229,11 +233,11 @@ public class CustomerPageClient {
      * The UPDATED shopping cart menu using Simple GUI; need to implement this
      * @return
      */
-    public static String displayShoppingCartMenu() {
+    public String displayShoppingCartMenu() {
         ArrayList<PurchasedBike> shoppingCartTemp = CustomerPageServer.thisBuyer.getShoppingCart();
-        String [] bikeNames = new String[shoppingCartTemp.size()];
+        String[] bikeNames = new String[shoppingCartTemp.size()];
         int i = 0;
-        for (PurchasedBike pb: shoppingCartTemp) {
+        for (PurchasedBike pb : shoppingCartTemp) {
             bikeNames[i] = pb.toNiceString();
         }
         // main menu option 1: display bikes
@@ -323,7 +327,7 @@ public class CustomerPageClient {
         if (success) {
             JOptionPane.showMessageDialog(null, "Successful Checkout!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
         }
-        for (PurchasedBike pb:CustomerPageServer.thisBuyer.getShoppingCart()) {
+        for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
             System.out.println(pb.toNiceString());
         }
 
