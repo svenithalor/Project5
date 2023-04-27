@@ -272,6 +272,7 @@ public class CustomerPageClient {
                 writer.println();
                 writer.flush();
                 c.addBike(writer, reader);
+                System.out.println("I am in a switch statement under case 0 line 275");
                 message = "add";
                 break;
             case 1: // Delete Item
@@ -285,6 +286,7 @@ public class CustomerPageClient {
                 writer.write("checkout");
                 writer.println();
                 writer.flush();
+                System.out.println("I am in a switch statement under case 2 line 289");
                 c.checkOutBikes(reader); //TODO need to fix this
                 message = "checkout";
                 break;

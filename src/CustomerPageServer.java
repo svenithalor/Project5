@@ -456,7 +456,7 @@ public class CustomerPageServer {
 
     }
 
-    public void checkout(BufferedReader reader, PrintWriter writer) {
+    public void checkout(PrintWriter writer) {
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
