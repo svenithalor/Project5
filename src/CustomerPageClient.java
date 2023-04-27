@@ -61,10 +61,17 @@ public class CustomerPageClient {
                                     int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
                                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
                                     if (option == 0) {
+                                        writer.write("false");
+                                        writer.println();
+                                        writer.flush();
                                         break;
                                     } else { //takes the buyer to the shopping cart to add a bike
                                         //TODO Need to take the buyer to the shopping cart
-
+                                        writer.write("true");
+                                        writer.println();
+                                        writer.flush();
+                                        CustomerPageClient c = new CustomerPageClient();
+                                        c.addBike(writer,reader);
                                         break;
                                     }
                                 case -2, -3: // sorting bikes

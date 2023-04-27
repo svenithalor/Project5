@@ -68,6 +68,13 @@ public class CustomerPageServer {
                                         writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
+
+                                        //If the user wants to add the item to their cart, then allow them to do so.
+                                        Boolean toCart = Boolean.parseBoolean(reader.readLine());
+                                        if (toCart) {
+                                            System.out.println("Add to Cart!");
+                                            //S.addBike(reader,writer,cart);
+                                        }
                                         break;
                                     case -3: // sort by quantity
                                         ArrayList<Bike> quantitySorted = sortByQuantity(UserInfo.getBikes());
@@ -115,7 +122,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader, writer, thisBuyer);  //runs the shopping cart
+                            runShoppingCart(reader, writer);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
@@ -257,9 +264,14 @@ public class CustomerPageServer {
      */
 
     //Methods
-    public static void runShoppingCart(BufferedReader reader, PrintWriter writer, Buyer buyer) {
-        //creates a Shopping Cart object to navigate the additional shopping cart methods in ShoppingCart.java
-        ShoppingCart cart = new ShoppingCart(buyer);
+
+    /*******
+     * This method allows the buyer to run the shopping cart page and select from this menu to add a bike, delete a bike,
+     * checkout items, or return back to home
+     * @param reader waits for the button pressed by the buyer
+     * @param writer allows the server to communicate with the client as they are traversing the shopping cart
+     */
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer) {
         CustomerPageServer s = new CustomerPageServer();
         do {
             String input = ""; //stores the button input entered by the user of where they want to navigate to
@@ -273,17 +285,16 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer, cart);
+                s.addBike(reader, writer);
 
             } else if (input.equals("delete")) {
 
-                s.removeBike(reader, writer);  //TODO
+                s.removeBike(reader, writer);
 
 
             } else if (input.equals("checkout")) {
 
-                s.checkout(writer); //TODO
-
+                s.checkout(writer);
 
             } else if (input.equals("backHome")) {
                 return;
@@ -296,11 +307,11 @@ public class CustomerPageServer {
 
 
     /*************
-     * This method allows the buyer to add a bike to their shopping cart
-     * @param reader
+     * This method allows the buyer to add a bike from the shopping cart page.
+     * @param reader the
      * @param writer
      */
-    public void addBike(BufferedReader reader, PrintWriter writer, ShoppingCart cart) {
+    public void addBike(BufferedReader reader, PrintWriter writer) {
         /*******
          * Saves the bikeID chosen by the user
          */
@@ -349,7 +360,7 @@ public class CustomerPageServer {
                     System.out.println("addBike method error under quantity");
                     return;
                 }
-                validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                validQuantity = checkBikeQuantity(q, bikeId, inCart, bikeIndex);
                 System.out.println("Valid Quantity Server? " + validQuantity);
                 writer.write("" + validQuantity);
                 writer.println();
@@ -403,7 +414,7 @@ public class CustomerPageServer {
                     System.out.println("addBike method error under quantity");
                     return;
                 }
-                validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                validQuantity = checkBikeQuantity(q, bikeId, inCart, bikeIndex);
                 writer.write("" + validQuantity);
                 writer.println();
                 writer.flush();
@@ -658,5 +669,104 @@ public class CustomerPageServer {
 
     }
 
+    /**********
+     * This method checks if the user entered a bike quantity that is an integer is still in stock (so the quantity on
+     * the listing page is not equal to 0 and/or has not been removed), and the quantity requested is not more than the
+     * quantity available
+     * @author Christina Joslin
+     *
+     * @param input the quantity of bikes to be entered by the buyer
+     * @param bikeId the unique 4-digit id of the bike that the buyer wants to purchase
+     * @param inCart checks if a bike that is being added is already in the buyer's shopping cart
+     * @param cartIndex the index of the bike to be added or removed out from the shopping cart
+     * @return true if the quantity is valid (meets the conditions above) and false if hte quantity is not valid
+     * (does not meet the conditions above)
+     * @author Christina Joslin
+     */
+    public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
+        int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
+        boolean found = false; //checks if the bikeId they would like to purchase is found in the list
+        System.out.println(bikeId);
+
+        //checks if the input is an integer
+        try {
+            purchaseQuantity = Integer.parseInt(input);
+        } catch (Exception e) {
+            return false;
+        }
+        //checks if the quantity equals 0
+        if (purchaseQuantity == 0) {
+            return false;
+        }
+
+        //adjusts the quantity if the cart the buyer wants to add on to an already exists in the shopping cart
+        if (inCart) {
+            purchaseQuantity += thisBuyer.getShoppingCart().get(cartIndex).getQuantity();
+            System.out.println("Purchase Quantity: " + purchaseQuantity);
+        }
+        //checks if the bikeID they want to purchase exists on the listing page
+        for (Bike b : UserInfo.getBikes()) {
+            //finds the corresponding bike id they want to add or purchase
+            if (b.getId() == bikeId) {
+                System.out.println("found matching bike on listing page");
+                found = true;
+                //finds the quantity for the bike id they want to remove and if it is equal to 0 then return false
+                if (b.getQuantity() == 0) {
+                    System.out.println("The bike quantity equals zero");
+                    return false;
+                }
+                //if the quantity available of this bike id is less than the quantity they want to purchase, return false
+                if (b.getQuantity() < purchaseQuantity) {
+                    System.out.println("The purchase quantity is greater than the bike quantity available");
+                    System.out.println("Purchase Quantity: " + purchaseQuantity);
+                    System.out.println("Bike Quantity: " + b.getQuantity());
+                    return false;
+                }
+                break;
+            }
+        }
+        //if the bike id they want to purchase does not exist at all then return false
+        if (!found) {
+            return false;
+        }
+        return found;
+    }
+
 
 }
+
+    /********
+     * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
+     * (delete). If meets these requirements, then return true. If it does not,
+     * then return false.
+     * @author Christina Joslin
+     * @param input the bike id entered by the user
+     * @return true or false indicating is the user input is valid
+     */
+/**********
+ public boolean checkBikeID(String input) {
+ int bikeId = -1; //saves the bike ID entered by the user
+
+ //checks if the bike id consists of 4 digits
+ if (input.length() != 4) {
+ return false;
+ }
+ try {
+ //checks if the bikeID consists of numbers. if not then return false
+ bikeId = Integer.parseInt(input);
+
+ } catch (Exception e) {
+ return false;
+ }
+ //checks if the bike id is either found on the listing page ("add") in the shopping cart ("delete")
+ for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
+ if (pb.getId() == bikeId) {
+ return true;
+ }
+ }
+ return false;
+ }
+ }
+ ***********************/
+
+
