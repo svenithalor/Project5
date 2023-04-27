@@ -95,12 +95,14 @@ public class CustomerPageClient {
                                     System.out.println("Client received search result from server: " + result);
                                     if (!result.equals("-1")) {
                                         choice2 = C.displayBikesMenu(result);
+                                        System.out.println("client side choice 2 after search: " + choice2);
                                         if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
                                             String[] matchesArray = result.substring(1, result.length() - 1).split(",");
                                             String matchChoice = matchesArray[choice2].strip();
                                             for (int i = 0; i < bikeNamesArray.length; i++) {
                                                 if (matchChoice.equals(bikeNamesArray[i].strip())) {
                                                     choice2 = i;
+                                                    System.out.println("Choice2 after adjusting index: " + choice2);
                                                     break;
                                                 }
                                             }
