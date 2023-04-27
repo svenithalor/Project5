@@ -50,6 +50,7 @@ public class CustomerPageServer {
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
                                         System.out.println("Server printed bike display info to client");
+                                        break;
                                     case -3: // sort by quantity
                                         ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
                                         ArrayList<String> sortedNames = new ArrayList<>();
