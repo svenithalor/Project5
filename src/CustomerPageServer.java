@@ -453,6 +453,14 @@ public class CustomerPageServer {
 
     }
 
+    /**********
+     * This method first checks if all the bikes in the shopping cart are still available on the listing page. If this is true,
+     * then all the bikes in the shopping cart are put into the purchase history and the quantity remaining of the bikes for sale
+     * (the bikes on the listing page and in the seller inventories) is updated accordingly. If this is false, then an error
+     * message is displayed
+     * @param writer write to the client that the checkout has or has not successfully taken place
+     * @author Christina Joslin
+     */
     public void checkout(PrintWriter writer) {
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
@@ -587,23 +595,61 @@ public class CustomerPageServer {
     }
 
 
+    public void removeBike(BufferedReader reader,PrintWriter writer, ShoppingCart cart) {
+
+        /********
+         * Check for a valid ID
+         */
+        boolean validId = false;
+        String d = "";
+        do {
+            try {
+                d = reader.readLine();
+            } catch (Exception e) {
+                System.out.println("removeBike method error under id");
+                return;
+            }
+            validId = cart.checkBikeID(d);
+            writer.write("" + validId);
+            writer.println();
+            writer.flush();
+
+        } while (!validId);
+        //saves the bike Id entered
+        int bikeId = Integer.parseInt(d);
+
+        /*******
+         * Removes the designated
+         */
+
+        do {
+            try {
+                q = reader.readLine();
+            } catch (Exception e) {
+                System.out.println("removeBike method error under quantity");
+                return;
+            }
+
+            for (PurchasedBike purchasedBike : shoppingCart) {
+                if (purchasedBike.getId() == bikeId) {
+                    int quantity = purchasedBike.getQuantity();
+                    if (quantity >= Integer.parseInt(q)) {
+                        purchasedBike.setQuantity(quantity - Integer.parseInt(q));
+                        if (purchasedBike.getQuantity() == 0) {
+                            shoppingCart.remove(purchasedBike);
+                        }
+                        validQuantity = true;
+                    }
+                    break;
+                }
+            }
+
+            writer.write("" + validQuantity);
+            writer.println();
+            writer.flush();
+        } while (!validQuantity);
+
+    }
+
+
 }
-
-
-/************
- /******
- * Updates the seller inventory
- *ArrayList<Seller> tempSellers = UserInfo.getSellers();
- *for (Seller se : tempSellers) {
- *for (Bike bike : se.getInventory()) {
- for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
- if (pb.getId() == bike.getId()) {
- bike.setQuantity(bike.getQuantity() - pb.getQuantity());
- System.out.println("Bike Quantity Inventory" + bike.getQuantity());
- }
- }
- }
- }
- UserInfo.setSellers(tempSellers);
- *
- */

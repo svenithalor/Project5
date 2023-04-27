@@ -1,14 +1,18 @@
 /*********************
- * This class contains methods used to check bike quantity and
+ * This class contains methods used to check critical components of buying,removing, and checking out from the shopping cart
+ * that include checking if the bike quantity and bike ID are valid
+ * @author Christina Joslin, lab sec 4427
+ * @version 4/27/2023
  */
 public class ShoppingCart {
     private Buyer thisBuyer; //the buyer currently navigating the buyer shopping cart
 
     //Constructor
-    public ShoppingCart (Buyer buyer) {
+    public ShoppingCart(Buyer buyer) {
         this.thisBuyer = buyer;
 
     }
+
     /**********
      * This method checks if the user entered a bike quantity that is an integer is still in stock (so the quantity on
      * the listing page is not equal to 0 and/or has not been removed), and the quantity requested is not more than the
@@ -57,7 +61,7 @@ public class ShoppingCart {
                 }
                 //if the quantity available of this bike id is less than the quantity they want to purchase, return false
                 if (b.getQuantity() < purchaseQuantity) {
-                    System.out.println("The purchae quantity is greater than the bike quantity available");
+                    System.out.println("The purchase quantity is greater than the bike quantity available");
                     System.out.println("Purchase Quantity: " + purchaseQuantity);
                     System.out.println("Bike Quantity: " + b.getQuantity());
                     return false;
@@ -73,15 +77,14 @@ public class ShoppingCart {
     }
 
     /********
-     * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart (add)
-     * or is already in the listing page (delete). If meets these requirements, then return true. If it does not,
+     * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
+     * (delete). If meets these requirements, then return true. If it does not,
      * then return false.
      * @author Christina Joslin
      * @param input the bike id entered by the user
-     * @param buttonType the type of button (add or delete) to be used by the user
      * @return true or false indicating is the user input is valid
      */
-    public boolean checkBikeID(String input, String buttonType) {
+    public boolean checkBikeID(String input) {
         int bikeId = -1; //saves the bike ID entered by the user
 
         //checks if the bike id consists of 4 digits
@@ -95,23 +98,11 @@ public class ShoppingCart {
         } catch (Exception e) {
             return false;
         }
-        //checks if the bike id is either found on the listing page ("add") or in the shopping cart ("delete")
-        switch (buttonType) {
-            case "add":
-                for (Bike b : UserInfo.getBikes()) {
-                    if (b.getId() == bikeId) {
-                        return true;
-                    }
-                }
-                break;
-            case "delete":
-                for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
-                    if (pb.getId() == bikeId) {
-                        return true;
-                    }
-                }
-                break;
-
+        //checks if the bike id is either found on the listing page ("add") in the shopping cart ("delete")
+        for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
+            if (pb.getId() == bikeId) {
+                return true;
+            }
         }
         return false;
     }
