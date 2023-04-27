@@ -17,7 +17,7 @@ public class CustomerPageServer {
             thisBuyer = buyer; //makes a shallow copy of tc
 
 
-            // he buyer currently navigating the customer page
+            //the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
                 ArrayList<Bike> bikes = UserInfo.getBikes();
@@ -503,12 +503,14 @@ public class CustomerPageServer {
                     System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
-                        System.out.println("Bike Quantity Listing Page: " + bike.getQuantity());
                     }
                 }
             }
             UserInfo.setBikes(tempBikes);
-
+            System.out.println("Bike Listing Page");
+            for (Bike b: UserInfo.getBikes()) {
+                System.out.println(b.toString());
+            }
 
             /*******
              * Moves everything in the shopping cart to the purchase history
