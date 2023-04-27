@@ -6,10 +6,11 @@ import java.util.ArrayList;
 
 public class CustomerPageServer {
     static Buyer thisBuyer;
+
     //Methods
     public static void run(Buyer buyer) {
         try {
-            ServerSocket serverSocket = new ServerSocket(1234);
+            ServerSocket serverSocket = new ServerSocket(1233);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -22,7 +23,7 @@ public class CustomerPageServer {
                     String format = "%s | $%.2f | Quantity: %d";
                     bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                 }
-                writer.println("Line 26 "+ bikeNames);
+                writer.println("Line 26 " + bikeNames);
                 writer.flush();
                 bikeNames.clear();
 
@@ -100,7 +101,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader,writer,thisBuyer);  //runs the shopping cart
+                            runShoppingCart(reader, writer, thisBuyer);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
@@ -231,13 +232,14 @@ public class CustomerPageServer {
         }
         return deleted;
     }
+
     /*****
      * The following methods update shopping cart contents for the buyer and allow them to add/delete/checkout
      * items accordingly
      */
 
     //Methods
-    public static void runShoppingCart(BufferedReader reader, PrintWriter writer,Buyer buyer) {
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer, Buyer buyer) {
         //creates a Shopping Cart object to navigate the additional shopping cart methods in ShoppingCart.java
         ShoppingCart cart = new ShoppingCart(buyer);
         CustomerPageServer s = new CustomerPageServer();
@@ -253,7 +255,7 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer,cart);
+                s.addBike(reader, writer, cart);
 
             } else if (input.equals("delete")) {
 
@@ -284,7 +286,7 @@ public class CustomerPageServer {
      * @param reader
      * @param writer
      */
-    public void addBike(BufferedReader reader, PrintWriter writer,ShoppingCart cart) {
+    public void addBike(BufferedReader reader, PrintWriter writer, ShoppingCart cart) {
         /*******
          * Saves the bikeID chosen by the user
          */
@@ -319,23 +321,26 @@ public class CustomerPageServer {
         writer.write("" + inCart);
         writer.println();
         writer.flush();
-        System.out.println("Server message sent");
+        System.out.println("Server message is" + inCart);
 
 
         if (inCart) {
             /****
              * Checks if the user entered a valid Bike Quantity to add on to the existing total
              */
-            boolean validQuantity = false;
+            boolean validQuantity;
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    q = reader.readLine();
+                    if (reader.ready()) {
+                        q = reader.readLine();
+                    }
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
                 }
                 validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                System.out.println("Quantity is :" + validQuantity);
                 writer.write("" + validQuantity);
                 writer.println();
                 writer.flush();
@@ -374,7 +379,9 @@ public class CustomerPageServer {
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    q = reader.readLine();
+                    if (reader.ready()) {
+                        q = reader.readLine();
+                    }
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
@@ -520,8 +527,6 @@ public class CustomerPageServer {
 
         }
     }
-
-
 
 
 }

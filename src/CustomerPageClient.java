@@ -19,7 +19,7 @@ public class CustomerPageClient {
 
     public static void runClient(Buyer buyer) {
         try {
-            Socket socket = new Socket("localhost", 1234);
+            Socket socket = new Socket("localhost", 1233);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
 
@@ -111,7 +111,7 @@ public class CustomerPageClient {
                             }
                         } while (repeat1 == 1);
                         break;
-                    case 2: // TODO option 2: view cart
+                    case 2: //option 2: view cart
                         String message = "";
                         do {
                             message = C.displayShoppingCartMenu();

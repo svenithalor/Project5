@@ -33,12 +33,12 @@ public class ControlFlowMenu {
                 userType = parts[1];
             }
         };
-        loginClient.start();
         loginServer.start();
+        loginClient.start();
 
         try {
-            loginClient.join();
             loginServer.join();
+            loginClient.join();
 
         } catch (Exception e) {
             String[] options = {"OK"};
@@ -67,6 +67,7 @@ public class ControlFlowMenu {
                 };
 
                 buyerServer.start();
+
                 buyerClient.start();
 
                 try {
