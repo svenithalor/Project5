@@ -622,32 +622,7 @@ public class CustomerPageServer {
          * Removes the designated
          */
 
-        do {
-            try {
-                q = reader.readLine();
-            } catch (Exception e) {
-                System.out.println("removeBike method error under quantity");
-                return;
-            }
-
-            for (PurchasedBike purchasedBike : shoppingCart) {
-                if (purchasedBike.getId() == bikeId) {
-                    int quantity = purchasedBike.getQuantity();
-                    if (quantity >= Integer.parseInt(q)) {
-                        purchasedBike.setQuantity(quantity - Integer.parseInt(q));
-                        if (purchasedBike.getQuantity() == 0) {
-                            shoppingCart.remove(purchasedBike);
-                        }
-                        validQuantity = true;
-                    }
-                    break;
-                }
-            }
-
-            writer.write("" + validQuantity);
-            writer.println();
-            writer.flush();
-        } while (!validQuantity);
+        //removes the bikes from the shopping cart
 
     }
 
