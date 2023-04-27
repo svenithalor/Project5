@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
+import java.io.File;
 
 /*******
  * This class..
@@ -47,7 +48,6 @@ public class CustomerPageClient {
                             } else {
                                 choice1 = C.displayBikesMenu(bikeNames);
                             }
-                            System.out.println("Client Writing choice 1 to server : " + choice1);
                             writer.println(choice1);
                             writer.flush();
 
@@ -56,7 +56,6 @@ public class CustomerPageClient {
                                     String bikeDescription = reader.readLine();
                                     bikeDescription += "\n" + reader.readLine();
                                     bikeDescription += "\n" + reader.readLine();
-                                    System.out.println("Client read bike description from server: " + bikeDescription);
                                     String[] buttons = {"Go back", "Add to cart"};
                                     int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
                                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
@@ -69,7 +68,6 @@ public class CustomerPageClient {
                                     }
                                 case -2, -3: // sorting bikes
                                     String sortedBikeInfo = reader.readLine();
-                                    System.out.println("Client received sorted info from server: " + sortedBikeInfo);
                                     choice2 = C.displayBikesMenu(sortedBikeInfo);
                                     if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
                                         String[] sortedBikesArray = sortedBikeInfo.substring(1, sortedBikeInfo.length() - 1).split(",");
@@ -86,12 +84,9 @@ public class CustomerPageClient {
                                     repeat1 = 0;
                                     break;
                                 case -4: // search
-                                    System.out.println(C.searchTerm);
                                     writer.println(C.searchTerm);
                                     writer.flush();
-                                    System.out.println("Client printed search query to server: " + C.searchTerm);
                                     String result = reader.readLine();
-                                    System.out.println("Client received search result from server: " + result);
                                     if (!result.equals("-1")) {
                                         choice2 = C.displayBikesMenu(result);
                                         if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
@@ -119,8 +114,18 @@ public class CustomerPageClient {
 
                         break;
                     case 3: // option 3: view purchase history
-                        String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
-                        writer.println(fileName);
+                        JFileChooser j = new JFileChooser();
+                        j.setDialogTitle("Choose a file to save purchase history to");
+                        int save = j.showSaveDialog(null);
+                        File file = null;
+                        if (save == JFileChooser.APPROVE_OPTION) {
+                            file = j.getSelectedFile();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "An error occurred, try again!");
+                            break;
+                        }
+                        String path = file.getPath();
+                        writer.println(path);
                         writer.flush();
                         writer.println(buyer.getUsername());
                         writer.flush();

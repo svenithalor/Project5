@@ -6,11 +6,10 @@ import java.util.ArrayList;
 
 public class CustomerPageServer {
     static Buyer thisBuyer;
-
     //Methods
     public static void run(Buyer buyer) {
         try {
-            ServerSocket serverSocket = new ServerSocket(1233);
+            ServerSocket serverSocket = new ServerSocket(1234);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -23,7 +22,7 @@ public class CustomerPageServer {
                     String format = "%s | $%.2f | Quantity: %d";
                     bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                 }
-                writer.println("Line 26 " + bikeNames);
+                writer.println(bikeNames);
                 writer.flush();
                 bikeNames.clear();
 
@@ -42,15 +41,14 @@ public class CustomerPageServer {
                             int repeat1 = 1;
                             do {
                                 int choice1 = Integer.parseInt(reader.readLine());
-                                System.out.println("Server reading choice1 from client: " + choice1);
                                 switch (choice1) {
                                     default: // writing description of selected bike
                                         Bike chosenBike = bikes.get(choice1);
-                                        writer.println(String.format("Line 49 Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
+                                        writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
                                         writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
-                                        System.out.println("Server printed bike display info to client");
+                                        break;
                                     case -3: // sort by quantity
                                         ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
                                         ArrayList<String> sortedNames = new ArrayList<>();
@@ -58,9 +56,8 @@ public class CustomerPageServer {
                                             String format = "%s | $%.2f | Quantity: %d";
                                             sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                         }
-                                        writer.println("Line 60 " + sortedNames);
+                                        writer.println(sortedNames);
                                         writer.flush();
-                                        System.out.println("Server printed quantity sorted list to client: " + sortedNames);
                                         sortedNames.clear();
                                         break;
                                     case -2: // sort by price
@@ -70,9 +67,8 @@ public class CustomerPageServer {
                                             String format = "%s | $%.2f | Quantity: %d";
                                             priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                         }
-                                        writer.println("Line 71" + priceSortedNames);
+                                        writer.println(priceSortedNames);
                                         writer.flush();
-                                        System.out.println("Server printed price sorted names to client" + priceSortedNames);
                                         priceSortedNames.clear();
                                         break;
                                     case -1:
@@ -80,7 +76,6 @@ public class CustomerPageServer {
                                         break; // go back to main menu
                                     case -4: // search
                                         String searchTerm = reader.readLine();
-                                        System.out.println("Server search term: " + searchTerm);
                                         ArrayList<Bike> matches = search(searchTerm, bikes);
                                         ArrayList<String> matchNames = new ArrayList<>();
                                         if (matches != null) {
@@ -88,9 +83,8 @@ public class CustomerPageServer {
                                                 String format = "%s | $%.2f | Quantity: %d";
                                                 matchNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
                                             }
-                                            writer.println("Line 89" + matchNames);
+                                            writer.println(matchNames);
                                             writer.flush();
-                                            System.out.println("Server printed search results to client: " + matchNames);
                                             matchNames.clear();
                                         } else {
                                             writer.println(-1);
@@ -101,13 +95,13 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader, writer, thisBuyer);  //runs the shopping cart
+                            runShoppingCart(reader,writer,thisBuyer);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
-                            String fileName = reader.readLine();
+                            String filePath = reader.readLine();
                             String username = reader.readLine();
-                            boolean success = getPurchaseHistory(fileName, username);
+                            boolean success = getPurchaseHistory(filePath, username);
                             writer.println(success);
                             writer.flush();
                             break;
@@ -186,16 +180,11 @@ public class CustomerPageServer {
         String term = searchTerm.toLowerCase();
         for (Bike bike : bikes) {
             if (bike.getModelName().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
             } else if (bike.getSellerName().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
             } else if (bike.getDescription().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
-            } else {
-                System.out.println(bike.getModelName() + ": No match");
             }
         }
         if (matches.size() == 0) {
@@ -205,9 +194,9 @@ public class CustomerPageServer {
         }
     }
 
-    public static boolean getPurchaseHistory(String fileName, String username) {
+    public static boolean getPurchaseHistory(String path, String username) {
         try {
-            File file = new File(fileName);
+            File file = new File(path);
             PrintWriter pw = new PrintWriter(file);
             Buyer thisBuyer = null;
             for (int i = 0; i < UserInfo.getBuyers().size(); i++) {
@@ -216,10 +205,8 @@ public class CustomerPageServer {
                 }
             }
             ArrayList<PurchasedBike> purchasedBikes = thisBuyer.getPurchaseHistory();
-            System.out.println(purchasedBikes);
             for (PurchasedBike b : purchasedBikes) {
                 pw.println(b.toNiceString());
-                System.out.println("Printing to file: " + b.toNiceString());
             }
             pw.flush();
             pw.close();
@@ -243,14 +230,13 @@ public class CustomerPageServer {
         }
         return deleted;
     }
-
     /*****
      * The following methods update shopping cart contents for the buyer and allow them to add/delete/checkout
      * items accordingly
      */
 
     //Methods
-    public static void runShoppingCart(BufferedReader reader, PrintWriter writer, Buyer buyer) {
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer,Buyer buyer) {
         //creates a Shopping Cart object to navigate the additional shopping cart methods in ShoppingCart.java
         ShoppingCart cart = new ShoppingCart(buyer);
         CustomerPageServer s = new CustomerPageServer();
@@ -266,7 +252,7 @@ public class CustomerPageServer {
 
             if (input.equals("add")) {
 
-                s.addBike(reader, writer, cart);
+                s.addBike(reader, writer,cart);
 
             } else if (input.equals("delete")) {
 
@@ -297,7 +283,7 @@ public class CustomerPageServer {
      * @param reader
      * @param writer
      */
-    public void addBike(BufferedReader reader, PrintWriter writer, ShoppingCart cart) {
+    public void addBike(BufferedReader reader, PrintWriter writer,ShoppingCart cart) {
         /*******
          * Saves the bikeID chosen by the user
          */
@@ -332,26 +318,23 @@ public class CustomerPageServer {
         writer.write("" + inCart);
         writer.println();
         writer.flush();
-        System.out.println("Server message is" + inCart);
+        System.out.println("Server message sent");
 
 
         if (inCart) {
             /****
              * Checks if the user entered a valid Bike Quantity to add on to the existing total
              */
-            boolean validQuantity;
+            boolean validQuantity = false;
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    if (reader.ready()) {
-                        q = reader.readLine();
-                    }
+                    q = reader.readLine();
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
                 }
                 validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
-                System.out.println("Quantity is :" + validQuantity);
                 writer.write("" + validQuantity);
                 writer.println();
                 writer.flush();
@@ -390,9 +373,7 @@ public class CustomerPageServer {
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    if (reader.ready()) {
-                        q = reader.readLine();
-                    }
+                    q = reader.readLine();
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
@@ -538,6 +519,8 @@ public class CustomerPageServer {
 
         }
     }
+
+
 
 
 }
