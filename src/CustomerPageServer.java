@@ -277,7 +277,7 @@ public class CustomerPageServer {
 
             } else if (input.equals("delete")) {
 
-                s.removeBike(reader,writer);  //TODO
+                s.removeBike(reader, writer);  //TODO
 
 
             } else if (input.equals("checkout")) {
@@ -359,14 +359,21 @@ public class CustomerPageServer {
             /******
              * Updates the current bike in the buyer's shopping cart
              */
-
-            int existingQuantity = CustomerPageServer.thisBuyer.getShoppingCart().get(bikeIndex).getQuantity();
+            PurchasedBike tempBike = thisBuyer.getShoppingCart().get(bikeIndex);
+            int existingQuantity = tempBike.getQuantity();
 
             //updates the quantity and purchasing price for the buyer
             ArrayList<PurchasedBike> tempShoppingCart = CustomerPageServer.thisBuyer.getShoppingCart();
-            tempShoppingCart.get(bikeIndex).setQuantity(existingQuantity + quantity);
-            tempShoppingCart.get(bikeIndex).setFinalPrice(tempShoppingCart.get(bikeIndex).getFinalPrice() * quantity);
+            tempBike.setQuantity(existingQuantity + quantity);
+
+            if (tempBike.isInsured()) {
+                tempBike.setFinalPrice(tempBike.getPrice() * (existingQuantity + quantity) + 50.00);
+            } else {
+                tempBike.setFinalPrice(tempBike.getPrice() * (existingQuantity + quantity));
+            }
+            tempShoppingCart.set(tempShoppingCart.indexOf(tempBike), tempBike);
             thisBuyer.setShoppingCart(tempShoppingCart);
+
 
             //updates the entire buyer database
             ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
@@ -609,11 +616,12 @@ public class CustomerPageServer {
         int bikeId = -1;
 
         try {
-            if (reader.ready()) {
-                bikeId = Integer.parseInt(reader.readLine());
-                System.out.println(bikeId);
-            }
+
+            bikeId = Integer.parseInt(reader.readLine());
+            System.out.println(bikeId);
+
         } catch (Exception e) {
+            System.out.println("Unable to parse int");
             //e.printStackTrace();
             return;
         }
@@ -635,6 +643,15 @@ public class CustomerPageServer {
         thisBuyer.setShoppingCart(tempShoppingCart);
         ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
         tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
+        UserInfo.setBuyers(tempBuyers);
+
+        /**
+         * Testing only prints the current shopping cart of thisBuyer
+         */
+        for (PurchasedBike b : thisBuyer.getShoppingCart()) {
+            System.out.println(b.toNiceString());
+        }
+        //sends a message to the client confirming the successful deletes
         writer.write("true");
         writer.println();
         writer.flush();

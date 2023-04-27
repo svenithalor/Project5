@@ -206,9 +206,6 @@ public class ShoppingCartServer {
                     stillAvailable = false;
                     break;
                 }
-                System.out.println(bikeEquivalent.toString());
-                System.out.println(pb.toString());
-
                 if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
                     stillAvailable = false;
                     break;

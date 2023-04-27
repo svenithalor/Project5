@@ -278,8 +278,8 @@ public class CustomerPageClient {
                 writer.write("delete");
                 writer.println();
                 writer.flush();
-                message = "delete";
                 c.removeBike(writer,reader);
+                message = "delete";
                 break;
 
             case 2: // Checkout
@@ -516,7 +516,6 @@ public class CustomerPageClient {
      */
     public void removeBike(PrintWriter writer,BufferedReader reader) {
         int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
-        boolean validId = false; //confirms that the user has entered a validBikeId
 
         //creates a dropdown menu of items that the user can remove from their shopping cart
         String[] shoppingCartOptions = new String[CustomerPageServer.thisBuyer.getShoppingCart().size()];
@@ -525,12 +524,13 @@ public class CustomerPageClient {
         /********
          * Iterates through the available bikes in the shopping cart database and displays them to the user
          */
-        for (Bike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
-            shoppingCartOptions[i] = b.toNiceString();
+        for (PurchasedBike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            shoppingCartOptions[i] = b.shoppingCartToString();
             i++;
         }
-        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Remove", "Boilermaker Bikes",
+        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Item(s) to Remove", "Boilermaker Bikes",
                 JOptionPane.PLAIN_MESSAGE, null, shoppingCartOptions, shoppingCartOptions[0]);
+        System.out.println("Bike message" + bikeMessage);
         //if the user does not choose an option then set the bike message to null
         if (bikeMessage == null || bikeMessage.isEmpty()) {
             System.out.println("Exit Button");
@@ -539,9 +539,10 @@ public class CustomerPageClient {
         /********
          * Retrieves the corresponding bikeID
          */
-        for (Bike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
-            if (b.toNiceString().equals(bikeMessage)) {
+        for (PurchasedBike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            if (b.shoppingCartToString().equals(bikeMessage)) {
                 bikeId = b.getId();
+                System.out.println("found bikeID " + bikeId);
                 writer.write(bikeId + "");
                 writer.println();
                 writer.flush();
