@@ -54,29 +54,15 @@ public class ControlFlowMenu {
         if (userIndex != -1) {
             if (userType.equals("buyer")) {
                 thisBuyer = UserInfo.getBuyers().get(userIndex);
+                //opens up the buyer server
                 Thread buyerServer = new Thread() {
                     public void run() {
-
                         CustomerPageServer.run(thisBuyer);
                     }
                 };
-
-                Thread buyerClient = new Thread() {
-                    public void run() {
-                        System.out.println(" ");
-                        CustomerPageClient.runClient(thisBuyer);
-                    }
-                };
-
-
-
                 buyerServer.start();
 
-                buyerClient.start();
-
-
                 try {
-                    buyerClient.join();
                     buyerServer.join();
 
                 } catch (Exception e) {
@@ -88,9 +74,10 @@ public class ControlFlowMenu {
 
             } else if (userType.equals("seller")) {
                 thisSeller = UserInfo.getSellers().get(userIndex);
+                //opens up the seller page server
 
                 Thread sellerClient = new Thread() {
-                    public void run() {
+                    public void run() { //TODO maybe need to move the client so that the thread starts INSIDE of the seller server class
                         SellerPageClient C = new SellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
                         C.runSellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
                     }

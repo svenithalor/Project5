@@ -10,11 +10,25 @@ public class CustomerPageServer {
     //Methods
     public static void run(Buyer buyer) {
         try {
+            thisBuyer = buyer; //makes a shallow copy of the buyer
+            System.out.println("Running this page!");
             ServerSocket serverSocket = new ServerSocket(1233);
+
+            //opens up the customer page client thread
+            Thread buyerClient = new Thread() {
+                public void run() {
+                    System.out.println("Run the Buyer Client!");
+                    CustomerPageClient.runClient(thisBuyer);
+                }
+            };
+            buyerClient.start();
+
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            thisBuyer = buyer; //makes a shallow copy of tc
+
+
+
 
 
             //the buyer currently navigating the customer page
@@ -544,8 +558,8 @@ public class CustomerPageServer {
             for (Seller s : UserInfo.getSellers()) {
                 System.out.println(s.toString());
             }
-            //once it has completed the saving process send the message success to the buyer
-            writer.write("success");
+            //once it has completed the saving process send the message of success to the buyer
+            writer.write("true");
             writer.println();
             writer.flush();
 

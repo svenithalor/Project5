@@ -20,6 +20,7 @@ public class CustomerPageClient {
 
     public static void runClient(Buyer buyer) {
         try {
+            System.out.println("Run Client!");
             Socket socket = new Socket("localhost", 1233);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
