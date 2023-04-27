@@ -260,7 +260,7 @@ public class CustomerPageServer {
         ShoppingCart cart = new ShoppingCart(buyer);
         CustomerPageServer s = new CustomerPageServer();
         do {
-            String input = ""; //stores the button input enterred by the user of where they want to navigate to
+            String input = ""; //stores the button input entered by the user of where they want to navigate to
             try {
                 //waits for what button the user presses
                 input = reader.readLine();
@@ -272,6 +272,7 @@ public class CustomerPageServer {
             if (input.equals("add")) {
 
                 s.addBike(reader, writer, cart); //TODO
+                System.out.println("Returning to the main menu");
 
             } else if (input.equals("delete")) {
 
@@ -286,10 +287,6 @@ public class CustomerPageServer {
             } else if (input.equals("backHome")) {
                 return;
 
-            } else if (input.equals("refresh")) {
-                //TODO
-
-                //do something *we may or may not need this if statement*
             }
 
         } while (true);
@@ -469,9 +466,6 @@ public class CustomerPageServer {
         for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
             //Checks if the bike is in the listing page
             for (Bike b : UserInfo.getBikes()) {
-                if (stillAvailable) {
-                    break;
-                }
                 System.out.println(b.getId());
                 System.out.println(pb.getId());
                 if (pb.getId() != b.getId()) {
@@ -496,6 +490,9 @@ public class CustomerPageServer {
                         break;
                     }
 
+                }
+                if (stillAvailable) {
+                    break;
                 }
             }
         }

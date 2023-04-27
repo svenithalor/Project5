@@ -20,7 +20,6 @@ public class CustomerPageClient {
 
     public static void runClient(Buyer buyer) {
         try {
-            System.out.println("Run Client!");
             Socket socket = new Socket("localhost", 1233);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
@@ -409,7 +408,6 @@ public class CustomerPageClient {
                 String quantity = "";
                 boolean validQuantity;
                 do {
-                    System.out.println("Hello world");
                     quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
                                     "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
@@ -439,7 +437,6 @@ public class CustomerPageClient {
 
 
             } else if (!inCart) {
-                System.out.println("Hello world!");
                 //checks if the bike quantity is valid
                 String quantity = "";
                 boolean validQuantity;
