@@ -320,22 +320,21 @@ public class CustomerPageServer {
                 break;
             }
         }
-        System.out.println("Server side it is " + inCart);
         writer.write("" + inCart);
         writer.println();
         writer.flush();
-        System.out.println("Server message sent");
 
 
         if (inCart) {
             /****
              * Checks if the user entered a valid Bike Quantity to add on to the existing total
              */
-            boolean validQuantity = false;
+            boolean validQuantity;
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
                     q = reader.readLine();
+                    System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
@@ -375,11 +374,12 @@ public class CustomerPageServer {
             /****
              * Checks if the user entered a valid Bike Quantity to add
              */
-            boolean validQuantity = false;
+            boolean validQuantity;
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
                     q = reader.readLine();
+                    System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
@@ -406,11 +406,16 @@ public class CustomerPageServer {
                 } else {
                     finalPrice = bikeToAdd.getPrice() * quantity + 50.00 * quantity;
                 }
+                System.out.println("finalPrice " + finalPrice);
 
                 /******
                  * Adds the purchased bike to the buyer's shopping cart
                  */
                 PurchasedBike newPurchase = new PurchasedBike(bikeToAdd, finalPrice, insured);
+                newPurchase.setQuantity(quantity); //sets the new purchase to a new quantity
+                newPurchase.setFinalPrice(finalPrice);
+
+                System.out.println("New Bike: " + newPurchase.toNiceString());
                 ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
                 ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
                 tempShoppingCart.add(newPurchase);

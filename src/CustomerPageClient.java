@@ -387,12 +387,10 @@ public class CustomerPageClient {
             boolean inCart;
             String input = "";
             try {
-                if (reader.ready()) {
-                    input = reader.readLine();
-                    JOptionPane.getRootFrame().dispose();
-                }
+                input = reader.readLine();
                 //System.out.println("Client input received");
                 inCart = Boolean.parseBoolean(input);
+                System.out.println("inCart is " + inCart);
                 //System.out.println("Client side it is" + inCart + "");
 
             } catch (Exception e) {
@@ -435,6 +433,7 @@ public class CustomerPageClient {
 
 
             } else if (!inCart) {
+                System.out.println("Hello world!");
                 //checks if the bike quantity is valid
                 String quantity = "";
                 boolean validQuantity;
@@ -442,16 +441,17 @@ public class CustomerPageClient {
                 do {
                     quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    System.out.println("quantity entered " + quantity);
                     writer.write(quantity);
                     writer.println();
                     writer.flush();
                     try {
-                        if (reader.ready()) {
-                            validQuantity = Boolean.parseBoolean(reader.readLine());
-                            if (validQuantity) {
-                                break;
-                            }
+                        validQuantity = Boolean.parseBoolean(reader.readLine());
+                        System.out.println("Valid Quantity? " + validQuantity);
+                        if (validQuantity) {
+                            break;
                         }
+
                     } catch (Exception e) {
                         System.out.println("Error under bike quantity in AddBike");
                         break;
@@ -465,7 +465,6 @@ public class CustomerPageClient {
                     }
 
                 } while (true);
-                System.out.println("Quantity " + quantity);  //TEST
                 //asks the user if they would like bike insurance added to their total
                 int x = JOptionPane.showConfirmDialog(null, "Would you like $50 bike in a tree " +
                                 "insurance for each bike you are purchasing?",

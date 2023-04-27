@@ -30,7 +30,9 @@ public class ShoppingCart {
         //checks if the input is an integer
         try {
             purchaseQuantity = Integer.parseInt(input);
+            System.out.println("Purchase Quantity: " + purchaseQuantity);
         } catch (Exception e) {
+            System.out.println("Input cannot be parsed" + input);
             return false;
         }
         //checks if the quantity equals 0
@@ -46,6 +48,7 @@ public class ShoppingCart {
         for (Bike b : UserInfo.getBikes()) {
             //finds the corresponding bike id they want to add or purchase
             if (b.getId() == bikeId) {
+                System.out.println("found matching bike on listing page");
                 found = true;
                 //finds the quantity for the bike id they want to remove and if it is equal to 0 then return false
                 if (b.getQuantity() == 0) {
@@ -55,6 +58,7 @@ public class ShoppingCart {
                 if (b.getQuantity() < purchaseQuantity) {
                     return false;
                 }
+                break;
             }
         }
         //if the bike id they want to purchase does not exist at all then return false
