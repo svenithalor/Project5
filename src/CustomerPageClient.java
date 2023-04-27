@@ -397,9 +397,6 @@ public class CustomerPageClient {
                 System.out.println("error when trying to find out if already in shopping cart");
                 return;
             }
-            if (inCart == true || inCart == false) {
-                JOptionPane.getRootFrame().dispose();
-            }
 
             if (inCart) {
                 //checks if the bike quantity is valid
