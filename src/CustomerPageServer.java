@@ -451,12 +451,18 @@ public class CustomerPageServer {
         int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
 
         for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+            //Checks if the bike is in the listing page
             for (Bike b : UserInfo.getBikes()) {
-                if (!pb.equals(b)) {
+                if (stillAvailable) {
+                    break;
+                }
+                System.out.println(b.getId());
+                System.out.println(pb.getId());
+                if (pb.getId() != b.getId()) {
                     System.out.println("Bike is not available on listing page");
                     stillAvailable = false;
-                    break;
                 } else {
+                    stillAvailable = true;
                     /*****
                      * If the quantity of this bike in the listing page equals zero, then remove it from the listing page altogether
                      * and return stillAvailable as false
@@ -530,6 +536,12 @@ public class CustomerPageServer {
             tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
             UserInfo.setBuyers(tempBuyers);
 
+            /****
+             * Testing only.Printing out the current buyers.
+             */
+            for (Buyer b: UserInfo.getBuyers()) {
+
+            }
             //once it has completed the saving process send the message success to the buyer
             writer.write("success");
             writer.println();

@@ -63,6 +63,7 @@ public class ControlFlowMenu {
 
                 Thread buyerClient = new Thread() {
                     public void run() {
+                        System.out.println(" ");
                         CustomerPageClient.runClient(thisBuyer);
                     }
                 };
