@@ -48,7 +48,6 @@ public class CustomerPageClient {
                             } else {
                                 choice1 = C.displayBikesMenu(bikeNames);
                             }
-                            System.out.println("Client Writing choice 1 to server : " + choice1);
                             writer.println(choice1);
                             writer.flush();
 
@@ -57,7 +56,6 @@ public class CustomerPageClient {
                                     String bikeDescription = reader.readLine();
                                     bikeDescription += "\n" + reader.readLine();
                                     bikeDescription += "\n" + reader.readLine();
-                                    System.out.println("Client read bike description from server: " + bikeDescription);
                                     String[] buttons = {"Go back", "Add to cart"};
                                     int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
                                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
@@ -70,7 +68,6 @@ public class CustomerPageClient {
                                     }
                                 case -2, -3: // sorting bikes
                                     String sortedBikeInfo = reader.readLine();
-                                    System.out.println("Client received sorted info from server: " + sortedBikeInfo);
                                     choice2 = C.displayBikesMenu(sortedBikeInfo);
                                     if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
                                         String[] sortedBikesArray = sortedBikeInfo.substring(1, sortedBikeInfo.length() - 1).split(",");
@@ -87,22 +84,17 @@ public class CustomerPageClient {
                                     repeat1 = 0;
                                     break;
                                 case -4: // search
-                                    System.out.println(C.searchTerm);
                                     writer.println(C.searchTerm);
                                     writer.flush();
-                                    System.out.println("Client printed search query to server: " + C.searchTerm);
                                     String result = reader.readLine();
-                                    System.out.println("Client received search result from server: " + result);
                                     if (!result.equals("-1")) {
                                         choice2 = C.displayBikesMenu(result);
-                                        System.out.println("client side choice 2 after search: " + choice2);
                                         if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
                                             String[] matchesArray = result.substring(1, result.length() - 1).split(",");
                                             String matchChoice = matchesArray[choice2].strip();
                                             for (int i = 0; i < bikeNamesArray.length; i++) {
                                                 if (matchChoice.equals(bikeNamesArray[i].strip())) {
                                                     choice2 = i;
-                                                    System.out.println("Choice2 after adjusting index: " + choice2);
                                                     break;
                                                 }
                                             }

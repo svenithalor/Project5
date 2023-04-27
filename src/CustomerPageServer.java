@@ -41,7 +41,6 @@ public class CustomerPageServer {
                             int repeat1 = 1;
                             do {
                                 int choice1 = Integer.parseInt(reader.readLine());
-                                System.out.println("Server reading choice1 from client: " + choice1);
                                 switch (choice1) {
                                     default: // writing description of selected bike
                                         Bike chosenBike = bikes.get(choice1);
@@ -49,7 +48,6 @@ public class CustomerPageServer {
                                         writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
-                                        System.out.println("Server printed bike display info to client");
                                         break;
                                     case -3: // sort by quantity
                                         ArrayList<Bike> quantitySorted = sortByQuantity(bikes);
@@ -60,7 +58,6 @@ public class CustomerPageServer {
                                         }
                                         writer.println(sortedNames);
                                         writer.flush();
-                                        System.out.println("Server printed quantity sorted list to client: " + sortedNames);
                                         sortedNames.clear();
                                         break;
                                     case -2: // sort by price
@@ -72,7 +69,6 @@ public class CustomerPageServer {
                                         }
                                         writer.println(priceSortedNames);
                                         writer.flush();
-                                        System.out.println("Server printed price sorted names to client" + priceSortedNames);
                                         priceSortedNames.clear();
                                         break;
                                     case -1:
@@ -80,7 +76,6 @@ public class CustomerPageServer {
                                         break; // go back to main menu
                                     case -4: // search
                                         String searchTerm = reader.readLine();
-                                        System.out.println("Server search term: " + searchTerm);
                                         ArrayList<Bike> matches = search(searchTerm, bikes);
                                         ArrayList<String> matchNames = new ArrayList<>();
                                         if (matches != null) {
@@ -90,7 +85,6 @@ public class CustomerPageServer {
                                             }
                                             writer.println(matchNames);
                                             writer.flush();
-                                            System.out.println("Server printed search results to client: " + matchNames);
                                             matchNames.clear();
                                         } else {
                                             writer.println(-1);
@@ -186,16 +180,11 @@ public class CustomerPageServer {
         String term = searchTerm.toLowerCase();
         for (Bike bike : bikes) {
             if (bike.getModelName().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
             } else if (bike.getSellerName().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
             } else if (bike.getDescription().toLowerCase().contains(term)) {
-                System.out.println("Bike added");
                 matches.add(bike);
-            } else {
-                System.out.println(bike.getModelName() + ": No match");
             }
         }
         if (matches.size() == 0) {
@@ -216,10 +205,8 @@ public class CustomerPageServer {
                 }
             }
             ArrayList<PurchasedBike> purchasedBikes = thisBuyer.getPurchaseHistory();
-            System.out.println(purchasedBikes);
             for (PurchasedBike b : purchasedBikes) {
                 pw.println(b.toNiceString());
-                System.out.println("Printing to file: " + b.toNiceString());
             }
             pw.flush();
             pw.close();
