@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 public class CustomerPageServer {
     static Buyer thisBuyer;
 
@@ -25,7 +26,6 @@ public class CustomerPageServer {
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
 
-
             //the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
@@ -35,7 +35,7 @@ public class CustomerPageServer {
                      * Testing ONLY prints the bikes in the inventory
                      */
                     System.out.println("Updated inventory");
-                    for (Bike b: UserInfo.getBikes()) {
+                    for (Bike b : UserInfo.getBikes()) {
                         System.out.println(b.toNiceString());
                     }
                     ArrayList<String> bikeNames = new ArrayList<>();
@@ -282,7 +282,7 @@ public class CustomerPageServer {
 
             } else if (input.equals("checkout")) {
 
-                s.checkout(reader, writer); //TODO
+                s.checkout(writer); //TODO
 
 
             } else if (input.equals("backHome")) {
@@ -326,9 +326,9 @@ public class CustomerPageServer {
             if (p.getId() == bikeId) {
                 inCart = true;
                 bikeIndex = i;
-                i++;
                 break;
             }
+            i++;
         }
         writer.write("" + inCart);
         writer.println();
@@ -343,15 +343,14 @@ public class CustomerPageServer {
             String q = ""; //temporarily saves the quantity entered by the user and if valid converts it to an integer
             do {
                 try {
-                    if (reader.ready()) {
-                        q = reader.readLine();
-                    }
+                    q = reader.readLine();
                     System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
                     System.out.println("addBike method error under quantity");
                     return;
                 }
                 validQuantity = cart.checkBikeQuantity(q, bikeId, inCart, bikeIndex);
+                System.out.println("Valid Quantity Server? " + validQuantity);
                 writer.write("" + validQuantity);
                 writer.println();
                 writer.flush();
@@ -428,9 +427,7 @@ public class CustomerPageServer {
                 newPurchase.setQuantity(quantity); //sets the new purchase to a new quantity
                 newPurchase.setFinalPrice(finalPrice);
 
-                System.out.println("New Bike: " + newPurchase.shoppingCartToString());
                 ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
-                System.out.println("Size of temp shopping cart: " + thisBuyer.getShoppingCart().size());
                 ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
                 tempShoppingCart.add(newPurchase);
                 thisBuyer.setShoppingCart(tempShoppingCart);
@@ -519,8 +516,8 @@ public class CustomerPageServer {
              * If any bike quantity are equal to 0 then remove them from the listing page
              *
              */
-            Iterator <Bike> itr = tempBikes.iterator();
-            for (Iterator<Bike> it = itr; it.hasNext();) {
+            Iterator<Bike> itr = tempBikes.iterator();
+            for (Iterator<Bike> it = itr; it.hasNext(); ) {
                 Bike i = it.next();
                 if (i.getQuantity() == 0) {
                     tempBikes.remove(i);
@@ -529,7 +526,7 @@ public class CustomerPageServer {
             UserInfo.setBikes(tempBikes);
 
             System.out.println("Bike Listing Page - Post Checkout");
-            for (Bike b: UserInfo.getBikes()) {
+            for (Bike b : UserInfo.getBikes()) {
                 System.out.println(b.toString());
             }
 
@@ -554,11 +551,11 @@ public class CustomerPageServer {
              * Removes any bike with a quantity of 0 from the seller inventory
              */
             ArrayList<Seller> tempSellers = UserInfo.getSellers();
-            for (Seller s: tempSellers) {
+            for (Seller s : tempSellers) {
 
                 ArrayList<Bike> tempInventory = s.getInventory();
                 Iterator<Bike> temp = tempInventory.iterator();
-                for (Iterator<Bike> tp = temp;tp.hasNext();) {
+                for (Iterator<Bike> tp = temp; tp.hasNext(); ) {
                     Bike bike = tp.next();
                     if (bike.getQuantity() == 0) {
                         tempInventory.remove(bike);
@@ -597,16 +594,16 @@ public class CustomerPageServer {
  /******
  * Updates the seller inventory
  *ArrayList<Seller> tempSellers = UserInfo.getSellers();
-*for (Seller se : tempSellers) {
+ *for (Seller se : tempSellers) {
  *for (Bike bike : se.getInventory()) {
-                    for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
-                    if (pb.getId() == bike.getId()) {
-                    bike.setQuantity(bike.getQuantity() - pb.getQuantity());
-                    System.out.println("Bike Quantity Inventory" + bike.getQuantity());
-                    }
-                    }
-                    }
-                    }
-                    UserInfo.setSellers(tempSellers);
+ for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+ if (pb.getId() == bike.getId()) {
+ bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+ System.out.println("Bike Quantity Inventory" + bike.getQuantity());
+ }
+ }
+ }
+ }
+ UserInfo.setSellers(tempSellers);
  *
  */

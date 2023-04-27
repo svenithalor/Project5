@@ -26,11 +26,11 @@ public class ShoppingCart {
     public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
         int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
         boolean found = false; //checks if the bikeId they would like to purchase is found in the list
+        System.out.println(bikeId);
 
         //checks if the input is an integer
         try {
             purchaseQuantity = Integer.parseInt(input);
-            System.out.println("Purchase Quantity: " + purchaseQuantity);
         } catch (Exception e) {
             return false;
         }
@@ -42,6 +42,7 @@ public class ShoppingCart {
         //adjusts the quantity if the cart the buyer wants to add on to an already exists in the shopping cart
         if (inCart) {
             purchaseQuantity += thisBuyer.getShoppingCart().get(cartIndex).getQuantity();
+            System.out.println("Purchase Quantity: " + purchaseQuantity);
         }
         //checks if the bikeID they want to purchase exists on the listing page
         for (Bike b : UserInfo.getBikes()) {
@@ -51,10 +52,14 @@ public class ShoppingCart {
                 found = true;
                 //finds the quantity for the bike id they want to remove and if it is equal to 0 then return false
                 if (b.getQuantity() == 0) {
+                    System.out.println("The bike quantity equals zero");
                     return false;
                 }
                 //if the quantity available of this bike id is less than the quantity they want to purchase, return false
                 if (b.getQuantity() < purchaseQuantity) {
+                    System.out.println("The purchae quantity is greater than the bike quantity available");
+                    System.out.println("Purchase Quantity: " + purchaseQuantity);
+                    System.out.println("Bike Quantity: " + b.getQuantity());
                     return false;
                 }
                 break;

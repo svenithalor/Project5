@@ -415,17 +415,19 @@ public class CustomerPageClient {
                     quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
                                     "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-
+                    System.out.println("Entered quantity: " + quantity);
                     writer.write(quantity);
                     writer.println();
                     writer.flush();
+                    quantity = ""; //clears the quantity for the next iteration
+
                     try {
-                        if (reader.ready()) {
-                            validQuantity = Boolean.parseBoolean(reader.readLine());
-                            if (validQuantity) {
-                                break;
-                            }
+                        validQuantity = Boolean.parseBoolean(reader.readLine());
+                        System.out.println("Valid Quantity Client? " + validQuantity);
+                        if (validQuantity) {
+                            break;
                         }
+
                     } catch (Exception e) {
                         System.out.println("Error invalid quantity in AddBike");
                         return;
