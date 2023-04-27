@@ -291,6 +291,8 @@ public class CustomerPageClient {
                 writer.flush();
                 message = "backHome";
                 break;
+            default:
+                break;
         }
         return message;
     }
@@ -360,7 +362,7 @@ public class CustomerPageClient {
                     JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
 
             //if the user does not choose an option then set the bike message to null
-            if (bikeMessage.isEmpty() || bikeMessage == null) {
+            if (bikeMessage == null || bikeMessage.isEmpty()) {
                 return;
             }
 
@@ -401,10 +403,9 @@ public class CustomerPageClient {
             if (inCart) {
                 //checks if the bike quantity is valid
                 String quantity = "";
-                boolean validQuantity = false;
+                boolean validQuantity;
                 do {
                     System.out.println("Hello world");
-                    JOptionPane.getRootFrame().dispose();
                     quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
                                     "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
@@ -413,29 +414,30 @@ public class CustomerPageClient {
                     writer.println();
                     writer.flush();
                     try {
-                        validQuantity = Boolean.parseBoolean(reader.readLine());
-                        //System.out.println(validQuantity);
+                        if (reader.ready()) {
+                            validQuantity = Boolean.parseBoolean(reader.readLine());
+                            if (validQuantity) {
+                                break;
+                            }
+                        }
                     } catch (Exception e) {
                         System.out.println("Error invalid quantity in AddBike");
                         return;
                     }
 
-                    if (validQuantity) {
-                        break;
-                    }
                     int error = JOptionPane.showConfirmDialog(null, "Error. Invalid quantity " +
                                     "please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
                             JOptionPane.ERROR_MESSAGE);
                     if (error == JOptionPane.CLOSED_OPTION || error == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
-                } while (!validQuantity);
+                } while (true);
 
 
             } else if (!inCart) {
                 //checks if the bike quantity is valid
                 String quantity = "";
-                boolean validQuantity = false;
+                boolean validQuantity;
 
                 do {
                     quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
@@ -444,14 +446,17 @@ public class CustomerPageClient {
                     writer.println();
                     writer.flush();
                     try {
-                        validQuantity = Boolean.parseBoolean(reader.readLine());
+                        if (reader.ready()) {
+                            validQuantity = Boolean.parseBoolean(reader.readLine());
+                            if (validQuantity) {
+                                break;
+                            }
+                        }
                     } catch (Exception e) {
                         System.out.println("Error under bike quantity in AddBike");
                         break;
                     }
-                    if (validQuantity) {
-                        break;
-                    }
+
                     int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     //allows the user to exit at any point using exit button
 
@@ -459,10 +464,11 @@ public class CustomerPageClient {
                         break;
                     }
 
-                } while (!validQuantity);
-
+                } while (true);
+                System.out.println("Quantity " + quantity);  //TEST
                 //asks the user if they would like bike insurance added to their total
-                int x = JOptionPane.showConfirmDialog(null, "Enter bike insurance ",
+                int x = JOptionPane.showConfirmDialog(null, "Would you like $50 bike in a tree " +
+                                "insurance for each bike you are purchasing?",
                         "Boilermaker Bikes",
                         JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
@@ -478,7 +484,7 @@ public class CustomerPageClient {
                     return;
                 }
             }
-            boolean success = false;
+            boolean success;
             try {
                 success = Boolean.parseBoolean(reader.readLine());
             } catch (Exception e) {

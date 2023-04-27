@@ -299,7 +299,7 @@ public class CustomerPageServer {
         try {
             bikeId = Integer.parseInt(reader.readLine());
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("Error under addBike in CustomerPageServer");
             return;
         }
@@ -396,7 +396,7 @@ public class CustomerPageServer {
 
 
             /********
-             * Checks if the user wants $50 insurance added to their bike
+             * Checks if the user wants $50 insurance per bike added to their bike
              */
             Bike bikeToAdd = UserInfo.searchBike(bikeId);
             try {
@@ -404,7 +404,7 @@ public class CustomerPageServer {
                 if (!insured) {
                     finalPrice = bikeToAdd.getPrice() * quantity;
                 } else {
-                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00 * quantity;
                 }
 
                 /******
@@ -455,8 +455,6 @@ public class CustomerPageServer {
                     stillAvailable = false;
                     break;
                 }
-                System.out.println(bikeEquivalent.toString());
-                System.out.println(pb.toString());
 
                 if (bikeEquivalent.getQuantity() < pb.getQuantity()) {
                     stillAvailable = false;
