@@ -540,7 +540,7 @@ public class CustomerPageServer {
              * Testing only.Printing out the current buyers.
              */
             for (Buyer b: UserInfo.getBuyers()) {
-
+                System.out.println(b.toString());
             }
             //once it has completed the saving process send the message success to the buyer
             writer.write("success");

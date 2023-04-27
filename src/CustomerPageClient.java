@@ -326,14 +326,16 @@ public class CustomerPageClient {
                 return;
             }
         } while (!stillAvailable);
-        boolean success = false; //keeps track of if the user has successfully
+        boolean success; //keeps track of if the user has successfully
         try {
             success = Boolean.parseBoolean(reader.readLine());
+            if (success) {
+                JOptionPane.showMessageDialog(null, "Successful Checkout!",
+                        "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+
+            }
         } catch (Exception e) {
             System.out.println("Error message under successfully completing the shopping cart.");
-        }
-        if (success) {
-            JOptionPane.showMessageDialog(null, "Successful Checkout!", "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
         }
         for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
             System.out.println(pb.toNiceString());
