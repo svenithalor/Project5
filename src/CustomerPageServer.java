@@ -104,9 +104,9 @@ public class CustomerPageServer {
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
-                            String fileName = reader.readLine();
+                            String filePath = reader.readLine();
                             String username = reader.readLine();
-                            boolean success = getPurchaseHistory(fileName, username);
+                            boolean success = getPurchaseHistory(filePath, username);
                             writer.println(success);
                             writer.flush();
                             break;
@@ -204,9 +204,9 @@ public class CustomerPageServer {
         }
     }
 
-    public static boolean getPurchaseHistory(String fileName, String username) {
+    public static boolean getPurchaseHistory(String path, String username) {
         try {
-            File file = new File(fileName);
+            File file = new File(path);
             PrintWriter pw = new PrintWriter(file);
             Buyer thisBuyer = null;
             for (int i = 0; i < UserInfo.getBuyers().size(); i++) {

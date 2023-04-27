@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
+import java.io.File;
 
 /*******
  * This class..
@@ -119,8 +120,18 @@ public class CustomerPageClient {
 
                         break;
                     case 3: // option 3: view purchase history
-                        String fileName = JOptionPane.showInputDialog("Enter name of file to export data to");
-                        writer.println(fileName);
+                        JFileChooser j = new JFileChooser();
+                        j.setDialogTitle("Choose a file to save purchase history to");
+                        int save = j.showSaveDialog(null);
+                        File file = null;
+                        if (save == JFileChooser.APPROVE_OPTION) {
+                            file = j.getSelectedFile();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "An error occurred, try again!");
+                            break;
+                        }
+                        String path = file.getPath();
+                        writer.println(path);
                         writer.flush();
                         writer.println(buyer.getUsername());
                         writer.flush();
