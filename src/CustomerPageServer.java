@@ -262,7 +262,7 @@ public class CustomerPageServer {
 
             } else if (input.equals("delete")) {
 
-                //cart.removeBike(reader,writer,s); TODO
+                //s.removeBike(reader,writer,cart); 
 
 
             } else if (input.equals("checkout")) {
