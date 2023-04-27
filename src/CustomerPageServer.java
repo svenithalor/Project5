@@ -29,23 +29,24 @@ public class CustomerPageServer {
             //the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
-                /*****
-                 * Testing ONLY prints the bikes in the inventory
-                 */
-                System.out.println("Updated inventory");
-                for (Bike b: UserInfo.getBikes()) {
-                    System.out.println(b.toNiceString());
-                }
-                ArrayList<String> bikeNames = new ArrayList<>();
-                for (Bike bike : UserInfo.getBikes()) {
-                    String format = "%s | $%.2f | Quantity: %d";
-                    bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
-                }
-                writer.println(bikeNames);
-                writer.flush();
-                bikeNames.clear();
 
                 while (repeat == 1) {
+                    /*****
+                     * Testing ONLY prints the bikes in the inventory
+                     */
+                    System.out.println("Updated inventory");
+                    for (Bike b: UserInfo.getBikes()) {
+                        System.out.println(b.toNiceString());
+                    }
+                    ArrayList<String> bikeNames = new ArrayList<>();
+                    for (Bike bike : UserInfo.getBikes()) {
+                        String format = "%s | $%.2f | Quantity: %d";
+                        bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
+                    }
+                    writer.println(bikeNames);
+                    writer.flush();
+                    bikeNames.clear();
+
 
                     String input = reader.readLine();
                     int choice = Integer.parseInt(input);
@@ -310,7 +311,6 @@ public class CustomerPageServer {
             bikeId = Integer.parseInt(reader.readLine());
         } catch (Exception e) {
             //e.printStackTrace();
-            System.out.println("Error under addBike in CustomerPageServer");
             return;
         }
 
@@ -550,8 +550,23 @@ public class CustomerPageServer {
             ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
             tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
             UserInfo.setBuyers(tempBuyers);
+            /********
+             * Removes any bike with a quantity of 0 from the seller inventory
+             */
+            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+            for (Seller s: tempSellers) {
 
-
+                ArrayList<Bike> tempInventory = s.getInventory();
+                Iterator<Bike> temp = tempInventory.iterator();
+                for (Iterator<Bike> tp = temp;tp.hasNext();) {
+                    Bike bike = tp.next();
+                    if (bike.getQuantity() == 0) {
+                        tempInventory.remove(bike);
+                    }
+                }
+                s.setInventory(tempInventory);
+            }
+            UserInfo.setSellers(tempSellers);
 
             /****
              * Testing only.Printing out the current bikes on the listing page

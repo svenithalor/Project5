@@ -25,10 +25,11 @@ public class CustomerPageClient {
             writer = new PrintWriter(socket.getOutputStream());
 
             int repeat = 1;
-            CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
-            String bikeNames = reader.readLine();
-            String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
+
             do {
+                CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
+                String bikeNames = reader.readLine();
+                String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
                 int choice = C.displayMainMenu(writer, reader);
                 writer.println(choice);
                 writer.flush();
