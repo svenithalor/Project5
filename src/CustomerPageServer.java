@@ -748,7 +748,7 @@ public class CustomerPageServer {
      * (does not meet the conditions above)
      * @author Christina Joslin
      */
-    public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
+    public synchronized boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
         int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
         boolean found = false; //checks if the bikeId they would like to purchase is found in the list
         System.out.println(bikeId);

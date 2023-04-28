@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.util.concurrent.*;
-
 /***************
  *The ControlFlowMenu class allows the user to navigate to the login and the buyer or seller pages on the
  *Boilermaker Bikes site.
@@ -113,9 +112,4 @@ public class ControlFlowMenu {
 
 }
 
-/*******
- *   String[] options = {"OK"};
- *             JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
- *                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
- */
 
