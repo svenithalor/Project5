@@ -20,11 +20,11 @@ public class SellerPageClient {
     public static Bike parseBike(String newBike) {
         
         String[] sNB = newBike.split(",");
-        int wS = Integer.valueOf(sNB[1]);
-        double p = Double.valueOf(sNB[2]);
+        int wS = Integer.parseInt(sNB[1]);
+        double p = Double.parseDouble(sNB[2]);
         boolean u = Boolean.parseBoolean(sNB[4]);
-        int q = Integer.valueOf(sNB[7]);
-        int tempID = Integer.valueOf(sNB[8]);
+        int q = Integer.parseInt(sNB[7]);
+        int tempID = Integer.parseInt(sNB[8]);
 
         Bike bike = new Bike(sNB[0], wS, p, sNB[3], u, sNB[5], sNB[6], q, tempID);
 
