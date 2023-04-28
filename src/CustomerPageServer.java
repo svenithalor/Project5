@@ -20,6 +20,12 @@ public class CustomerPageServer {
     static Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
 
     //Methods
+
+    /************
+     * This method allows the user to run the customer page client and server.
+     * @author Sveni Thalor and Christina Joslin
+     * @param buyer the user who is currently navigating the customer page
+     */
     public static void run(Buyer buyer) {
         try {
             thisBuyer = buyer; //makes a shallow copy of the buyer
@@ -279,6 +285,7 @@ public class CustomerPageServer {
     /*****
      * The following methods update shopping cart contents for the buyer and allow them to add/delete/checkout
      * items accordingly
+     * @author Christina Joslin
      */
 
     //Methods
@@ -288,6 +295,7 @@ public class CustomerPageServer {
      * checkout items, or return back to home
      * @param reader waits for the button pressed by the buyer
      * @param writer allows the server to communicate with the client as they are traversing the shopping cart
+     * @author Christina Joslin
      */
     public static void runShoppingCart(BufferedReader reader, PrintWriter writer) {
         CustomerPageServer s = new CustomerPageServer();
@@ -326,8 +334,10 @@ public class CustomerPageServer {
 
     /*************
      * This method allows the buyer to add a bike from the shopping cart page.
-     * @param reader the
-     * @param writer
+     * @param reader saves the user input for processing
+     * @param writer informs the client class if the user input is valid/invalid and or the process of adding a bike was
+     * successful
+     * @author Christina Joslin
      */
     public void addBike(BufferedReader reader, PrintWriter writer) {
         int bikeId = -1; //saves the bike ID retrieved from the server
@@ -754,6 +764,11 @@ public class CustomerPageServer {
 }
 
 /********
+ *
+ * This method checks the Bike ID (Not sure if we need it still)
+ *
+ *
+ *
  * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
  * (delete). If meets these requirements, then return true. If it does not,
  * then return false.
