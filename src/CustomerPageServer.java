@@ -96,9 +96,12 @@ public class CustomerPageServer {
 
                     switch (choice) {
                         case -1:
-                            reader.close();
-                            writer.close();
-                            repeat = 0;
+                            boolean exit = Boolean.parseBoolean(reader.readLine());
+                            if (exit) {
+                                reader.close();
+                                writer.close();
+                                repeat = 0;
+                            }
                             break;
                         case 1: // main menu switch case 1: view available bike
                             int repeat1 = 1;
@@ -169,7 +172,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader, writer,S);  //runs the shopping cart
+                            runShoppingCart(reader, writer, S);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
@@ -179,8 +182,11 @@ public class CustomerPageServer {
                             writer.println(success);
                             writer.flush();
                             break;
-                        case 4: // logout -- do we need processing on the server side for this?
-                            repeat = 0;
+                        case 4: // logout
+                            boolean logout = Boolean.parseBoolean(reader.readLine());
+                            if (logout) {
+                                repeat = 0;
+                            }
                             break;
                         case 5: // main menu option 5: delete account
                             String confirm = reader.readLine();
@@ -331,6 +337,7 @@ public class CustomerPageServer {
                 System.out.println("Button error");
                 return;
             }
+            System.out.println("Server side input: " + input);
 
             if (input.equals("add")) {
 
@@ -346,8 +353,10 @@ public class CustomerPageServer {
                 s.checkout(writer);
 
             } else if (input.equals("backHome")) {
-                return;
+                break;
 
+            } else if (input.equals("exit")) {
+                break;
             }
 
         } while (true);
@@ -684,6 +693,8 @@ public class CustomerPageServer {
 
         } catch (Exception e) {
             System.out.println("Unable to parse int");
+            writer.println("false");
+            writer.flush();
             //e.printStackTrace();
             return;
         }

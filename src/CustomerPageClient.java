@@ -39,7 +39,12 @@ public class CustomerPageClient {
 
                 switch (choice) {
                     case -1:
-                        repeat = 0;
+                        boolean exit = LoginClient.userLogout();
+                        writer.println(exit);
+                        writer.flush();
+                        if (exit) {
+                            repeat = 0;
+                        }
                         break;
                     case 1: // main menu option 1: display bikes
                         int repeat1 = 1;
@@ -63,7 +68,7 @@ public class CustomerPageClient {
                                     String[] buttons = {"Go back", "Add to cart"};
                                     int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
                                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-                                    if (option == 0) {
+                                    if (option == 0 || option == -1) {
                                         writer.write("false");
                                         writer.println();
                                         writer.flush();
@@ -121,7 +126,7 @@ public class CustomerPageClient {
                         do {
                             message = C.displayShoppingCartMenu(S);
                             if (message.equals("exit")) {
-                                return;
+                                break;
                             }
                         } while (!message.equals("backHome"));
 
@@ -149,9 +154,13 @@ public class CustomerPageClient {
                             JOptionPane.showMessageDialog(null, "An error occurred, try again!");
                         }
                         break;
-                    case 4: // option 4: logout  //TODO need to put in the GUI for this
-                        repeat = 0;
-                        LoginClient.userLogout();
+                    case 4: // option 4: logout
+                        boolean logout = LoginClient.userLogout();
+                        writer.println(logout);
+                        writer.flush();
+                        if (logout) {
+                            repeat = 0;
+                        }
                         break;
                     case 5: // option 5: delete account
                         String confirm = JOptionPane.showInputDialog("Enter username to confirm account deletion");
@@ -271,7 +280,7 @@ public class CustomerPageClient {
         panel.add(dropdown);
         int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-
+        System.out.println(option);
         CustomerPageClient c = new CustomerPageClient();
 
         switch (option) {
@@ -304,7 +313,10 @@ public class CustomerPageClient {
                 writer.flush();
                 message = "backHome";
                 break;
+
             default:
+                writer.println("exit");
+                writer.flush();
                 message = "exit";
                 break;
         }
