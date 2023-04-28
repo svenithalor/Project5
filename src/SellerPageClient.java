@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
+import java.text.CompactNumberFormat;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -143,7 +144,7 @@ public class SellerPageClient {
 
                 //String type = reader.readLine(); // gets back type of output
 
-            } while (o != 8 && o != 5);
+            } while (o != 8 && o != 5 && o != -1);
 
             String finalInventory = sendArrayList(inventory);
 
@@ -176,13 +177,16 @@ public class SellerPageClient {
         panel.add(label1);
         JComboBox dropdown = new JComboBox(new String[]{"1. View current bikes","2. Add new bike",
                 "3. Remove Bike","4. Search Bike","5. Delete Account", "6. View Customer Shopping Carts",
-                "7. View analytics","8. Exit"});
+                "7. View analytics","8. Logout"});
 
         panel.add(dropdown);
         
         int confirmOption = JOptionPane.showConfirmDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
         int option = dropdown.getSelectedIndex() + 1;
+        writer.write(Integer.toString(confirmOption));
+        writer.println();
+        writer.flush();
         if (confirmOption == JOptionPane.OK_OPTION) {
             // System.out.println(option);
             writer.write(Integer.toString(option));
@@ -275,28 +279,34 @@ public class SellerPageClient {
                 String term = JOptionPane.showInputDialog(null, "Enter a search term",
                 "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
 
+                if (!(term == null || (term != null && term.equals("")))) {
+                    writer.write(term);
+                    writer.println();
+                    writer.flush();
+                    System.out.println("option 4 test");
 
-                writer.write(term);
-                writer.println();
-                writer.flush();
-                System.out.println("option 4 test");
-
-                String matchesString = reader.readLine();
-                String succ = reader.readLine();
-                boolean success = Boolean.parseBoolean(succ);
-                ArrayList<Bike> matches = new ArrayList<>(inventory);
-                if (success) {
-                    try {
-                        matches = recieveArrayList(matchesString);
-                        basicViewOnly(matches);
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
-                        JOptionPane.ERROR_MESSAGE);
-                    }
-                    
+                    String matchesString = reader.readLine();
+                    String succ = reader.readLine();
+                    boolean success = Boolean.parseBoolean(succ);
+                    ArrayList<Bike> matches = new ArrayList<>(inventory);
+                    if (success) {
+                        try {
+                            matches = recieveArrayList(matchesString);
+                            basicViewOnly(matches);
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
+                            JOptionPane.ERROR_MESSAGE);
+                        }
                         
-                    
+                            
+                        
+                    }
+                } else {
+                    writer.write("null");
+                    writer.println();
+                    writer.flush();
                 }
+                
                 
                 
             } else if (option == 5) {
@@ -363,25 +373,42 @@ public class SellerPageClient {
                     JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
                     JOptionPane.ERROR_MESSAGE);
                 }
+
+                writer.close();
+                reader.close();
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
            // writer.write("" + Integer.toString(option));
             //writer.println();
             //writer.flush();
+            
+            return option;
+        } else {
+            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
+                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+
+            
             String vtr = sendArrayList(inventory);
 
             writer.write(vtr);
             writer.println();
             writer.flush();
-            return option;
-        } else {
-            JOptionPane.showMessageDialog(null,"Thank you for visiting Boilermaker Bikes!",
-                    "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
-                    String vtr = sendArrayList(inventory);
+
+            String strSuccess = reader.readLine();
+            boolean success = Boolean.parseBoolean(strSuccess);
+
+            if (success) {
+                JOptionPane.showMessageDialog(null, "Successfully saved data. Exiting now...", "Boilermaker Bikes", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
+                JOptionPane.ERROR_MESSAGE);
+            }
 
             writer.write(vtr);
             writer.println();
             writer.flush();
+
             writer.close();
             reader.close();
             return -1;

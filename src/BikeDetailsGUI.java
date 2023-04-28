@@ -50,7 +50,7 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
             try {
                 result = this.sendBike();
             } catch(Exception nfe) {
-                JOptionPane.showMessageDialog(null, "At least one of the components is invalid.", "Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "At least one of the components is invalid. No action was taken.", "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
                 this.success = false;
             } 

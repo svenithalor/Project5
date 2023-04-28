@@ -194,123 +194,155 @@ public class SellerPageServer {
             SellerPageServer sp = new SellerPageServer(sellerName, inv);
 
             String strOption = null;
+            String strConfirmOption = null;
             int option = -1;
+            int confirmOption = -1;
             do {
-                
-                strOption = reader.readLine(); // will read the input from client
-                //System.out.println("Check2");
-                option = Integer.parseInt(strOption);
-                System.out.println(strOption);
-                // Options 1-3 are taken care of within client
-                if (option == 4) {
-                    boolean success = true;
+                strConfirmOption = reader.readLine();
+                confirmOption = Integer.parseInt(strConfirmOption);
+                System.out.println(confirmOption);
 
-                    String term = reader.readLine();
-                    ArrayList<Bike> matches = new ArrayList<>();
-                    try {
-                        matches = sp.searchBike(term);
-
-                    } catch(Exception ie) {
-                        success = false;
-                    }
-                    String vtr = sendArrayList(matches);
-
-                    writer.write(vtr);
-                    writer.println();
-                    writer.flush();
-
-                    vtr = Boolean.toString(success);
-                    writer.write(vtr);
-                    writer.println();
-                    writer.flush();
-
-
-                } else if (option == 5) {
+                if (confirmOption != 1) {
+                    strOption = reader.readLine(); // will read the input from client
+                    //System.out.println("Check2");
+                    option = Integer.parseInt(strOption);
+                    System.out.println(strOption);
+                    // Options 1-3 are taken care of within client
                     
-                    boolean deleted = sp.deleteAccount();
-                    
-                    String vtr = Boolean.toString(deleted);
+                    if (option == 4) {
+                        boolean success = true;
 
-                    writer.write(vtr);
-                    writer.println();
-                    writer.flush();
+                        String term = reader.readLine();
 
-                } else if (option == 6) {
-                    // BELOW CODE IS FOR TESTING SELLERPAGE ALONE
-                    String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,test,1,false,1090";
-                    String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,test,2,false,1101";
-                    String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
+                        if (!(term.equals("null"))) {
+                            ArrayList<Bike> matches = new ArrayList<>();
+                            try {
+                                matches = sp.searchBike(term);
 
-                    ArrayList<PurchasedBike> bruh = new ArrayList<>();
+                            } catch(Exception ie) {
+                                success = false;
+                            }
+                            String vtr = sendArrayList(matches);
 
-                    bruh.add(parsePurchasedBike(testb1));
-                    bruh.add(parsePurchasedBike(testb2));
-                    bruh.add(parsePurchasedBike(testb3));
-                    System.out.println("test2" + bruh.get(2).getSellerName());
-                    ArrayList<PurchasedBike> matches = new ArrayList<>();
-                    
-                    // ABOVE CODE IS FOR TESTING SELLERPAGE ALONE
-                    for (Buyer b : UserInfo.getBuyers()) {
-                        for (PurchasedBike pb : b.getShoppingCart()) {
-                            if (sp.getName().equals(pb.getSellerName())) {
-                                matches.add(pb);
-                                
+                            writer.write(vtr);
+                            writer.println();
+                            writer.flush();
+
+                            vtr = Boolean.toString(success);
+                            writer.write(vtr);
+                            writer.println();
+                            writer.flush();
+                        }
+                        
+
+
+                    } else if (option == 5) {
+                        
+                        boolean deleted = sp.deleteAccount();
+                        
+                        String vtr = Boolean.toString(deleted);
+
+                        writer.write(vtr);
+                        writer.println();
+                        writer.flush();
+
+                    } else if (option == 6) {
+                        // BELOW CODE IS FOR TESTING SELLERPAGE ALONE
+                        String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,test,1,false,1090";
+                        String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,test,2,false,1101";
+                        String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
+
+                        ArrayList<PurchasedBike> bruh = new ArrayList<>();
+
+                        bruh.add(parsePurchasedBike(testb1));
+                        bruh.add(parsePurchasedBike(testb2));
+                        bruh.add(parsePurchasedBike(testb3));
+                        System.out.println("test2" + bruh.get(2).getSellerName());
+                        ArrayList<PurchasedBike> matches = new ArrayList<>();
+                        
+                        // ABOVE CODE IS FOR TESTING SELLERPAGE ALONE
+                        for (Buyer b : UserInfo.getBuyers()) {
+                            for (PurchasedBike pb : b.getShoppingCart()) {
+                                if (sp.getName().equals(pb.getSellerName())) {
+                                    matches.add(pb);
+                                    
+                                }
                             }
                         }
-                    }
-                    
+                        
 
-                    String vtr = sendPurchasedBikes(matches);
-                    
-                    // System.out.println(vtr);
+                        String vtr = sendPurchasedBikes(matches);
+                        
+                        // System.out.println(vtr);
 
-                    writer.write(vtr);
-                    writer.println();
-                    writer.flush();
-                } else if (option == 7) {
+                        writer.write(vtr);
+                        writer.println();
+                        writer.flush();
+                    } else if (option == 7) {
 
-                    ArrayList<PurchasedBike> matches = new ArrayList<>();
-                    for (Buyer buyer : UserInfo.getBuyers()) {
-                        for (PurchasedBike pb : buyer.getPurchaseHistory()) {
+                        ArrayList<PurchasedBike> matches = new ArrayList<>();
+                        for (Buyer buyer : UserInfo.getBuyers()) {
+                            for (PurchasedBike pb : buyer.getPurchaseHistory()) {
 
-                            if (pb.getSellerName().equals(sp.getName())) {
-                                matches.add(pb);
+                                if (pb.getSellerName().equals(sp.getName())) {
+                                    matches.add(pb);
+                                }
                             }
                         }
-                    }
 
-                    String vtr = sendPurchasedBikes(matches);
-                    writer.write(vtr);
-                    writer.println();
-                    writer.flush();
-                } else if (option == 8) {
+                        String vtr = sendPurchasedBikes(matches);
+                        writer.write(vtr);
+                        writer.println();
+                        writer.flush();
+                    } else if (option == 8) {
+                        boolean success = true;
+                        try {
+                            String iString = reader.readLine();
+
+                            ArrayList<Bike> invArrayList = recieveArrayList(iString);
+
+                            sp.setInventory(invArrayList);
+
+                            int sellerIndex = UserInfo.getSellerIndex(sellerName);
+
+                            UserInfo.getSellers().get(sellerIndex).setInventory(sp.getInventory());
+                        } catch (Exception e) {
+                            success = false;
+                        }
+
+                        writer.write(Boolean.toString(success));
+                        writer.println();
+                        writer.flush();
+                        
+                    }
+                } else {
                     boolean success = true;
                     try {
                         String iString = reader.readLine();
-
+        
                         ArrayList<Bike> invArrayList = recieveArrayList(iString);
-
+        
                         sp.setInventory(invArrayList);
-
+        
                         int sellerIndex = UserInfo.getSellerIndex(sellerName);
-
+        
                         UserInfo.getSellers().get(sellerIndex).setInventory(sp.getInventory());
                     } catch (Exception e) {
                         success = false;
                     }
-
+        
                     writer.write(Boolean.toString(success));
                     writer.println();
                     writer.flush();
-                    
                 }
                 
-                String updatedInventory = reader.readLine();
-                sp.setInventory(recieveArrayList(updatedInventory));
-            } while (option != 8 && option != 5);
 
-            //String fiString = reader.readLine();
-            //sp.setInventory(recieveArrayList(fiString));
+                
+                //String updatedInventory = reader.readLine();
+                //sp.setInventory(recieveArrayList(updatedInventory));
+            } while (option != 8 && option != 5 && confirmOption != 1);
+
+           
 
             writer.close();
             reader.close();
