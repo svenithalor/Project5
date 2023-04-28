@@ -71,7 +71,7 @@ public class CustomerPageClient {
                                         writer.println();
                                         writer.flush();
                                         CustomerPageClient c = new CustomerPageClient();
-                                        c.addBike(writer,reader);
+                                        c.addBike(writer,reader,"fromDescription");
                                         break;
                                     }
                                 case -2, -3: // sorting bikes
@@ -278,7 +278,7 @@ public class CustomerPageClient {
                 writer.write("add");
                 writer.println();
                 writer.flush();
-                c.addBike(writer, reader);
+                c.addBike(writer, reader,"fromCart");
                 message = "add";
                 break;
             case 1: // Delete Item
@@ -356,44 +356,61 @@ public class CustomerPageClient {
      * This method allows the user to add a bike to their shopping cart via the add bike button
      * @param writer writes the user input to the server
      * @param reader reads either true or false from the server indicating it the process was a success or not
+     * @param buttonType if the user is adding a bike from the shoppingCart, then a dropdown menu is first displayed to
+     * select a specific bike. If the user is adding a bike from its description then it will simply ask for the quantity to be added
      * @author Christina Joslin
      */
-    public void addBike(PrintWriter writer, BufferedReader reader) {
+    public void addBike(PrintWriter writer, BufferedReader reader,String buttonType) {
         do {
             int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
-            boolean validId = false; //confirms that the user has enterred a validBikeId
-            String[] listingPageOptions = new String[UserInfo.getBikes().size()];
-            int i = 0;
+            if (buttonType.equals("fromCart")) {
+                String[] listingPageOptions = new String[UserInfo.getBikes().size()];
+                int i = 0;
 
-            /********
-             * Iterates through the available bikes in the shopping cart database and displays them to the user
-             */
-            for (Bike b : UserInfo.getBikes()) {
-                listingPageOptions[i] = b.toNiceString();
-                i++;
-            }
-            String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
-                    JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
-            System.out.println(bikeMessage);
-            //if the user does not choose an option then set the bike message to null
-            if (bikeMessage == null || bikeMessage.isEmpty()) {
-                System.out.println("Exit Button");
-                return;
-            }
+                /********
+                 * Iterates through the available bikes in the shopping cart database and displays them to the user
+                 */
+                for (Bike b : UserInfo.getBikes()) {
+                    listingPageOptions[i] = b.toNiceString();
+                    i++;
+                }
+                String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
+                        JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
+                System.out.println(bikeMessage);
+                //if the user does not choose an option then set the bike message to null
+                if (bikeMessage == null || bikeMessage.isEmpty()) {
+                    System.out.println("Exit Button");
+                    return;
+                }
 
-            /********
-             * Retrieves the corresponding bikeID
-             */
-            for (Bike b : UserInfo.getBikes()) {
-                if (b.toNiceString().equals(bikeMessage)) {
-                    bikeId = b.getId();
+                /********
+                 * Retrieves the corresponding bikeID
+                 */
+                for (Bike b : UserInfo.getBikes()) {
+                    if (b.toNiceString().equals(bikeMessage)) {
+                        bikeId = b.getId();
+                        writer.write(bikeId + "");
+                        writer.println();
+                        writer.flush();
+                        break;
+                    }
+                }
+            } else if (buttonType.equals("fromDescription")) {
+                //receives the corresponding bike id of the bike description chosen by the buyer
+                try {
+                    bikeId = Integer.parseInt(reader.readLine());
+
+                    //sends the bikeId to the server for processing
                     writer.write(bikeId + "");
                     writer.println();
                     writer.flush();
-                    break;
-                }
-            }
 
+                } catch (Exception e) {
+                    System.out.println(bikeId + " cannot be parsed");
+                    return;
+                }
+
+            }
 
             /************
              * Checks if the bikeID is already in the shopping cart. If it is already there, then just have the buyer add
@@ -517,10 +534,11 @@ public class CustomerPageClient {
     }
 
     /*********
-     * This method removes bikes bikes from the shopping cart
-     * @param writer
-     * @param reader
+     * This method removes bikes from the shopping cart
+     * @param writer sends the specific bike ID to be removed to the user
+     * @param reader indicates whether the bike has been successfully removed from the shopping cart
      */
+    //TODO need to allow the user to choose what quantity they want removed
     public void removeBike(PrintWriter writer,BufferedReader reader) {
         int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
 
@@ -535,7 +553,7 @@ public class CustomerPageClient {
             shoppingCartOptions[i] = b.shoppingCartToString();
             i++;
         }
-        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Item(s) to Remove", "Boilermaker Bikes",
+        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose an Item to Remove", "Boilermaker Bikes",
                 JOptionPane.PLAIN_MESSAGE, null, shoppingCartOptions, shoppingCartOptions[0]);
         System.out.println("Bike message" + bikeMessage);
         //if the user does not choose an option then set the bike message to null
@@ -572,8 +590,5 @@ public class CustomerPageClient {
         }
 
     }
-
-
-
 
 }

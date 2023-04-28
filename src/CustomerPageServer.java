@@ -69,11 +69,16 @@ public class CustomerPageServer {
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
 
-                                        //If the user wants to add the item to their cart, then allow them to do so.
+                                        //If the user wants to add the item to their cart, then take them to the addBike method
                                         Boolean toCart = Boolean.parseBoolean(reader.readLine());
                                         if (toCart) {
-                                            System.out.println("Add to Cart!");
-                                            //S.addBike(reader,writer,cart);
+                                            System.out.println("Hello World!");
+                                            CustomerPageServer S = new CustomerPageServer();
+                                            //sends the id of the chosen bike to the client
+                                            writer.write(chosenBike.getId() + "");
+                                            writer.println();
+                                            writer.flush();
+                                            S.addBike(reader, writer);
                                         }
                                         break;
                                     case -3: // sort by quantity
@@ -312,11 +317,11 @@ public class CustomerPageServer {
      * @param writer
      */
     public void addBike(BufferedReader reader, PrintWriter writer) {
+        int bikeId = -1; //saves the bike ID retrieved from the server
+
         /*******
          * Saves the bikeID chosen by the user
          */
-        //saves the bike ID retrieved from the server
-        int bikeId = -1;
 
         try {
             bikeId = Integer.parseInt(reader.readLine());
@@ -735,14 +740,14 @@ public class CustomerPageServer {
 
 }
 
-    /********
-     * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
-     * (delete). If meets these requirements, then return true. If it does not,
-     * then return false.
-     * @author Christina Joslin
-     * @param input the bike id entered by the user
-     * @return true or false indicating is the user input is valid
-     */
+/********
+ * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
+ * (delete). If meets these requirements, then return true. If it does not,
+ * then return false.
+ * @author Christina Joslin
+ * @param input the bike id entered by the user
+ * @return true or false indicating is the user input is valid
+ */
 /**********
  public boolean checkBikeID(String input) {
  int bikeId = -1; //saves the bike ID entered by the user
