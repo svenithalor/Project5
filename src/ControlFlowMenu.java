@@ -16,6 +16,11 @@ public class ControlFlowMenu {
 
     public static void main(String[] args) {
 
+        //We need to put in the final element of concurrency where we run each buyer and seller as a separate thread
+        //need to close the socket, reader,writer, etc.
+        //need to fix the exit points (cancel,close,yes,no,ok)
+        //need to connect the login and start writing to a file
+
         //opens up the LoginClient thread
         Thread loginClient = new Thread() {
             public void run() {
