@@ -277,11 +277,11 @@ public class LoginServer {
      * Need an explanation here for this method...
      * @return
      */
-    public static String run() {
+    public static String run(int port) {
 
         String userInfo = ""; //stores the current index of the user in the database and the type of user they are (buyer or seller)
         try {
-            ServerSocket serverSocket = new ServerSocket(4242);
+            ServerSocket serverSocket = new ServerSocket(port);
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());

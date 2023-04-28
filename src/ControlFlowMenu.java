@@ -1,5 +1,7 @@
 import javax.swing.*;
+import java.io.IOException;
 import java.util.concurrent.*;
+import java.net.*;
 /***************
  *The ControlFlowMenu class allows the user to navigate to the login and the buyer or seller pages on the
  *Boilermaker Bikes site.
@@ -14,29 +16,42 @@ public class ControlFlowMenu {
     private static Seller thisSeller; //the current seller navigating Boilermaker Bikes
     private static String[] options = {"OK"}; //the ok button displayed when the user receives an error message
     private static ExecutorService pool = Executors.newFixedThreadPool(4);  //uses the executor service to create a limited number of threads for each client and server
+    private static final int[] localPorts = {4242,2323,4590,9876,1023,1002,1526,1345,1987,2903,2145,3145};
 
+    /******
+     * This method checks if one of the listed ports are still available. If it is then pass it to the next server-client network
+     * io connection.
+     * @return the next available port for a thread to use
+     */
+    synchronized public static int availablePort() {
+        int availablePort = -1; //stores the next available port
+
+        for (int p: localPorts) {
+            try {
+                ServerSocket socket = new ServerSocket(p);
+                socket.close();
+                availablePort = p;
+                break;
+            } catch (IOException e) {
+            }
+        }
+        return availablePort;
+    }
 
     public static void main(String[] args) {
-        ControlFlowMenu user = new ControlFlowMenu(); //creates an object of the control flow menu to create new threads
-        //Thread newUser = new Thread(user); do
-        //pool.execute(user); do more research on this
-
-        //We need to put in the final element of concurrency where we run each buyer and seller as a separate thread
-        //need to close the socket, reader,writer, etc.
-        //need to fix the exit points (cancel,close,yes,no,ok)
-        //need to connect the login and start writing to a file
-
+        //checks which port is currently available
+        int currentPort = availablePort();
 
         //opens up the LoginClient thread
         Thread loginClient = new Thread() {
             public void run() {
-                LoginClient.run();
+                LoginClient.run(currentPort);
             }
         };
         //opens up the LoginServer Thread
         Thread loginServer = new Thread() {
             public void run() {
-                String userInfo = LoginServer.run();
+                String userInfo = LoginServer.run(currentPort);
 
                 //converts the information from the user login into their current index in the database and the user type (buyer or seller)
                 String[] parts = userInfo.split(",");
@@ -62,10 +77,13 @@ public class ControlFlowMenu {
         if (userIndex != -1) {
             if (userType.equals("buyer")) {
                 thisBuyer = UserInfo.getBuyers().get(userIndex);
+                //searches for a port that the buyer can use
+                int buyerPort = availablePort();
+
                 //opens up the buyer server
                 Thread buyerServer = new Thread() {
                     public void run() {
-                        CustomerPageServer.run(thisBuyer);
+                        CustomerPageServer.run(thisBuyer,buyerPort);
                     }
                 };
                 buyerServer.start();

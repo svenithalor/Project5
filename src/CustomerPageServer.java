@@ -48,17 +48,18 @@ public class CustomerPageServer {
      * This method allows the user to run the customer page client and server.
      * @author Sveni Thalor and Christina Joslin
      * @param buyer the user who is currently navigating the customer page
+     * @param port the next available port to connect to
      */
-    public static void run(Buyer buyer) {
+    public static void run(Buyer buyer,int port) {
 
         try {
             CustomerPageServer S = new CustomerPageServer(buyer);
-            ServerSocket serverSocket = new ServerSocket(1233);
+            ServerSocket serverSocket = new ServerSocket(port);
 
             //opens up the customer page client thread
             Thread buyerClient = new Thread() {
                 public void run() {
-                    CustomerPageClient.runClient(S.getThisBuyer());
+                    CustomerPageClient.runClient(S.getThisBuyer(),port);
                 }
             };
             buyerClient.start();

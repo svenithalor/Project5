@@ -7,6 +7,6 @@ public class CustomerTester {
         ArrayList<PurchasedBike> cart = new ArrayList<>();
         ArrayList<PurchasedBike> purchases = new ArrayList<>();
         Buyer buyer = new Buyer(username, password, cart, purchases);
-        CustomerPageClient.runClient(buyer);
+        CustomerPageClient.runClient(buyer,2121);
     }
 }

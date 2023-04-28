@@ -181,10 +181,10 @@ public class LoginClient {
         }
     }
 
-    public static void run() {
+    public static void run(int port) {
         try {
             //use localhost because we are having the server and client run on the same machine
-            Socket socket = new Socket("localhost", 4242);
+            Socket socket = new Socket("localhost",port);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());

@@ -19,9 +19,9 @@ public class CustomerPageClient {
     private static PrintWriter writer;
 
     //Methods
-    public static void runClient(Buyer buyer) {
+    public static void runClient(Buyer buyer,int port) {
         try {
-            Socket socket = new Socket("localhost", 1233);
+            Socket socket = new Socket("localhost", port);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
 
@@ -512,7 +512,7 @@ public class CustomerPageClient {
                     }
 
                 } while (true);
-                //asks the user if they would like bike insurance added to their total
+                //asks the user if they would like bike  added to their total
                 int x = JOptionPane.showConfirmDialog(null, "Would you like one-time $50 bike in a tree " +
                                 "insurance?",
                         "Boilermaker Bikes",
