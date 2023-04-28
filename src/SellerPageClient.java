@@ -320,11 +320,23 @@ public class SellerPageClient {
 
 
             } else if (option == 7) {
+                boolean success = true;
                 String analyticsString = reader.readLine();
-
-                ArrayList<PurchasedBike> analytics = recievePurchasedBikes(analyticsString);
+                ArrayList<PurchasedBike> analytics = new ArrayList<>();
+                try {
+                    analytics = recievePurchasedBikes(analyticsString);
+                } catch (ArrayIndexOutOfBoundsException fjlsdkjf) {
+                    JOptionPane.showMessageDialog(null, "No customers are interested in your bikes", "CS180 HW11",
+                    JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "An error occured. No Action was taken.", "CS180 HW11",
+                    JOptionPane.ERROR_MESSAGE);
+                    success = false;
+                }
                 
-                viewAnalytics(analytics);
+                if (success) {
+                    viewAnalytics(analytics);
+                }
             } else {
                 String vtr = sendArrayList(inventory);
 

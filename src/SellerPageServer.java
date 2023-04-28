@@ -125,14 +125,30 @@ public class SellerPageServer {
     public boolean deleteAccount() {
         String user = this.getName();
         ArrayList<Seller> sellers = UserInfo.getSellers();
-        
+        ArrayList<Bike> allBikes = UserInfo.getBikes();
+
         try {
-            for (Seller seller : sellers) {
+            for (Seller seller : UserInfo.getSellers()) {
                 if(seller.getUsername().equalsIgnoreCase(user)) {
                     sellers.remove(seller);
+                    
                     //System.out.println("Account deleted.");
                 }
             }
+            
+            int i = 0;
+            do {
+                
+                
+                if (allBikes.get(i).getSellerName().equalsIgnoreCase(user)) {
+                    allBikes.remove(i);
+                } else {
+                    i++;
+                }
+            } while (i < allBikes.size());
+
+            UserInfo.setSellers(sellers);
+            UserInfo.setBikes(allBikes);
         } catch (Exception e) {
             return false;
         }
