@@ -10,10 +10,12 @@ public class SellerPageServer {
     // fields
     private String name;
     private ArrayList<Bike> inventory;
+    private int port;
 
-    public SellerPageServer(String name, ArrayList<Bike> bikes) {
+    public SellerPageServer(String name, ArrayList<Bike> bikes, int port) {
         this.name = name;
         this.inventory = bikes;
+        this.port = port;
     }
 
     public String getName() {
@@ -157,12 +159,12 @@ public class SellerPageServer {
     }
     public void run() {
         try {
-            ServerSocket ss = new ServerSocket(1212); // change this port later
+            ServerSocket ss = new ServerSocket(port);
 
             //runs the sellerClient thread
             Thread sellerClient = new Thread() {
                 public void run() {
-                    SellerPageClient C = new SellerPageClient(name,inventory);
+                    SellerPageClient C = new SellerPageClient(name,inventory,port);
                     C.runSellerPageClient(name,inventory);
                 }
             };
@@ -191,7 +193,7 @@ public class SellerPageServer {
             
 
             
-            SellerPageServer sp = new SellerPageServer(sellerName, inv);
+            SellerPageServer sp = new SellerPageServer(sellerName, inv,port);
 
             String strOption = null;
             String strConfirmOption = null;

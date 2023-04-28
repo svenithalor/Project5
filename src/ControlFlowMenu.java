@@ -15,14 +15,12 @@ public class ControlFlowMenu {
     private static Buyer thisBuyer; //the current buyer navigating Boilermaker Bikes
     private static Seller thisSeller; //the current seller navigating Boilermaker Bikes
     private static String[] options = {"OK"}; //the ok button displayed when the user receives an error message
-    private static ExecutorService pool = Executors.newFixedThreadPool(4);  //uses the executor service to create a limited number of threads for each client and server
-    private static final int[] localPorts = {4242,2323,4590,9876,1023,1002,1526,1345,1987,2903,2145,3145};
+    private static final int[] localPorts = {4242,2323,4590,9876,1023,1002,1526,1345,1987,2903,2145,3145}; //the local ports available for each thread to navigate to
 
     /******
      * This method checks if one of the listed ports are still available. If it is then pass it to the next server-client network
      * io connection.
      * @return the next available port for a thread to use
-     * @param
      */
     synchronized public static int availablePort() {
         int availablePort = -1; //stores the next available port
@@ -100,11 +98,14 @@ public class ControlFlowMenu {
                 }
 
             } else if (userType.equals("seller")) {
+                //searches for a port that the seller can use
+                int sellerPort = availablePort();
+
                 thisSeller = UserInfo.getSellers().get(userIndex);
                 //opens up the seller page server
                 Thread sellerServer = new Thread() {
                     public void run() {
-                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(), thisSeller.getInventory());
+                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(), thisSeller.getInventory(),sellerPort);
                         S.run();
                     }
                 };

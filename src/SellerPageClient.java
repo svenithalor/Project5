@@ -13,10 +13,12 @@ public class SellerPageClient {
     // fields
     private String name;
     private ArrayList<Bike> inventory;
+    private int port;
 
-    public SellerPageClient(String name, ArrayList<Bike> inventory) {
+    public SellerPageClient(String name, ArrayList<Bike> inventory,int port) {
         this.name = name;
         this.inventory = inventory;
+        this.port = port;
     }
     public static Bike parseBike(String newBike) {
         
@@ -115,14 +117,14 @@ public class SellerPageClient {
 
         // ALL OF THE ABOVE STUFF IS TEMPORARY FOR TESTING PURPOSES
 
-        SellerPageClient spc = new SellerPageClient("test", inv);
-        spc.runSellerPageClient("test", inv);
+       // SellerPageClient spc = new SellerPageClient("test", inv);
+       // spc.runSellerPageClient("test", inv);
     }
     
     public void runSellerPageClient(String rName, ArrayList<Bike> rInventory) {
         try {
-            SellerPageClient C = new SellerPageClient(rName, rInventory); //creates an object to be used to navigate the menu
-            Socket socket = new Socket("localhost", 1212);
+            SellerPageClient C = new SellerPageClient(rName, rInventory,port); //creates an object to be used to navigate the menu
+            Socket socket = new Socket("localhost", port);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
