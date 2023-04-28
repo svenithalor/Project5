@@ -142,8 +142,6 @@ public class CustomerPageClient {
                         writer.flush();
                         writer.println(buyer.getUsername());
                         writer.flush();
-                        writer.println(buyer.getUsername());
-                        writer.flush();
                         String success = reader.readLine();
                         if (success.equals("true")) {
                             JOptionPane.showMessageDialog(null, "Success!");
