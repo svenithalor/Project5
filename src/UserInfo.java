@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-
 /*********
  * This class stores user information reads past user information and writes current user information
  * into buyer.csv and seller.csv

@@ -143,6 +143,16 @@ public class SellerPageServer {
         try {
             ServerSocket ss = new ServerSocket(1212); // change this port later
 
+            //runs the sellerClient thread
+            Thread sellerClient = new Thread() {
+                public void run() {
+                    SellerPageClient C = new SellerPageClient(name,inventory);
+                    C.runSellerPageClient(name,inventory);
+                }
+            };
+            sellerClient.start();
+            sellerClient.join();
+
             Socket socket = ss.accept();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

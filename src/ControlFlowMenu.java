@@ -41,9 +41,6 @@ public class ControlFlowMenu {
             loginClient.join();
 
         } catch (Exception e) {
-            String[] options = {"OK"};
-            JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
-                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
             return;
 
         }
@@ -75,26 +72,15 @@ public class ControlFlowMenu {
             } else if (userType.equals("seller")) {
                 thisSeller = UserInfo.getSellers().get(userIndex);
                 //opens up the seller page server
-
-                Thread sellerClient = new Thread() {
-                    public void run() { //TODO maybe need to move the client so that the thread starts INSIDE of the seller server class
-                        SellerPageClient C = new SellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
-                        C.runSellerPageClient(thisSeller.getUsername(),thisSeller.getInventory());
-                    }
-                };
-
                 Thread sellerServer = new Thread() {
                     public void run() {
                         SellerPageServer S = new SellerPageServer(thisSeller.getUsername(),thisSeller.getInventory());
                         S.run();
                     }
                 };
-
-                sellerClient.start();
                 sellerServer.start();
 
                 try {
-                    sellerClient.join();
                     sellerServer.join();
 
                 } catch (Exception e) {
@@ -114,3 +100,10 @@ public class ControlFlowMenu {
     }
 
 }
+
+    /*******
+     *   String[] options = {"OK"};
+     *             JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
+     *                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+     */
+
