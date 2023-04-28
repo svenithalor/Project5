@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.concurrent.*;
 
 /***************
  *The ControlFlowMenu class allows the user to navigate to the login and the buyer or seller pages on the
@@ -13,13 +14,19 @@ public class ControlFlowMenu {
     private static Buyer thisBuyer; //the current buyer navigating Boilermaker Bikes
     private static Seller thisSeller; //the current seller navigating Boilermaker Bikes
     private static String[] options = {"OK"}; //the ok button displayed when the user receives an error message
+    private static ExecutorService pool = Executors.newFixedThreadPool(4);  //uses the executor service to create a limited number of threads for each client and server
+
 
     public static void main(String[] args) {
+        ControlFlowMenu user = new ControlFlowMenu(); //creates an object of the control flow menu to create new threads
+        //Thread newUser = new Thread(user); do
+        //pool.execute(user); do more research on this
 
         //We need to put in the final element of concurrency where we run each buyer and seller as a separate thread
         //need to close the socket, reader,writer, etc.
         //need to fix the exit points (cancel,close,yes,no,ok)
         //need to connect the login and start writing to a file
+
 
         //opens up the LoginClient thread
         Thread loginClient = new Thread() {
@@ -79,7 +86,7 @@ public class ControlFlowMenu {
                 //opens up the seller page server
                 Thread sellerServer = new Thread() {
                     public void run() {
-                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(),thisSeller.getInventory());
+                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(), thisSeller.getInventory());
                         S.run();
                     }
                 };
@@ -106,9 +113,9 @@ public class ControlFlowMenu {
 
 }
 
-    /*******
-     *   String[] options = {"OK"};
-     *             JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
-     *                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
-     */
+/*******
+ *   String[] options = {"OK"};
+ *             JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
+ *                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+ */
 
