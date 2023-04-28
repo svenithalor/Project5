@@ -114,8 +114,8 @@ public class SellerPageServer {
 
         String t = term.toLowerCase();
         for (Bike b : inventory) {
-            if (b.getColor().contains(t) || b.getModelName().contains(t)
-                || b.getDescription().contains(t) || Integer.toString(b.getId()).contains(t)) {
+            if (b.getColor().toLowerCase().contains(t.toLowerCase()) || b.getModelName().toLowerCase().contains(t.toLowerCase())
+                || b.getDescription().toLowerCase().contains(t.toLowerCase()) || Integer.toString(b.getId()).toLowerCase().contains(t.toLowerCase())) {
                     matches.add(b);
                 }
         }
@@ -203,14 +203,27 @@ public class SellerPageServer {
                 System.out.println(strOption);
                 // Options 1-3 are taken care of within client
                 if (option == 4) {
-                    
+                    boolean success = true;
+
                     String term = reader.readLine();
-                    ArrayList<Bike> matches = sp.searchBike(term);
+                    ArrayList<Bike> matches = new ArrayList<>();
+                    try {
+                        matches = sp.searchBike(term);
+
+                    } catch(Exception ie) {
+                        success = false;
+                    }
                     String vtr = sendArrayList(matches);
 
                     writer.write(vtr);
                     writer.println();
                     writer.flush();
+
+                    vtr = Boolean.toString(success);
+                    writer.write(vtr);
+                    writer.println();
+                    writer.flush();
+
 
                 } else if (option == 5) {
                     

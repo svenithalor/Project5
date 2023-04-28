@@ -282,13 +282,19 @@ public class SellerPageClient {
                 System.out.println("option 4 test");
 
                 String matchesString = reader.readLine();
-                ArrayList<Bike> matches = recieveArrayList(matchesString);
-                if (matches.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
-                    JOptionPane.ERROR_MESSAGE);
-                } else {
-                    basicViewOnly(matches);
+                String succ = reader.readLine();
+                boolean success = Boolean.parseBoolean(succ);
+                ArrayList<Bike> matches = new ArrayList<>(inventory);
+                if (success) {
+                    matches = recieveArrayList(matchesString);
+                    if (matches.size() == 0) {
+                        JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
+                        JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        basicViewOnly(matches);
+                    }
                 }
+                
                 
             } else if (option == 5) {
                String deletedString = reader.readLine();
