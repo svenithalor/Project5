@@ -171,6 +171,7 @@ public class CustomerPageClient {
                             writer.flush();
                             int buyerIndex = UserInfo.getBuyers().indexOf(buyer);
                             writer.println(buyerIndex);
+                            writer.flush();
                             String deleted = reader.readLine();
                             if (deleted.equals("true")) {
                                 JOptionPane.showMessageDialog(null, "Account deleted successfully!");
