@@ -4,8 +4,20 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/**************
+ * The CustomerPageSever class handles the processing involved with the buyer experience such as adding and deleting items
+ * from the buyer's shopping cart, checking out the buyer's shopping cart (moving all items to their purchase history
+ * and updating the inventory and listing page accordingly), searching by modelName as well as sorting by quantity/price,
+ * exporting purchase history to a file of the buyer's choice, deleting the buyer's account, as well as saving all
+ * buyer information during and between sessions
+ *
+ * @author Christina Joslin and Sveni Thalor, lab sec 4427
+ * @version 4/27/2023
+ *
+ */
 public class CustomerPageServer {
-    static Buyer thisBuyer;
+
+    static Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
 
     //Methods
     public static void run(Buyer buyer) {
@@ -32,7 +44,7 @@ public class CustomerPageServer {
 
                 while (repeat == 1) {
                     /*****
-                     * Testing ONLY prints the bikes in the inventory
+                     * Testing prints the bikes in the inventory
                      */
                     System.out.println("Updated inventory");
                     for (Bike b : UserInfo.getBikes()) {

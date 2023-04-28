@@ -1,15 +1,16 @@
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.File;
 
-/*******
- * This class..
- * @author Sveni Thalor and Christina Joslin
+/**************
+ * The CustomerPageClient class allows the buyer to navigate through the buyer menu options via a user-friendly GUI
+ * application that includes displaying the central buyer menu in addition to providing users access to the shopping
+ * cart and listing page features.
+ *
+ * @author Christina Joslin and Sveni Thalor, lab sec 4427
+ * @version 4/27/2023
  *
  */
 public class CustomerPageClient {
@@ -66,7 +67,6 @@ public class CustomerPageClient {
                                         writer.flush();
                                         break;
                                     } else { //takes the buyer to the shopping cart to add a bike
-                                        //TODO Need to take the buyer to the shopping cart
                                         writer.write("true");
                                         writer.println();
                                         writer.flush();
