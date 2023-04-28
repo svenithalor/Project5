@@ -298,7 +298,7 @@ public class CustomerPageServer {
             JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
