@@ -151,8 +151,6 @@ public class SellerPageServer {
                 }
             };
             sellerClient.start();
-            sellerClient.join();
-
             Socket socket = ss.accept();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

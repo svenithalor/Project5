@@ -32,12 +32,7 @@ public class CustomerPageServer {
                 }
             };
             buyerClient.start();
-            try {
-                buyerClient.join();
-            } catch (Exception e) {
-                System.out.println("BuyerClient thread interrupted");
-                return;
-            }
+
 
             Socket socket = serverSocket.accept(); //waits until the client connects
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
