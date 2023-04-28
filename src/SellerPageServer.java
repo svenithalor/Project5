@@ -294,7 +294,7 @@ public class SellerPageServer {
                 
                 String updatedInventory = reader.readLine();
                 sp.setInventory(recieveArrayList(updatedInventory));
-            } while (option != 8);
+            } while (option != 8 && option != 5);
 
             //String fiString = reader.readLine();
             //sp.setInventory(recieveArrayList(fiString));

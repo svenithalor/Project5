@@ -143,7 +143,7 @@ public class SellerPageClient {
 
                 //String type = reader.readLine(); // gets back type of output
 
-            } while (o != 8);
+            } while (o != 8 && o != 5);
 
             String finalInventory = sendArrayList(inventory);
 
