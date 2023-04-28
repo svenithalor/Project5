@@ -133,6 +133,7 @@ public class SellerPageServer {
                     //System.out.println("Account deleted.");
                 }
             }
+            UserInfo.setSellers(sellers);
         } catch (Exception e) {
             return false;
         }

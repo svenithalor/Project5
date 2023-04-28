@@ -18,7 +18,7 @@ public class CustomerPageClient {
     private static BufferedReader reader;
     private static PrintWriter writer;
 
-
+    //Methods
     public static void runClient(Buyer buyer) {
         try {
             Socket socket = new Socket("localhost", 1233);
@@ -28,7 +28,9 @@ public class CustomerPageClient {
             int repeat = 1;
 
             do {
-                CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used for processing
+                CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used to display GUI
+                CustomerPageServer S = new CustomerPageServer(buyer); //creates a CustomerPage object to be used for processing
+
                 String bikeNames = reader.readLine();
                 String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
                 int choice = C.displayMainMenu(writer, reader);
@@ -117,7 +119,7 @@ public class CustomerPageClient {
                     case 2: //option 2: view cart
                         String message = "";
                         do {
-                            message = C.displayShoppingCartMenu();
+                            message = C.displayShoppingCartMenu(S);
                             if (message.equals("exit")) {
                                 return;
                             }
@@ -249,11 +251,12 @@ public class CustomerPageClient {
      */
 
     /*******
-     * The UPDATED shopping cart menu using Simple GUI; need to implement this
-     * @return
+     * This method displays a shopping cart menu for the buyer to interact with.
+     * @param S the customer page server object that contains the buyer that is navigating the customer page
+     * @return the button corresponding to user input
      */
-    public String displayShoppingCartMenu() {
-        ArrayList<PurchasedBike> shoppingCartTemp = CustomerPageServer.thisBuyer.getShoppingCart();
+    public String displayShoppingCartMenu(CustomerPageServer S) {
+        ArrayList<PurchasedBike> shoppingCartTemp = S.getThisBuyer().getShoppingCart();
 
         String[] bikeNames = new String[shoppingCartTemp.size()];
         int i = 0;
@@ -285,7 +288,7 @@ public class CustomerPageClient {
                 writer.write("delete");
                 writer.println();
                 writer.flush();
-                c.removeBike(writer,reader);
+                c.removeBike(writer,reader,S);
                 message = "delete";
                 break;
 
@@ -537,19 +540,20 @@ public class CustomerPageClient {
      * This method removes bikes from the shopping cart
      * @param writer sends the specific bike ID to be removed to the user
      * @param reader indicates whether the bike has been successfully removed from the shopping cart
+     * @param S the object that contains the buyer who navigates the customer page
      */
     //TODO need to allow the user to choose what quantity they want removed
-    public void removeBike(PrintWriter writer,BufferedReader reader) {
+    public void removeBike(PrintWriter writer,BufferedReader reader,CustomerPageServer S) {
         int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
 
         //creates a dropdown menu of items that the user can remove from their shopping cart
-        String[] shoppingCartOptions = new String[CustomerPageServer.thisBuyer.getShoppingCart().size()];
+        String[] shoppingCartOptions = new String[S.getThisBuyer().getShoppingCart().size()];
         int i = 0;
 
         /********
          * Iterates through the available bikes in the shopping cart database and displays them to the user
          */
-        for (PurchasedBike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+        for (PurchasedBike b : S.getThisBuyer().getShoppingCart()) {
             shoppingCartOptions[i] = b.shoppingCartToString();
             i++;
         }
@@ -564,7 +568,7 @@ public class CustomerPageClient {
         /********
          * Retrieves the corresponding bikeID
          */
-        for (PurchasedBike b : CustomerPageServer.thisBuyer.getShoppingCart()) {
+        for (PurchasedBike b : S.getThisBuyer().getShoppingCart()) {
             if (b.shoppingCartToString().equals(bikeMessage)) {
                 bikeId = b.getId();
                 System.out.println("found bikeID " + bikeId);

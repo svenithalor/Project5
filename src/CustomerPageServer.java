@@ -17,9 +17,32 @@ import java.util.*;
  */
 public class CustomerPageServer {
 
-    static Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
+    private Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
+
+    //Constructor
+
+    public CustomerPageServer(Buyer buyer) {
+        this.thisBuyer = buyer;  //shallow copy of the buyer navigating this page
+    }
+
 
     //Methods
+
+    /********
+     * This method gets the buyer navigating the customer page
+     * @return the buyer navigating the customer page
+     */
+    public Buyer getThisBuyer() {
+        return thisBuyer;
+    }
+
+    /******
+     * This method updates the buyer navigating the customer page
+     * @param thisBuyer navigating the customer page
+     */
+    public void setThisBuyer(Buyer thisBuyer) {
+        this.thisBuyer = thisBuyer;
+    }
 
     /************
      * This method allows the user to run the customer page client and server.
@@ -27,14 +50,15 @@ public class CustomerPageServer {
      * @param buyer the user who is currently navigating the customer page
      */
     public static void run(Buyer buyer) {
+
         try {
-            thisBuyer = buyer; //makes a shallow copy of the buyer
+            CustomerPageServer S = new CustomerPageServer(buyer);
             ServerSocket serverSocket = new ServerSocket(1233);
 
             //opens up the customer page client thread
             Thread buyerClient = new Thread() {
                 public void run() {
-                    CustomerPageClient.runClient(thisBuyer);
+                    CustomerPageClient.runClient(S.getThisBuyer());
                 }
             };
             buyerClient.start();
@@ -92,7 +116,6 @@ public class CustomerPageServer {
                                         Boolean toCart = Boolean.parseBoolean(reader.readLine());
                                         if (toCart) {
                                             System.out.println("Hello World!");
-                                            CustomerPageServer S = new CustomerPageServer();
                                             //sends the id of the chosen bike to the client
                                             writer.write(chosenBike.getId() + "");
                                             writer.println();
@@ -146,7 +169,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
-                            runShoppingCart(reader, writer);  //runs the shopping cart
+                            runShoppingCart(reader, writer,S);  //runs the shopping cart
                             break;
 
                         case 3: // main menu option 3: export file with purchase history
@@ -295,10 +318,10 @@ public class CustomerPageServer {
      * checkout items, or return back to home
      * @param reader waits for the button pressed by the buyer
      * @param writer allows the server to communicate with the client as they are traversing the shopping cart
+     * @param s the object that contains the buyer navigating this customer page
      * @author Christina Joslin
      */
-    public static void runShoppingCart(BufferedReader reader, PrintWriter writer) {
-        CustomerPageServer s = new CustomerPageServer();
+    public static void runShoppingCart(BufferedReader reader, PrintWriter writer,CustomerPageServer s) {
         do {
             String input = ""; //stores the button input entered by the user of where they want to navigate to
             try {
@@ -402,7 +425,7 @@ public class CustomerPageServer {
             int existingQuantity = tempBike.getQuantity();
 
             //updates the quantity and purchasing price for the buyer
-            ArrayList<PurchasedBike> tempShoppingCart = CustomerPageServer.thisBuyer.getShoppingCart();
+            ArrayList<PurchasedBike> tempShoppingCart = thisBuyer.getShoppingCart();
             tempBike.setQuantity(existingQuantity + quantity);
 
             if (tempBike.isInsured()) {
@@ -515,7 +538,7 @@ public class CustomerPageServer {
         boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
         int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
 
-        for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+        for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
             //Checks if the bike is in the listing page
             for (Bike b : UserInfo.getBikes()) {
                 System.out.println(b.getId());
@@ -560,7 +583,7 @@ public class CustomerPageServer {
              */
             ArrayList<Bike> tempBikes = UserInfo.getBikes();
             for (Bike bike : tempBikes) {
-                for (PurchasedBike pb : CustomerPageServer.thisBuyer.getShoppingCart()) {
+                for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
                     System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
