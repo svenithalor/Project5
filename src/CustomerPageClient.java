@@ -139,7 +139,8 @@ public class CustomerPageClient {
                         if (save == JFileChooser.APPROVE_OPTION) {
                             file = j.getSelectedFile();
                         } else {
-                            JOptionPane.showMessageDialog(null, "An error occurred, try again!");
+                            writer.println("exit");
+                            writer.flush();
                             break;
                         }
                         String path = file.getPath();

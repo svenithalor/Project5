@@ -177,6 +177,9 @@ public class CustomerPageServer {
 
                         case 3: // main menu option 3: export file with purchase history
                             String filePath = reader.readLine();
+                            if (filePath.equals("exit")) {
+                                break;
+                            }
                             String username = reader.readLine();
                             boolean success = getPurchaseHistory(filePath, username);
                             writer.println(success);
