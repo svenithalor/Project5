@@ -286,13 +286,16 @@ public class SellerPageClient {
                 boolean success = Boolean.parseBoolean(succ);
                 ArrayList<Bike> matches = new ArrayList<>(inventory);
                 if (success) {
-                    matches = recieveArrayList(matchesString);
-                    if (matches.size() == 0) {
+                    try {
+                        matches = recieveArrayList(matchesString);
+                        basicViewOnly(matches);
+                    } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
                         JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        basicViewOnly(matches);
                     }
+                    
+                        
+                    
                 }
                 
                 
