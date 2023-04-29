@@ -308,7 +308,7 @@ public class SellerPageServer {
                         writer.println();
                         writer.flush();
                     } else if (option == 7) {
-
+                        UserInfo.readUsers();
                         ArrayList<PurchasedBike> matches = new ArrayList<>();
                         for (Buyer buyer : UserInfo.getBuyers()) {
                             for (PurchasedBike pb : buyer.getPurchaseHistory()) {
