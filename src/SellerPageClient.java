@@ -179,7 +179,7 @@ public class SellerPageClient {
         panel.add(label1);
         JComboBox dropdown = new JComboBox(new String[]{"1. View current bikes","2. Add new bike",
                 "3. Remove Bike","4. Search Bike","5. Delete Account", "6. View Customer Shopping Carts",
-                "7. View analytics","8. Logout"});
+                "7. View analytics","8. Logout", "9. Export Inventory"});
 
         panel.add(dropdown);
         
@@ -358,7 +358,7 @@ public class SellerPageClient {
                 if (success) {
                     viewAnalytics(analytics);
                 }
-            } else {
+            } else if (option == 8) {
                 String vtr = sendArrayList(inventory);
 
                 writer.write(vtr);
@@ -378,6 +378,30 @@ public class SellerPageClient {
 
                 writer.close();
                 reader.close();
+            } else {
+                JFileChooser j = new JFileChooser();
+                j.setDialogTitle("Choose a file to export inventory to.");
+                int save = j.showSaveDialog(null);
+                File file = null;
+                if (save == JFileChooser.APPROVE_OPTION) {
+                    file = j.getSelectedFile();
+                    String path = file.getPath();
+                    writer.println(path);
+                    writer.flush();
+                    writer.println(name);
+                    writer.flush();
+                    String success = reader.readLine();
+                    if (success.equals("true")) {
+                        JOptionPane.showMessageDialog(null, "Success!");
+                    } else if (success.equals("false")) {
+                        JOptionPane.showMessageDialog(null, "An error occurred, try again!");
+                    }
+                } else {
+                    writer.println("exit");
+                    writer.flush();
+                    
+                }
+                
             }
             //sends the chosen option to the server to be processed and then returns this index to the user
            // writer.write("" + Integer.toString(option));
