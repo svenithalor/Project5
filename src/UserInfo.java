@@ -244,8 +244,8 @@ public class UserInfo {
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }
             }
-            System.out.println("Buyer size: " + getBuyers().size());
-            System.out.println("Seller size: " + getSellers().size());
+            //System.out.println("Buyer size: " + getBuyers().size());
+            //System.out.println("Seller size: " + getSellers().size());
 
 
         } catch (Exception e) {

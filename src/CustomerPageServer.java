@@ -69,13 +69,6 @@ public class CustomerPageServer {
                 int repeat = 1;
                 while (repeat == 1) {
                     UserInfo.readUsers();
-                    /*****
-                     * Testing prints the bikes in the inventory
-                     */
-                    System.out.println("Updated inventory");
-                    for (Bike b : UserInfo.getBikes()) {
-                        System.out.println(b.toNiceString());
-                    }
                     ArrayList<String> bikeNames = new ArrayList<>();
                     //System.out.println("Size of buyer arraylist " + UserInfo.getBuyers().size());
                     for (Bike bike : UserInfo.getBikes()) {
