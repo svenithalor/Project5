@@ -17,13 +17,59 @@ Student 2 - Submitted vocareum workspace
 **********
 ## Description 
 
+### UserInfo.java 
+*Functionality* This class stores user information reads past user information and writes current user information into buyer.csv or seller.csv 
 
+*Relationship To Other Classes* This class contains the buyers, sellers, and bikes arraylists which are accessed and frequently updated by the customer page client/server as well as the seller page client/server. 
+
+*Fields* 
+private static ArrayList<Buyer> buyers; //stores all previous and new buyers 
+private static ArrayList<Seller> sellers; //stores all previous and new sellers 
+private static ArrayList<Bike> bikes; //stores all bikes that are for sale 
+
+ *Methods* 
+ 
+ synchronized public static void readUsers()
+ **Description** This method reads past user information and stores each user into either the buyer arraylist or the seller arraylist. If the user is a seller, then the bikes associated with their account will be put into the bikes arraylist to be made available to the customers
+ 
+synchronized public static void writeUsers()
+**Description** This method writes existing user information into both buyer.csv and seller.csv
+ 
+synchronized public static void setBuyers(ArrayList<Buyer> buyers)
+**Description** Updates the buyers database
+@param buyers of Boilermaker Bikes
+ 
+ public static ArrayList<Buyer> getBuyers()
+ **Description** returns the buyers database 
+ @return buyers of Boilermaker Bikes 
+ 
+ synchronized public static void setSellers(ArrayList<Buyer> sellers)
+**Description** Updates the sellers database
+@param sellers of Boilermaker Bikes
+ 
+ public static ArrayList<Bike> getBikes()
+ **Description** Returns all the available bikes for sale
+ @return the available bikes for sale
+ 
+ synchronized public static void setBikes(ArrayList<Bike> bikes)
+ **Description** Updates the available bikes for sale
+ @param bikes available for sale
+ 
+ public static ArrayList<Seller> getSellers()
+ **Description** returns the sellers database 
+ @return sellers of Boilermaker Bikes 
+ 
+ 
+ 
+ 
+ --------------------------------------------
 ### ControlFlowMenu.java
 *Functionality* The ControlFlowMenu class allows the user to navigate to the buyer or seller pages on the Boilermaker Bikes website
 
 *Relationship To Other Classes* This class is accessed via the ControlFlowMenu. 
 
 *Fields* 
+private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
 private static ArrayList<Bike> bikes = new ArrayList<>(); //stores the bikes t
 that are going to be included on the listing page
 
