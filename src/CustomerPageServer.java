@@ -36,13 +36,6 @@ public class CustomerPageServer {
         return thisBuyer;
     }
 
-    /******
-     * This method updates the buyer navigating the customer page
-     * @param thisBuyer navigating the customer page
-     */
-    public void setThisBuyer(Buyer thisBuyer) {
-        this.thisBuyer = thisBuyer;
-    }
 
     /************
      * This method allows the user to run the customer page client and server.
@@ -320,8 +313,6 @@ public class CustomerPageServer {
      * items accordingly
      * @author Christina Joslin
      */
-
-    //Methods
 
     /*******
      * This method allows the buyer to run the shopping cart page and select from this menu to add a bike, delete a bike,
@@ -739,7 +730,6 @@ public class CustomerPageServer {
      * This method checks if the user entered a bike quantity that is an integer is still in stock (so the quantity on
      * the listing page is not equal to 0 and/or has not been removed), and the quantity requested is not more than the
      * quantity available
-     * @author Christina Joslin
      *
      * @param input the quantity of bikes to be entered by the buyer
      * @param bikeId the unique 4-digit id of the bike that the buyer wants to purchase
@@ -749,7 +739,7 @@ public class CustomerPageServer {
      * (does not meet the conditions above)
      * @author Christina Joslin
      */
-    public synchronized boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
+    public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
         int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
         boolean found = false; //checks if the bikeId they would like to purchase is found in the list
         System.out.println(bikeId);
@@ -801,43 +791,5 @@ public class CustomerPageServer {
 
 }
 
-/********
- *
- * This method checks the Bike ID (Not sure if we need it still)
- *
- *
- *
- * This method checks if the user entered Bike ID is a 4 digit number that is already in the user's shopping cart
- * (delete). If meets these requirements, then return true. If it does not,
- * then return false.
- * @author Christina Joslin
- * @param input the bike id entered by the user
- * @return true or false indicating is the user input is valid
- */
-/**********
- public boolean checkBikeID(String input) {
- int bikeId = -1; //saves the bike ID entered by the user
-
- //checks if the bike id consists of 4 digits
- if (input.length() != 4) {
- return false;
- }
- try {
- //checks if the bikeID consists of numbers. if not then return false
- bikeId = Integer.parseInt(input);
-
- } catch (Exception e) {
- return false;
- }
- //checks if the bike id is either found on the listing page ("add") in the shopping cart ("delete")
- for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
- if (pb.getId() == bikeId) {
- return true;
- }
- }
- return false;
- }
- }
- ***********************/
 
 

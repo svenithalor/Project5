@@ -39,13 +39,6 @@ public class Seller {
         return password;
     }
 
-    /********
-     * Updates the user's password
-     * @param password of this user
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     /***********
      * Returns the inventory of this Seller

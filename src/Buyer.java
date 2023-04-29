@@ -51,14 +51,6 @@ public class Buyer {
         return password;
     }
 
-    /*********
-     * Updates the user's password
-     * @param password of this user
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     /*************
      * Returns the shopping cart of this buyer
      * @return the Shopping Cart of this buyer
@@ -93,32 +85,12 @@ public class Buyer {
         this.purchaseHistory = purchaseHistory;
     }
 
-    /***************
-     * Displays the bike id, model name, final price, and quantity purchased of the bike in the shopping cart
-     * @return 2D object array to be displayed in a JTable in the shopping cart
-     */
-    public Object[][] shoppingCartInfo() {
-        Object[][] items; //a 2 dimension array used to display the items in the user's shopping cart
-        ArrayList<Object[]> temp = new ArrayList<>(); //temporarily stores an individual array container the information for each purchased bike
-
-        //iterates through each bike in the user's shopping cart, creates an array out of hte information
-        // and temporarily stores it in an arraylist
-
-        for (PurchasedBike bike : getShoppingCart()) {
-            Object[] it = new Object[]{"" + bike.getId(), "" + bike.getModelName(), "$" + bike.getFinalPrice(), "" + bike.getQuantity()};
-            temp.add(it);
-
-        }
-        //converts the arraylist information into the 2D object array used for the JTable
-        items = temp.toArray(new Object[0][0]);
-
-        return items;
-    }
 
     @Override
     /********
      * This method is used to import/export buyer information in Login.java in the following format
      * username: [insert name]
+     * password: [insert 5 characters]
      *[insert name].shoppingcart color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,
      * insured
      *[insert name].purchasehistory color,wheelSize,price,finalPrice,modelName,used,description,sellerName,quantity,

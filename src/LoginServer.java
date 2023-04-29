@@ -196,7 +196,7 @@ public class LoginServer {
      * @param userType whether the user is a buyer or a seller
      * @param password the user entered password
      * @param writer tells the client if the user entered password is true (valid) or false (invalid)
-     * @return
+     * @return whether the password entered by the user is valid
      */
     public boolean NewPasswordChecker(String userType, String password, PrintWriter writer) {
         boolean valid = true; //saves if the user's new password is valid
@@ -274,8 +274,11 @@ public class LoginServer {
     }
 
     /*******
-     * Need an explanation here for this method...
-     * @return
+     * This method runs a login server thread which is started in the Control Flow menu.
+     * This thread also starts the login client thread. Once the login process is complete,
+     * this thread returns the usertype and the userIndex (the index of the current user in the Buyers arraylist)
+     * @param port the available port number
+     * @return the usertype and userindex which are sent back to the control flow menu
      */
     public static String run(int port) {
 

@@ -10,7 +10,7 @@ import java.net.Socket;
  * error/prompt messages as the user logins in and or creates an account.
  *
  * @author Christina Joslin (userLogin Client Server and main Client/Server) &
- * Duoli Chen (userLogout and main Client/Server) lab sec 4427
+ * Duoli Chen (userLogout) lab sec 4427
  * @version 4/17/2023
  */
 public class LoginClient {
@@ -181,6 +181,10 @@ public class LoginClient {
         }
     }
 
+    /**********
+     * This connects the login client with the login server
+     * @param port number being used by the login server
+     */
     public static void run(int port) {
         try {
             //use localhost because we are having the server and client run on the same machine

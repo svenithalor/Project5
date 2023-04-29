@@ -77,7 +77,7 @@ public class UserInfo {
     /********
      * This method reads past user information and stores each user into either the buyer arraylist or the
      * seller arraylist. If the user is a seller, then the bikes associated with their account will be put into the
-     * bikes arraylist to be made available to the user .
+     * bikes arraylist to be made available to the customers .
      */
     synchronized public static void readUsers() {
 
@@ -290,6 +290,7 @@ public class UserInfo {
 
     /*******
      * This method allows for the user to get the index of a buyer they are looking for in the buyers database
+     * @param buyer navigating the customer page
      * @return the index of the buyer they are looking for in the buyer database. If the buyer is not found, then
      * return an index of -1
      */
@@ -304,25 +305,10 @@ public class UserInfo {
         return index;
     }
 
-    /*******
-     * This method allows for the user to get the index of a seller they are looking for in the sellers database
-     * @return the index of the seller they are looking for in the sellers database. If the seller is not found, then
-     * return an index of -1
-     */
-    public static int getSellerIndex(Seller seller) {
-        int index = -1;
-        for (Seller s : sellers) {
-            if (s.equals(seller)) {
-                index = sellers.indexOf(s);
-                break;
-            }
-        }
-        return index;
-    }
 
     /**********
-     * Overloaded method that returns index of master seller list given the Seller name String
-     * @param sellerName
+     * Returns index of master seller list given the Seller name String
+     * @param sellerName the name of the seller navigating the seller page
      * @return the index of the seller they are looking for in the sellers database. If the seller is not found, then
      * return an index of -1
      */
