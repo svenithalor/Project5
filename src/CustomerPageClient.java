@@ -554,7 +554,6 @@ public class CustomerPageClient {
      * @param reader indicates whether the bike has been successfully removed from the shopping cart
      * @param S the object that contains the buyer who navigates the customer page
      */
-    //TODO need to allow the user to choose what quantity they want removed
     public void removeBike(PrintWriter writer,BufferedReader reader,CustomerPageServer S) {
         int bikeId = -1; //keeps track of the 4 digit bike id entered by the user
 
