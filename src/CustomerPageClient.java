@@ -386,6 +386,14 @@ public class CustomerPageClient {
                 /********
                  * Iterates through the available bikes in the shopping cart database and displays them to the user
                  */
+                if (UserInfo.getBikes().size() == 0 ) {
+                    String[] options = {"OK"};
+                    JOptionPane.showOptionDialog(null, "There are no bikes available for purchase.",
+                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null,
+                            options, options[0]);
+                    return;
+                }
+
                 for (Bike b : UserInfo.getBikes()) {
                     listingPageOptions[i] = b.toNiceString();
                     i++;

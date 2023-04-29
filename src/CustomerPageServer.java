@@ -16,6 +16,7 @@ import java.util.*;
  *
  */
 public class CustomerPageServer {
+    public static Object obj = new Object();
 
     private Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
 
@@ -540,6 +541,7 @@ public class CustomerPageServer {
      * @author Christina Joslin
      */
     public void checkout(PrintWriter writer) {
+        UserInfo.readUsers();
         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
@@ -595,6 +597,7 @@ public class CustomerPageServer {
                    // System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
+                        System.out.println(bike.getQuantity());
                     }
                 }
             }
@@ -602,16 +605,30 @@ public class CustomerPageServer {
              * If any bike quantity are equal to 0 then remove them from the listing page
              *
              */
-            Iterator<Bike> itr = tempBikes.iterator();
-            for (Iterator<Bike> it = itr; it.hasNext(); ) {
-                Bike i = it.next();
-                if (i.getQuantity() == 0) {
-                    tempBikes.remove(i);
+            ArrayList<Bike> bikesRemoved = new ArrayList<>();
+            for (Bike b: tempBikes) {
+                if (b.getQuantity() == 0) {
+                    bikesRemoved.add(b);
+                    System.out.println("Bike removed!");
                 }
             }
+            tempBikes.removeAll(bikesRemoved);
+
             UserInfo.setBikes(tempBikes);
+            UserInfo.writeUsers();
+            UserInfo.readUsers();
+
 
             //System.out.println("Bike Listing Page - Post Checkout");
+            /*****
+             * Iterator<Bike> itr = tempBikes.iterator();
+             *                 for (Iterator<Bike> it = itr; it.hasNext(); ) {
+             *                     Bike i = it.next();
+             *                     if (i.getQuantity() == 0) {
+             *                         itr.remove();
+             *                     }
+             *                 }
+             */
 
 
             /*******
@@ -636,35 +653,20 @@ public class CustomerPageServer {
              */
             ArrayList<Seller> tempSellers = UserInfo.getSellers();
             for (Seller s : tempSellers) {
-
                 ArrayList<Bike> tempInventory = s.getInventory();
-                Iterator<Bike> temp = tempInventory.iterator();
-                for (Iterator<Bike> tp = temp; tp.hasNext(); ) {
-                    Bike bike = tp.next();
-                    if (bike.getQuantity() == 0) {
-                        tempInventory.remove(bike);
+                ArrayList<Bike> inventoryRemoved = new ArrayList<>();
+                for (Bike b: tempInventory) {
+                    if (b.getQuantity() == 0) {
+                        inventoryRemoved.add(b);
                     }
                 }
+                tempInventory.removeAll(inventoryRemoved);
                 s.setInventory(tempInventory);
             }
             UserInfo.setSellers(tempSellers);
-
-            /****
-             * Testing only.Printing out the current bikes on the listing page
-             */
-            //System.out.println("Bikes in the Listing Page");
-            for (Bike b : UserInfo.getBikes()) {
-                System.out.println(b.toNiceString());
-            }
-            /**********
-             * Testing only. Printing out the current seller's inventory
-             */
-            System.out.println("Bikes in Seller Inventory");
-            for (Seller s : UserInfo.getSellers()) {
-                System.out.println(s.toString());
-            }
             UserInfo.writeUsers();
             UserInfo.readUsers();
+
             //once it has completed the saving process send the message of success to the buyer
             writer.write("true");
             writer.println();
