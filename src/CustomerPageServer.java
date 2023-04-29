@@ -66,8 +66,8 @@ public class CustomerPageServer {
             //the buyer currently navigating the customer page
             while (true) {
                 int repeat = 1;
-
                 while (repeat == 1) {
+                    UserInfo.readUsers();
                     /*****
                      * Testing prints the bikes in the inventory
                      */
@@ -76,7 +76,6 @@ public class CustomerPageServer {
                         System.out.println(b.toNiceString());
                     }
                     ArrayList<String> bikeNames = new ArrayList<>();
-                   // UserInfo.readUsers();
                     //System.out.println("Size of buyer arraylist " + UserInfo.getBuyers().size());
                     for (Bike bike : UserInfo.getBikes()) {
                         String format = "%s | $%.2f | Quantity: %d";
@@ -121,6 +120,7 @@ public class CustomerPageServer {
                                             writer.flush();
                                             S.addBike(reader, writer);
                                             UserInfo.writeUsers();
+                                            UserInfo.readUsers();
                                         }
                                         break;
                                     case -3: // sort by quantity
@@ -169,6 +169,7 @@ public class CustomerPageServer {
                             } while (repeat1 == 1);
                             break;
                         case 2: // main menu option 2: view cart
+                            UserInfo.readUsers();
                             runShoppingCart(reader, writer, S);  //runs the shopping cart
                             break;
 
@@ -310,6 +311,7 @@ public class CustomerPageServer {
             deleted = true;
         }
         UserInfo.writeUsers();
+        UserInfo.readUsers();
         return deleted;
     }
 
@@ -342,12 +344,10 @@ public class CustomerPageServer {
             if (input.equals("add")) {
 
                 s.addBike(reader, writer);
-                UserInfo.writeUsers();
 
             } else if (input.equals("delete")) {
 
                 s.removeBike(reader, writer);
-                UserInfo.writeUsers();
 
 
             } else if (input.equals("checkout")) {
@@ -449,12 +449,16 @@ public class CustomerPageServer {
 
             //updates the entire buyer database
             ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
+            //System.out.println("Size: " + UserInfo.getBuyers());
             tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
             UserInfo.setBuyers(tempBuyers);
+            UserInfo.writeUsers();
+            UserInfo.readUsers();
             //lets the client know that it has been successfully added to the shopping cart
             writer.write("true");
             writer.println();
             writer.flush();
+
 
 
         } else if (!inCart) {
@@ -510,7 +514,8 @@ public class CustomerPageServer {
                 thisBuyer.setShoppingCart(tempShoppingCart);
                 tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
                 UserInfo.setBuyers(tempBuyers);
-
+                UserInfo.writeUsers();
+                UserInfo.readUsers();
 
                 //lets the client know that it has been successfully added to the shopping cart
                 writer.write("true");
@@ -658,12 +663,13 @@ public class CustomerPageServer {
             for (Seller s : UserInfo.getSellers()) {
                 System.out.println(s.toString());
             }
+            UserInfo.writeUsers();
+            UserInfo.readUsers();
             //once it has completed the saving process send the message of success to the buyer
             writer.write("true");
             writer.println();
             writer.flush();
-            UserInfo.writeUsers();
-            System.out.println("Error message");
+
         }
     }
 
@@ -718,6 +724,8 @@ public class CustomerPageServer {
         for (PurchasedBike b : thisBuyer.getShoppingCart()) {
             System.out.println(b.toNiceString());
         }
+        UserInfo.writeUsers();
+        UserInfo.readUsers();
         //sends a message to the client confirming the successful deletes
         writer.write("true");
         writer.println();

@@ -265,6 +265,7 @@ public class CustomerPageClient {
      * @return the button corresponding to user input
      */
     public String displayShoppingCartMenu(CustomerPageServer S) {
+        UserInfo.readUsers();
         ArrayList<PurchasedBike> shoppingCartTemp = S.getThisBuyer().getShoppingCart();
 
         String[] bikeNames = new String[shoppingCartTemp.size()];

@@ -182,7 +182,7 @@ public class UserInfo {
             }
             //System.out.println("Size of Buyers: " + buyers.size());
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         /********
@@ -244,6 +244,8 @@ public class UserInfo {
                     inventory = new ArrayList<>(); //clears the inventory of the current user to read in another user
                 }
             }
+            System.out.println("Buyer size: " + getBuyers().size());
+            System.out.println("Seller size: " + getSellers().size());
 
 
         } catch (Exception e) {
@@ -302,7 +304,7 @@ public class UserInfo {
     public static int getBuyerIndex(Buyer buyer) {
         int index = -1;
         for (Buyer b : buyers) {
-            if (b.equals(buyer)) {
+            if (b.getUsername().equals(buyer.getUsername())) {
                 index = buyers.indexOf(b);
                 break;
             }
