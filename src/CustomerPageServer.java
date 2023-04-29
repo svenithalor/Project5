@@ -442,7 +442,7 @@ public class CustomerPageServer {
             tempBike.setQuantity(existingQuantity + quantity);
 
             if (tempBike.isInsured()) {
-                tempBike.setFinalPrice(tempBike.getPrice() * (existingQuantity + quantity) + 50.00);
+                tempBike.setFinalPrice((tempBike.getPrice() + 50.00) * (existingQuantity + quantity));
             } else {
                 tempBike.setFinalPrice(tempBike.getPrice() * (existingQuantity + quantity));
             }
@@ -499,7 +499,7 @@ public class CustomerPageServer {
                 if (!insured) {
                     finalPrice = bikeToAdd.getPrice() * quantity;
                 } else {
-                    finalPrice = bikeToAdd.getPrice() * quantity + 50.00;
+                    finalPrice = (bikeToAdd.getPrice() + 50.00) * quantity;
                 }
                 System.out.println("finalPrice " + finalPrice);
 

@@ -116,13 +116,6 @@ public class Bike {
         return quantity;
     }
 
-    /*******
-     * Updates the price of this bike
-     * @param price of this bike
-     */
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     /**********
      * Updates the quantity of this bike
@@ -138,28 +131,6 @@ public class Bike {
      */
     public int getId() {
         return id;
-    }
-
-
-    /***************
-     * Displays general information about this bike including the model name, wheel size, price, the seller name,
-     * and the quantity available
-     */
-    public void viewBikeInfo() {
-        String summary; //stores the summary of the bike info (50 characters of less) to be displayed in the shopping
-        // cart and listing page
-        //if description more than 50 characters, then abridge the content
-
-        if (getDescription().length() > 50) {
-            summary = getDescription().substring(0, 51);
-
-        } else {
-            summary = getDescription();
-        }
-        String message = String.format("%s %d-inch%n$%.2f   %s%nUsed:%b   %d remaining%nDescription: %s",
-                getModelName(), getWheelSize(), getPrice(), getSellerName(), isUsed(),
-                getQuantity(), summary);
-        System.out.println(message);
     }
 
     /***********
