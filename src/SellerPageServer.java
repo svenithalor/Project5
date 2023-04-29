@@ -225,7 +225,7 @@ public class SellerPageServer {
             do {
                 strConfirmOption = reader.readLine();
                 confirmOption = Integer.parseInt(strConfirmOption);
-                System.out.println(confirmOption);
+               // System.out.println(confirmOption);
 
                 if (confirmOption != 1) {
                     strOption = reader.readLine(); // will read the input from client
@@ -286,7 +286,7 @@ public class SellerPageServer {
                         bruh.add(parsePurchasedBike(testb1));
                         bruh.add(parsePurchasedBike(testb2));
                         bruh.add(parsePurchasedBike(testb3));
-                        System.out.println("test2" + bruh.get(2).getSellerName());
+                        //System.out.println("test2" + bruh.get(2).getSellerName());
                         ArrayList<PurchasedBike> matches = new ArrayList<>();
                         
                         // ABOVE CODE IS FOR TESTING SELLERPAGE ALONE

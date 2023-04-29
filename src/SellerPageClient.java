@@ -35,7 +35,7 @@ public class SellerPageClient {
     }
 
     public static PurchasedBike parsePurchasedBike(String part) {
-        System.out.println(part);
+        //System.out.println(part);
         String[] bikeElements = part.split(",");
         String color = bikeElements[0];
         int wheelSize = Integer.parseInt(bikeElements[1]);
@@ -86,7 +86,7 @@ public class SellerPageClient {
     }
 
     public static ArrayList<PurchasedBike> recievePurchasedBikes(String s) {
-        System.out.println(s);
+        //System.out.println(s);
         String[] bikes = s.split("]");
         ArrayList<PurchasedBike> vtr = new ArrayList<>();
 
@@ -285,7 +285,7 @@ public class SellerPageClient {
                     writer.write(term);
                     writer.println();
                     writer.flush();
-                    System.out.println("option 4 test");
+                   // System.out.println("option 4 test");
 
                     String matchesString = reader.readLine();
                     String succ = reader.readLine();
