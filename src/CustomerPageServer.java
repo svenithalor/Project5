@@ -195,6 +195,7 @@ public class CustomerPageServer {
                             boolean deleted = deleteAccount(confirm, user, buyerIndex);
                             writer.println(deleted);
                             writer.flush();
+
                             break;
                     }
                 }
@@ -308,6 +309,7 @@ public class CustomerPageServer {
             UserInfo.setBuyers(buyers);
             deleted = true;
         }
+        UserInfo.writeUsers();
         return deleted;
     }
 

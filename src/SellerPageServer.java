@@ -151,6 +151,7 @@ public class SellerPageServer {
 
             UserInfo.setSellers(sellers);
             UserInfo.setBikes(allBikes);
+            UserInfo.writeUsers();
         } catch (Exception e) {
             return false;
         }
@@ -198,7 +199,7 @@ public class SellerPageServer {
 
             String sellerName = reader.readLine(); // reads seller name first
 
-            System.out.println("Name: " + sellerName);
+            //System.out.println("Name: " + sellerName);
 
             String sellerInventory = reader.readLine(); // reads the inventory immediately after
 
