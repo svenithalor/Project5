@@ -89,6 +89,7 @@ that are going to be included on the listing page
 
 *Methods* 
  None except for the main method
+ 
  -------------------------------------
 ### LoginClient.java
 *Functionality* This method display the appropriate prompts to the user depending on if the user is accessing their existing account or needs to create a new one
