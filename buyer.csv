@@ -1,5 +1,4 @@
 username: haileyS
-username: haileyS
 password: Run4C
 haileyS.shoppingcart green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,Bob,1,false,1090
 haileyS.shoppingcart pink,20,189.99,360.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,Bob,2,false,1101
@@ -7,9 +6,16 @@ haileyS.purchasehistory green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Nor
 ***********
 username: cJoslin
 password: cmj32
-cJoslin.shoppingcart orange,25,129.99,659.99,PanAme Mountain,false,Suitable for a variety of people,Bob,3,false,1110
 cJoslin.purchasehistory purple,20,249.99,249.99,Joystar Mountain Bike,false,This bike is designed for kids seven to thirteen,BikesAreCool,1,false,2117
+cJoslin.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
+cJoslin.purchasehistory red,25,329.99,379.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,1,true,1080
+cJoslin.purchasehistory red,25,329.99,379.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,1,true,1080
+cJoslin.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
+cJoslin.purchasehistory green,24,209.99,1039.96,JoyStar,false, Is a class looking cruiser bike,BikesAreCool,4,true,1090
 ***********
 username: c9sug
 password: cmj45
+c9sug.shoppingcart green,24,209.99,1039.96,JoyStar,false, Is a class looking cruiser bike,BikesAreCool,4,true,1090
+c9sug.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
+c9sug.purchasehistory red,25,329.99,379.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,1,true,1080
 ***********

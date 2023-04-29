@@ -601,7 +601,7 @@ public class CustomerPageServer {
             for (Bike b: tempBikes) {
                 if (b.getQuantity() == 0) {
                     bikesRemoved.add(b);
-                    System.out.println("Bike removed!");
+                    //System.out.println("Bike removed!");
                 }
             }
             tempBikes.removeAll(bikesRemoved);

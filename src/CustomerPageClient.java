@@ -222,7 +222,7 @@ public class CustomerPageClient {
     }
 
     public int displayBikesMenu(String bikeNames) {
-
+        UserInfo.readUsers();
         // main menu option 1: display bikes
         String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
         String[] buttons = {"Search", "Sort by price", "Sort by quantity", "View bike", " Go back"};
@@ -234,7 +234,7 @@ public class CustomerPageClient {
         panel.add(searchField);
         int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-
+        UserInfo.readUsers();
         switch (option) {
             case 0: // search
                 this.searchTerm = searchField.getText();
@@ -284,6 +284,7 @@ public class CustomerPageClient {
         int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
         //System.out.println(option);
+        UserInfo.readUsers();
         CustomerPageClient c = new CustomerPageClient();
 
         switch (option) {
@@ -498,6 +499,7 @@ public class CustomerPageClient {
                     quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     //System.out.println("quantity entered " + quantity);
+                    //System.out.println("Error " + quantity + "");
                     writer.write(quantity);
                     writer.println();
                     writer.flush();
