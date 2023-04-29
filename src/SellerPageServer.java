@@ -48,6 +48,7 @@ public class SellerPageServer {
     }
 
     public static PurchasedBike parsePurchasedBike(String part) {
+        UserInfo.readUsers();
         String[] bikeElements = part.split(",");
         String color = bikeElements[0];
         int wheelSize = Integer.parseInt(bikeElements[1]);
@@ -112,6 +113,7 @@ public class SellerPageServer {
     }
 
     public ArrayList<Bike> searchBike(String term) {
+        UserInfo.readUsers();
         ArrayList<Bike> matches = new ArrayList<>();
 
         String t = term.toLowerCase();
