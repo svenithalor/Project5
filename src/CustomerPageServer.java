@@ -538,13 +538,15 @@ public class CustomerPageServer {
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
         boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
-        int bikeEquivalentIndex = -1; //saves the index of the bike on the listing page corresponding to the bike in the shopping cart
 
         for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
             //Checks if the bike is in the listing page
             for (Bike b : UserInfo.getBikes()) {
                // System.out.println(b.getId());
                // System.out.println(pb.getId());
+                if (b.getQuantity() == 0) {
+                    stillAvailable = false;
+                }
                 if (pb.getId() != b.getId()) {
                     //System.out.println("Bike is not available on listing page");
                     stillAvailable = false;
