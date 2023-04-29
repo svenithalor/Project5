@@ -1,5 +1,4 @@
-# Project 5 - Boilermaker Bikes 
-Author: Christina Joslin 
+# Project 5 - Boilermaker Bikes  
 
 ## Instructions (from Intellij IDEA) 
 
@@ -35,9 +34,26 @@ private static ArrayList<Bike> bikes; //stores all bikes that are for sale
 synchronized public static void writeUsers()
 **Description** This method writes existing user information into both buyer.csv and seller.csv
  
+ public static Bike searchBike(int bikeId)
+ **Description** This method allows the user to search for the index of a bike they
+ are looking for on the listing page
+ @param bikeId the 4 digit unique bike id entered by the user
+ @return the bike with the matching id entered
+ 
+ public static int getBuyerIndex(Buyer buyer)
+ **Description** This method allows for the user to get the index of a buyer they are looking for in the buyers database
+ @param buyer navigating the customer page
+ @return the index of the buyer they are looking for in the buyer database. If the buyer is not found, then return an index of -1
+ 
+public static int getSellerIndex(String sellerName)
+**Description** Returns index of master seller list given the Seller name String
+ @param sellerName the name of the seller navigating the seller page
+ @return the index of the seller they are looking for in the sellers database. If the seller is not found, then return an index of -1
+ 
 synchronized public static void setBuyers(ArrayList<Buyer> buyers)
 **Description** Updates the buyers database
 @param buyers of Boilermaker Bikes
+
  
  public static ArrayList<Buyer> getBuyers()
  **Description** returns the buyers database 
@@ -58,8 +74,6 @@ synchronized public static void setBuyers(ArrayList<Buyer> buyers)
  public static ArrayList<Seller> getSellers()
  **Description** returns the sellers database 
  @return sellers of Boilermaker Bikes 
- 
- 
  
  
  --------------------------------------------
@@ -347,92 +361,146 @@ public void updateListings(ArrayList<Bike> bikes)
 @param bikes updated arraylist of available bikes
  
  -------------------------------------
-### Login.java
-*Functionality* This class creates the login and logout functionalities of the Boilermaker Bikes websites, reads information from either buyer.txt or seller.txt and then writes it back into buyer.txt or seller.txt. The methods included are the intialSetup(int usertype *buyer or seller*) which initially reads through either the buyer.txt or the seller.txt file (depending on the usertype), parses through each line and creates buyer objects, and then from there writes those buyer objects into a buyers arraylist or a seller arraylist "database". The final two methods are the userLogin(scanner,usertype *buyer or seller*) which based on user input either has the user sign into their existing account or create a a new account and the userLogout(userType) which is accessed through the ControlFlowMenu.java and the SellerPage.java or the customerPage.java to write all of the buyer or seller objects in the arraylist back into the seller.txt file or the buyer.txt file. This was tested using the TestClassLogin.java which contains a main method and using login and logout reprints the seller.txt and buyer.txt sample files.
+### LoginClient.java
+*Functionality* This method display the appropriate prompts to the user depending on if the user is accessing their existing account or needs to create a new one
 
-*Relationship To Other Classes* This class is accessed via the ControlFlowMenu.
+*Relationship To Other Classes* This class is accessed via the ControlFlowMenu and interacts with LoginServer.java to allow the user to navigate the login.
 
 *Fields*
-private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
- //keeps track of all the buyers on the bicycle website
- 
-private static ArrayList<Seller> sellers = new ArrayList<Seller>();
-//keeps track of all the sellers on the bicycle website
+ none 
  
 *Methods*
- 
-public static void initialSetup(int userType)
-**Description** This method iterates through a file containing all buyer or seller information and stores it into the buyer and seller arraylists.
-@param userType determines whether the buyer.txt or the seller.txt file will be iterated through
 
-public int userLogin(Scanner scanner, int userType)
-**Description** This method logs the user into the Boiler Bikes website and or has them create a new account
-@param scanner the username to be enterred by the user
-@param userType the type of user logging in (a buyer or seller)
+public void userLogin(BufferedReader reader, PrintWriter writer) throws IOException
+**Description** This method display the appropriate prompts to the user depending on if the user is accessing their existing account or needs to create a new one
+@param reader reads the server output that determines if the user
+@param writer writes the user input to the server to check if they are in the database 
+@throws IOException to be handled in the main method with an error message
  
-public void userLogout(int userType)
-**Description** This method logs the user out of the application and saves their information to a file
-@param userType the user that is logging our whether a buyer or seller
- 
-public static void setBuyers(ArrayList<Buyer> buyers)
-**Description** This method sets the buyer from the arraylist
-@param buyer from the arraylist
+public static boolean userLogout()
+**Description** This method logs the user out of the application and saves their information to a file.
 
-public static ArrayList<Buyer> getBuyers()
-**Description** Returns the buyer of this ArrayList
-@return the buyer of this ArrayList
- 
-public static void setSellers(ArrayList<Seller> sellers)
-**Description** This method sets the seller from the arraylist
-@param seller from the arraylist
- 
-public static ArrayList<Seller> getSellers()
-**Description** Returns the seller of this arraylist
-@return the seller of this arraylist
+ public static void run(int port)
+ **Description** This connects the login client with the login server
+ @param port number being used by the login server
  
  ----------------------------------
- ### SellerPage.java
-*Functionality* This class creates six functionalities for sellers to have and use. There are six methods: displayBikes() to get the current inventory of bikes with their properties of names, prices, wheel sizes, colors and qunatities; addBike(Bike b) to add a bike(as parameter) to the seller inventory; removeBike(Bike b) to remove a bike(as parameter) to the seller inventory; searchBike(String term) to search for a bike in the seller inventory based on a keyword(paramter); deleteAccount(String user) to delete a user's account from the shop; viewCustomerCarts(String filename) to show the items with all properties of a user's purchasehistory. These methods all help withe main sellerpage method runSellerPage(Seller seller) to run these methods.
+### LoginServer.java 
+ 
+*Functionality* This class handles all the data processing for the login by receiving user input from the client and sending it back to be displayed to the user. This class also searches the buyer and seller databases to check if the user can log in to their existing account or needs to create a new account.
 
-*Relationship To Other Classes* This class is accessed via the ControlFlowMenu.
+ 
+ *Relationship To Other Classes* This class accepts a connection form the loginclient and performs the procssing of login and keeps the client informed of whether or not a process was sucessfully performed 
+ 
+ *Fields* 
+ private ArrayList<Buyer> buyers; //keeps track of all buyers from UserInfo
+ private ArrayList<Seller> sellers; //keeps track of all the sellers from UserInfo
+ 
+ *Constructor* 
+ public LoginServer() 
+ 
+ *Methods* 
+public int userLogin(String userType, BufferedReader reader, PrintWriter writer) throws IOException
+**Description** This method checks if a user's account already exists and has them either log in or create a new account
+@param userType the type of user logging in (buyer of seller)
+@param reader reads in the username and user type entered on the client side
+@param writer writes back to the client if the username already exists
+@return the index of the user in the database arraylist
+ 
+ 
+public boolean NewPasswordChecker(String userType, String password, PrintWriter writer)
+**Description** This method checks if the password entered by a new user is 5 characters and does NOT match with a password already in the buyer or seller database
+@param userType whether the user is a buyer or a seller
+@param password the user entered password
+@param writer tells the client if the user entered password is true (valid) or false (invalid)
+@return whether the password entered by the user is valid
+ 
+
+public boolean ExistingPasswordChecker(String userType, String password, String userName, PrintWriter writer)
+**Description** This method checks if the password entered by a user is 5 characters and corresponds with the same valid username entered by the user
+@param userType whether the user is a buyer or a seller
+@param password entered by the user
+@param userName entered by the user
+@param writer writes back to the client whether or not the password was valid
+@return whether the password is valid and exists (true) or is invalid and or does not exist (false)
+ 
+ 
+ public static String run(int port)
+ **Description** This method runs a login server thread which is started in the Control Flow menu. This thread also starts the login client thread. Once the login process is complete, this thread returns the usertype and the userIndex (the index of the current user in the Buyers arraylist)
+@param port the available port number
+@return the usertype and userindex which are sent back to the control flow menu
+ 
+ ---------------------------------------
+ ## CustomerPageServer.java 
+ *Functionality* 
+ The CustomerPageSever class handles the processing involved with the buyer experience such as adding and deleting items from the buyer's shopping cart, checking out the buyer's shopping cart (moving all items to their purchase history and updating the inventory and listing page accordingly), searching by modelName as well as sorting by quantity/price, exporting purchase history to a file of the buyer's choice, deleting the buyer's account, as well as saving all buyer information during and between sessions
+
+ *Relationship To Other Classes* This class connects with CustomerPageServer.java and reads/writes to and from the customer page server. 
+ 
+ *Fields* 
+ private Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
+ 
+ *Constructors* 
+ public CustomerPageServer(Buyer buyer)
+ 
+ *Methods* 
+ 
+ public Buyer getThisBuyer()
+ **Description** This method gets the buyer navigating the customer page
+ @return the buyer navigating the customer page
+ 
+ public static void run(Buyer buyer,int port) 
+ **Description** This method allows the user to run the customer page client and server.
+ @param buyer the user who is currently navigating the customer page
+ @param port the next available port to connect to
+
+public static void runShoppingCart(BufferedReader reader, PrintWriter writer,CustomerPageServer s)
+ **Description** 
+ This method allows the buyer to run the shopping cart page and select from this menu to add a bike, delete a bike, checkout items, or return back to home
+@param reader waits for the button pressed by the buyer
+@param writer allows the server to communicate with the client as they are traversing the shopping cart
+@param s the object that contains the buyer navigating this customer page
+ 
+public void addBike(BufferedReader reader, PrintWriter writer)
+**Description** 
+This method allows the buyer to add a bike from the shopping cart page.
+@param reader saves the user input for processing
+@param writer informs the client class if the user input is valid/invalid and or the process of adding a bike was successful
+
+ public void checkout(PrintWriter writer)
+ **Description** This method first checks if all the bikes in the shopping cart are still available on the listing page. If this is true, then all the bikes in the shopping cart are put into the purchase history and the quantity remaining of the bikes for sale (the bikes on the listing page and in the seller inventories) is updated accordingly. If this is false, then an error message is displayed
+@param writer write to the client that the checkout has or has not successfully taken place
+
+public void removeBike(BufferedReader reader, PrintWriter writer)
+**Description** This method allows the buyer to remove bikes from their current shopping cart.
+@param reader the user entered bikeID
+@param writer whether or not the shopping cart item was successfully removed
+ 
+public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex)
+ **Description** This method checks if the user entered a bike quantity that is an integer is still in stock (so the quantity on the listing page is not equal to 0 and/or has not been removed), and the quantity requested is not more than the quantity available
+@param input the quantity of bikes to be entered by the buyer
+@param bikeId the unique 4-digit id of the bike that the buyer wants to purchase
+@param inCart checks if a bike that is being added is already in the buyer's shopping cart
+@param cartIndex the index of the bike to be added or removed out from the shopping cart
+@return true if the quantity is valid (meets the conditions above) and false if the quantity is not valid (does not meet the conditions above)
+ 
+ 
+ TODO... 
+ -------------------------------------------
+ ## CustomerPageClient.java 
+ 
+ 
+ 
+ ### SellerPageClient.java
+*Functionality* This class is TODO
+*Relationship To Other Classes* This class is TODO 
  
 *Fields*
- 
-private String name;
-private ArrayList<Bike> inventory;
+ TODO
  
 *Constructors*
- 
-public SellerPage(String name, ArrayList<Bike> inventory)
+ TODO (if none, then just remove this portion) 
  
 *Methods*
  
-public ArrayList<Bike> runSellerPage(Seller seller)
-**Description** This method outlines the main sller user experience. It navigates through a series of options and the user
-can keep selecting options until they decide to exit. At the end of this method, the slelr object is updated with
-changes and the method returns the updated arraylist of bikes.
-@return Updated arraylist of available bikes
- 
-public void displayBikes()
-**Description** This method displays a bike with its characteristics
-
-public void addBike(Bike b)
-**Description** This method adds a bike to the seller inventory
-@param b the bike to be added to the seller inventory
- 
-public void removeBike(Bike b)
-**Description** This method removes bikes from the seller inventory
-@param b the bike to be removed from the inventory
-
-public void searchBike(String term)
-**Description** is method searches for a bike in the seller inventory based on a keyword
-@param term the term
- 
-public void deleteAccount(String user)
-**Description** This method removes all the information of the user from the arraylist
-@param name of the user to be deleted
- 
-public void viewCustomerCarts(String filename)
-**Description** Displays general information about the file of the user to be displayed in the shopping cart including
-its model name, color, wheel size, price, seller name, if it is used, and if it is insured under bike-in-a-tree insurance 
-@param name of the file to be displayed in the shopping cart 
+TODO 
