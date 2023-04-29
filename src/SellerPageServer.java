@@ -157,6 +157,28 @@ public class SellerPageServer {
         return true;
         
     }
+
+    public boolean exportInventory(String path, String username) {
+        try {
+            File file = new File(path);
+            PrintWriter pw = new PrintWriter(file);
+            
+            
+
+            for (Bike b : inventory) {
+                pw.println(b.toNiceString());
+            }
+            pw.flush();
+            pw.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
     public void run() {
         try {
             ServerSocket ss = new ServerSocket(port);
@@ -315,6 +337,15 @@ public class SellerPageServer {
                         writer.write(Boolean.toString(success));
                         writer.println();
                         writer.flush();
+                        
+                    } else if (option == 9) {
+                        String filePath = reader.readLine();
+                        if (!(filePath.equals("exit"))) {
+                            String username = reader.readLine();
+                            boolean success = exportInventory(filePath, username);
+                            writer.println(success);
+                            writer.flush();
+                        }
                         
                     }
                 } else {
