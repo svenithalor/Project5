@@ -85,6 +85,9 @@ public class LoginServer {
                     String password = ""; //stores the password entered by the user
                     do {
                         password = reader.readLine();
+                        if (password == null) {
+                            return -1;
+                        }
                     } while (!ExistingPasswordChecker(userType, password, userName, writer));
 
 
@@ -108,7 +111,11 @@ public class LoginServer {
             //from the client determines if the user is going to create a new account or not
             String userExited = reader.readLine();
             //System.out.printf("%s received from the client%n", userExited);
-
+            if (userExited == null) {
+                writer.close();
+                reader.close();
+                return -1;
+            }
             if (userExited.equals("yes")) {
                 writer.close();
                 reader.close();
@@ -171,6 +178,9 @@ public class LoginServer {
                 String newPassword = ""; //keeps track of the new password entered to create an account
                 do {
                     newPassword = reader.readLine();
+                    if (newPassword == null) {
+                        return -1;
+                    }
                 } while (!NewPasswordChecker(userType, newPassword, writer));
 
                 /*****
@@ -250,9 +260,6 @@ public class LoginServer {
      */
     public boolean ExistingPasswordChecker(String userType, String password, String userName, PrintWriter writer) {
         boolean found = false; //saves whether or not the user's password was found
-        if (password == null) {
-            return false;
-        }
 
         //checks if the entered password is equal to 5 characters
         if (password.length() != 5) {

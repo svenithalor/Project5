@@ -77,7 +77,7 @@ public class CustomerPageServer {
                     }
                     ArrayList<String> bikeNames = new ArrayList<>();
                    // UserInfo.readUsers();
-                    System.out.println("Size of buyer arraylist " + UserInfo.getBuyers());
+                    //System.out.println("Size of buyer arraylist " + UserInfo.getBuyers().size());
                     for (Bike bike : UserInfo.getBikes()) {
                         String format = "%s | $%.2f | Quantity: %d";
                         bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));

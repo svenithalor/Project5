@@ -1,3 +1,4 @@
+import javax.print.attribute.standard.JobKOctetsProcessed;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -173,8 +174,13 @@ public class LoginClient {
 
                 } while (!passwordSuccess);
 
-                JOptionPane.showMessageDialog(null, "Account successfully created!",
-                        "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
+                int choice = JOptionPane.showConfirmDialog(null, "Account successfully created!",
+                        "Boilermaker Bikes", JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                    return;
+                } else if (choice == JOptionPane.OK_OPTION) {
+                    UserInfo.writeUsers();
+                }
                 attempt++; //increments of the number of attempts made by the user to login
             }
         } while (true);
