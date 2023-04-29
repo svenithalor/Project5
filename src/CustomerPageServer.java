@@ -76,6 +76,7 @@ public class CustomerPageServer {
                         System.out.println(b.toNiceString());
                     }
                     ArrayList<String> bikeNames = new ArrayList<>();
+                    //UserInfo.readUsers();
                     for (Bike bike : UserInfo.getBikes()) {
                         String format = "%s | $%.2f | Quantity: %d";
                         bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
@@ -329,10 +330,10 @@ public class CustomerPageServer {
                 //waits for what button the user presses
                 input = reader.readLine();
             } catch (Exception e) {
-                System.out.println("Button error");
+                //System.out.println("Button error");
                 return;
             }
-            System.out.println("Server side input: " + input);
+           // System.out.println("Server side input: " + input);
 
             if (input.equals("add")) {
 
@@ -410,13 +411,13 @@ public class CustomerPageServer {
             do {
                 try {
                     q = reader.readLine();
-                    System.out.println("User entered quantity " + q);
+                   // System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
-                    System.out.println("addBike method error under quantity");
+                    //System.out.println("addBike method error under quantity");
                     return;
                 }
                 validQuantity = checkBikeQuantity(q, bikeId, inCart, bikeIndex);
-                System.out.println("Valid Quantity Server? " + validQuantity);
+                //System.out.println("Valid Quantity Server? " + validQuantity);
                 writer.write("" + validQuantity);
                 writer.println();
                 writer.flush();
@@ -445,9 +446,6 @@ public class CustomerPageServer {
             ArrayList<Buyer> tempBuyers = UserInfo.getBuyers();
             tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
             UserInfo.setBuyers(tempBuyers);
-            for (Buyer b : UserInfo.getBuyers()) {
-                System.out.println(b.toString());
-            }
             //lets the client know that it has been successfully added to the shopping cart
             writer.write("true");
             writer.println();
@@ -464,9 +462,9 @@ public class CustomerPageServer {
             do {
                 try {
                     q = reader.readLine();
-                    System.out.println("User entered quantity " + q);
+                    //System.out.println("User entered quantity " + q);
                 } catch (Exception e) {
-                    System.out.println("addBike method error under quantity");
+                    //System.out.println("addBike method error under quantity");
                     return;
                 }
                 validQuantity = checkBikeQuantity(q, bikeId, inCart, bikeIndex);
@@ -486,13 +484,13 @@ public class CustomerPageServer {
             Bike bikeToAdd = UserInfo.searchBike(bikeId);
             try {
                 boolean insured = Boolean.parseBoolean(reader.readLine());
-                System.out.println("Insured?" + insured);
+               // System.out.println("Insured?" + insured);
                 if (!insured) {
                     finalPrice = bikeToAdd.getPrice() * quantity;
                 } else {
                     finalPrice = (bikeToAdd.getPrice() + 50.00) * quantity;
                 }
-                System.out.println("finalPrice " + finalPrice);
+                //System.out.println("finalPrice " + finalPrice);
 
                 /******
                  * Adds the purchased bike to the buyer's shopping cart
@@ -509,10 +507,6 @@ public class CustomerPageServer {
                 UserInfo.setBuyers(tempBuyers);
 
 
-                for (Buyer b : UserInfo.getBuyers()) {
-                    System.out.println(b.toString());
-                }
-
                 //lets the client know that it has been successfully added to the shopping cart
                 writer.write("true");
                 writer.println();
@@ -520,7 +514,7 @@ public class CustomerPageServer {
 
 
             } catch (Exception e) {
-                System.out.println("Error under adding insurance in AddBike");
+                //System.out.println("Error under adding insurance in AddBike");
                 return;
             }
         }
@@ -545,8 +539,8 @@ public class CustomerPageServer {
         for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
             //Checks if the bike is in the listing page
             for (Bike b : UserInfo.getBikes()) {
-                System.out.println(b.getId());
-                System.out.println(pb.getId());
+               // System.out.println(b.getId());
+               // System.out.println(pb.getId());
                 if (pb.getId() != b.getId()) {
                     //System.out.println("Bike is not available on listing page");
                     stillAvailable = false;
@@ -557,12 +551,12 @@ public class CustomerPageServer {
                      * and return stillAvailable as false
                      */
                     if (b.getQuantity() == 0) {
-                        System.out.println("Bike equivalent equals 0");
+                        //System.out.println("Bike equivalent equals 0");
                         stillAvailable = false;
                         break;
                     }
                     if (b.getQuantity() < pb.getQuantity()) {
-                        System.out.println("Bike quantity is less than purchase quantity");
+                        //System.out.println("Bike quantity is less than purchase quantity");
                         stillAvailable = false;
                         break;
                     }
@@ -588,7 +582,7 @@ public class CustomerPageServer {
             ArrayList<Bike> tempBikes = UserInfo.getBikes();
             for (Bike bike : tempBikes) {
                 for (PurchasedBike pb : thisBuyer.getShoppingCart()) {
-                    System.out.println("Purchased bike ID " + pb);
+                   // System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
                     }
@@ -607,10 +601,8 @@ public class CustomerPageServer {
             }
             UserInfo.setBikes(tempBikes);
 
-            System.out.println("Bike Listing Page - Post Checkout");
-            for (Bike b : UserInfo.getBikes()) {
-                System.out.println(b.toString());
-            }
+            //System.out.println("Bike Listing Page - Post Checkout");
+
 
             /*******
              * Moves everything in the shopping cart to the purchase history
@@ -650,7 +642,7 @@ public class CustomerPageServer {
             /****
              * Testing only.Printing out the current bikes on the listing page
              */
-            System.out.println("Bikes in the Listing Page");
+            //System.out.println("Bikes in the Listing Page");
             for (Bike b : UserInfo.getBikes()) {
                 System.out.println(b.toNiceString());
             }
@@ -665,6 +657,7 @@ public class CustomerPageServer {
             writer.write("true");
             writer.println();
             writer.flush();
+            UserInfo.writeUsers();
         }
     }
 
@@ -684,10 +677,10 @@ public class CustomerPageServer {
         try {
 
             bikeId = Integer.parseInt(reader.readLine());
-            System.out.println(bikeId);
+            //System.out.println(bikeId);
 
         } catch (Exception e) {
-            System.out.println("Unable to parse int");
+            //System.out.println("Unable to parse int");
             writer.println("false");
             writer.flush();
             //e.printStackTrace();
@@ -742,7 +735,7 @@ public class CustomerPageServer {
     public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int cartIndex) {
         int purchaseQuantity = -1; //stores the quantity of bikes that the buyer wants to purchase
         boolean found = false; //checks if the bikeId they would like to purchase is found in the list
-        System.out.println(bikeId);
+        //System.out.println(bikeId);
 
         //checks if the input is an integer
         try {
@@ -758,24 +751,24 @@ public class CustomerPageServer {
         //adjusts the quantity if the cart the buyer wants to add on to an already exists in the shopping cart
         if (inCart) {
             purchaseQuantity += thisBuyer.getShoppingCart().get(cartIndex).getQuantity();
-            System.out.println("Purchase Quantity: " + purchaseQuantity);
+            //System.out.println("Purchase Quantity: " + purchaseQuantity);
         }
         //checks if the bikeID they want to purchase exists on the listing page
         for (Bike b : UserInfo.getBikes()) {
             //finds the corresponding bike id they want to add or purchase
             if (b.getId() == bikeId) {
-                System.out.println("found matching bike on listing page");
+                //System.out.println("found matching bike on listing page");
                 found = true;
                 //finds the quantity for the bike id they want to remove and if it is equal to 0 then return false
                 if (b.getQuantity() == 0) {
-                    System.out.println("The bike quantity equals zero");
+                    //System.out.println("The bike quantity equals zero");
                     return false;
                 }
                 //if the quantity available of this bike id is less than the quantity they want to purchase, return false
                 if (b.getQuantity() < purchaseQuantity) {
-                    System.out.println("The purchase quantity is greater than the bike quantity available");
-                    System.out.println("Purchase Quantity: " + purchaseQuantity);
-                    System.out.println("Bike Quantity: " + b.getQuantity());
+                    //System.out.println("The purchase quantity is greater than the bike quantity available");
+                    //System.out.println("Purchase Quantity: " + purchaseQuantity);
+                   // System.out.println("Bike Quantity: " + b.getQuantity());
                     return false;
                 }
                 break;

@@ -54,7 +54,11 @@ public class ControlFlowMenu {
 
                 //converts the information from the user login into their current index in the database and the user type (buyer or seller)
                 String[] parts = userInfo.split(",");
-                userIndex = Integer.parseInt(parts[0]);
+                try {
+                    userIndex = Integer.parseInt(parts[0]);
+                } catch (Exception e) {
+                    return;
+                }
                 userType = parts[1];
             }
         };

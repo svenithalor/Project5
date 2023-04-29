@@ -282,7 +282,7 @@ public class CustomerPageClient {
         panel.add(dropdown);
         int option = JOptionPane.showOptionDialog(null, panel, "Boilermaker Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
-        System.out.println(option);
+        //System.out.println(option);
         CustomerPageClient c = new CustomerPageClient();
 
         switch (option) {
@@ -354,14 +354,14 @@ public class CustomerPageClient {
         boolean success; //keeps track of if the user has successfully
         try {
             success = Boolean.parseBoolean(reader.readLine());
-            System.out.println("Successful checkout? " + success);
+            //System.out.println("Successful checkout? " + success);
             if (success) {
                 JOptionPane.showMessageDialog(null, "Successful Checkout!",
                         "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
 
             }
         } catch (Exception e) {
-            System.out.println("Error message under successfully completing the shopping cart.");
+            //System.out.println("Error message under successfully completing the shopping cart.");
         }
 
 
@@ -391,10 +391,10 @@ public class CustomerPageClient {
                 }
                 String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
                         JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
-                System.out.println(bikeMessage);
+                //System.out.println(bikeMessage);
                 //if the user does not choose an option then set the bike message to null
                 if (bikeMessage == null || bikeMessage.isEmpty()) {
-                    System.out.println("Exit Button");
+                    //System.out.println("Exit Button");
                     return;
                 }
 
@@ -421,7 +421,7 @@ public class CustomerPageClient {
                     writer.flush();
 
                 } catch (Exception e) {
-                    System.out.println(bikeId + " cannot be parsed");
+                    //System.out.println(bikeId + " cannot be parsed");
                     return;
                 }
 
@@ -437,11 +437,11 @@ public class CustomerPageClient {
                 input = reader.readLine();
                 //System.out.println("Client input received");
                 inCart = Boolean.parseBoolean(input);
-                System.out.println("inCart is " + inCart);
+                //System.out.println("inCart is " + inCart);
                 //System.out.println("Client side it is" + inCart + "");
 
             } catch (Exception e) {
-                System.out.println("error when trying to find out if already in shopping cart");
+                //System.out.println("error when trying to find out if already in shopping cart");
                 return;
             }
 
@@ -453,7 +453,7 @@ public class CustomerPageClient {
                     quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
                                     "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-                    System.out.println("Entered quantity: " + quantity);
+                    //System.out.println("Entered quantity: " + quantity);
                     writer.write(quantity);
                     writer.println();
                     writer.flush();
@@ -461,13 +461,13 @@ public class CustomerPageClient {
 
                     try {
                         validQuantity = Boolean.parseBoolean(reader.readLine());
-                        System.out.println("Valid Quantity Client? " + validQuantity);
+                        //System.out.println("Valid Quantity Client? " + validQuantity);
                         if (validQuantity) {
                             break;
                         }
 
                     } catch (Exception e) {
-                        System.out.println("Error invalid quantity in AddBike");
+                        //System.out.println("Error invalid quantity in AddBike");
                         return;
                     }
 
@@ -488,19 +488,19 @@ public class CustomerPageClient {
                 do {
                     quantity = JOptionPane.showInputDialog(null, "Enter bike quantity: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
-                    System.out.println("quantity entered " + quantity);
+                    //System.out.println("quantity entered " + quantity);
                     writer.write(quantity);
                     writer.println();
                     writer.flush();
                     try {
                         validQuantity = Boolean.parseBoolean(reader.readLine());
-                        System.out.println("Valid Quantity? " + validQuantity);
+                        //System.out.println("Valid Quantity? " + validQuantity);
                         if (validQuantity) {
                             break;
                         }
 
                     } catch (Exception e) {
-                        System.out.println("Error under bike quantity in AddBike");
+                       // System.out.println("Error under bike quantity in AddBike");
                         break;
                     }
 
@@ -534,7 +534,7 @@ public class CustomerPageClient {
             try {
                 success = Boolean.parseBoolean(reader.readLine());
             } catch (Exception e) {
-                System.out.println("Error under adding a bike in AddBike");
+                //System.out.println("Error under adding a bike in AddBike");
                 return;
             }
             if (success) {
@@ -570,10 +570,10 @@ public class CustomerPageClient {
         }
         String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose an Item to Remove", "Boilermaker Bikes",
                 JOptionPane.PLAIN_MESSAGE, null, shoppingCartOptions, shoppingCartOptions[0]);
-        System.out.println("Bike message" + bikeMessage);
+        //System.out.println("Bike message" + bikeMessage);
         //if the user does not choose an option then set the bike message to null
         if (bikeMessage == null || bikeMessage.isEmpty()) {
-            System.out.println("Exit Button");
+            //System.out.println("Exit Button");
             return;
         }
         /********
@@ -582,7 +582,7 @@ public class CustomerPageClient {
         for (PurchasedBike b : S.getThisBuyer().getShoppingCart()) {
             if (b.shoppingCartToString().equals(bikeMessage)) {
                 bikeId = b.getId();
-                System.out.println("found bikeID " + bikeId);
+                //System.out.println("found bikeID " + bikeId);
                 writer.write(bikeId + "");
                 writer.println();
                 writer.flush();
@@ -601,7 +601,7 @@ public class CustomerPageClient {
             }
 
         } catch (Exception e) {
-            System.out.println("Error under success in removeBike");
+            //System.out.println("Error under success in removeBike");
         }
 
     }

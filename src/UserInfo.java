@@ -80,8 +80,13 @@ public class UserInfo {
      * bikes arraylist to be made available to the customers .
      */
     synchronized public static void readUsers() {
-
+        /***********
+         * Clears the current arrayLists to make room for updates
+         */
         String line = ""; //empty line to reach through each file
+        buyers.clear();
+        sellers.clear();
+        bikes.clear();
 
         /******
          * Part One: Reads through the buyer information
