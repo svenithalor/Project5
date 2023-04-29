@@ -16,7 +16,6 @@ import java.util.*;
  *
  */
 public class CustomerPageServer {
-    public static Object obj = new Object();
 
     private Buyer thisBuyer; //stores the value of the buyer currently navigating the customer page
 
