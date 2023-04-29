@@ -229,8 +229,12 @@ public class SellerPageServer {
                 if (confirmOption != 1) {
                     strOption = reader.readLine(); // will read the input from client
                     //System.out.println("Check2");
-                    option = Integer.parseInt(strOption);
-                    System.out.println(strOption);
+                    try {
+                        option = Integer.parseInt(strOption);
+                    } catch (Exception e) {
+
+                    }
+                    //System.out.println(strOption);
                     // Options 1-3 are taken care of within client
                     
                     if (option == 4) {

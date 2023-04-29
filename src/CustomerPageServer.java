@@ -76,7 +76,8 @@ public class CustomerPageServer {
                         System.out.println(b.toNiceString());
                     }
                     ArrayList<String> bikeNames = new ArrayList<>();
-                    //UserInfo.readUsers();
+                   // UserInfo.readUsers();
+                    System.out.println("Size of buyer arraylist " + UserInfo.getBuyers());
                     for (Bike bike : UserInfo.getBikes()) {
                         String format = "%s | $%.2f | Quantity: %d";
                         bikeNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
@@ -113,12 +114,13 @@ public class CustomerPageServer {
                                         //If the user wants to add the item to their cart, then take them to the addBike method
                                         Boolean toCart = Boolean.parseBoolean(reader.readLine());
                                         if (toCart) {
-                                            System.out.println("Hello World!");
+                                            //System.out.println("Hello World!");
                                             //sends the id of the chosen bike to the client
                                             writer.write(chosenBike.getId() + "");
                                             writer.println();
                                             writer.flush();
                                             S.addBike(reader, writer);
+                                            UserInfo.writeUsers();
                                         }
                                         break;
                                     case -3: // sort by quantity
@@ -198,7 +200,7 @@ public class CustomerPageServer {
                 }
             }
         } catch (IOException ioe) {
-
+            //ioe.printStackTrace();
         }
     }
 
@@ -338,14 +340,15 @@ public class CustomerPageServer {
             if (input.equals("add")) {
 
                 s.addBike(reader, writer);
+                UserInfo.writeUsers();
 
             } else if (input.equals("delete")) {
 
                 s.removeBike(reader, writer);
+                UserInfo.writeUsers();
 
 
             } else if (input.equals("checkout")) {
-
                 s.checkout(writer);
 
             } else if (input.equals("backHome")) {
@@ -658,6 +661,7 @@ public class CustomerPageServer {
             writer.println();
             writer.flush();
             UserInfo.writeUsers();
+            System.out.println("Error message");
         }
     }
 

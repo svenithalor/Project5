@@ -91,6 +91,13 @@ public class LoginServer {
                     return userIndex;
                 }
             } else if (!found) {
+
+                if (ready == null) {
+                    writer.close();
+                    reader.close();
+                    return -1;
+
+                }
                 if (ready.equals("ready")) {
                     //System.out.println("Hello world! False");
                     writer.write("false");
@@ -243,6 +250,10 @@ public class LoginServer {
      */
     public boolean ExistingPasswordChecker(String userType, String password, String userName, PrintWriter writer) {
         boolean found = false; //saves whether or not the user's password was found
+        if (password == null) {
+            return false;
+        }
+
         //checks if the entered password is equal to 5 characters
         if (password.length() != 5) {
             found = false;
@@ -304,8 +315,15 @@ public class LoginServer {
             }
             //creates a login server object and goes to the login method
             LoginServer login = new LoginServer();
-            //stores the user index and sends the user either to their corresponding buyer or seller page
-            int userIndex = login.userLogin(userType, reader, writer);
+            int userIndex; //stores the user index of a user
+            try {
+                //stores the user index and sends the user either to their corresponding buyer or seller page
+                userIndex = login.userLogin(userType, reader, writer);
+            } catch (IOException e) {
+                reader.close();
+                writer.close();
+                return "";
+            }
             //creates a string containing the usertype and index to send to the Control Flow menu
             userInfo = "" + userIndex + "," + userType;
             reader.close();

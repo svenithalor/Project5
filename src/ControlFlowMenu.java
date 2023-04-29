@@ -78,6 +78,9 @@ public class ControlFlowMenu {
          */
 
         if (userIndex != -1) {
+            if (userType == null) {
+                return;
+            }
             if (userType.equals("buyer")) {
                 thisBuyer = UserInfo.getBuyers().get(userIndex);
                 //searches for a port that the buyer can use
@@ -96,7 +99,7 @@ public class ControlFlowMenu {
 
                 } catch (Exception e) {
                     String[] options = {"OK"};
-                    JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
+                    JOptionPane.showOptionDialog(null, "Login cancelled. Exiting Boilermaker Bikes.",
                             "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 
                 }
@@ -120,14 +123,14 @@ public class ControlFlowMenu {
 
                 } catch (Exception e) {
                     String[] options = {"OK"};
-                    JOptionPane.showOptionDialog(null, "Connection interrupted.  Exiting Boilermaker Bikes.",
+                    JOptionPane.showOptionDialog(null, "Exiting Boilermaker Bikes.",
                             "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 
                 }
 
             }
         } else {
-            JOptionPane.showOptionDialog(null, "Connection interrupted. Exiting Boilermaker Bikes.",
+            JOptionPane.showOptionDialog(null, "Exiting Boilermaker Bikes.",
                     "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
         }
 

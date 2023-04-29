@@ -9,9 +9,16 @@ password: cmj32
 cJoslin.purchasehistory purple,20,249.99,249.99,Joystar Mountain Bike,false,This bike is designed for kids seven to thirteen,BikesAreCool,1,false,2117
 cJoslin.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
 cJoslin.purchasehistory black,24,329.99,379.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,1,true,1081
+cJoslin.purchasehistory black,24,329.99,379.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,1,true,1081
+cJoslin.purchasehistory green,24,209.99,259.99,JoyStar,false, Is a class looking cruiser bike,BikesAreCool,1,true,1090
+cJoslin.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
 ***********
 username: c9sug
 password: cmj45
 c9sug.purchasehistory red,25,329.99,709.98,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,2,true,1080
 c9sug.purchasehistory blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
+***********
+username: cJosli
+password: cmj22
+cJosli.shoppingcart blue,26,299.99,349.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,1,true,1078
 ***********

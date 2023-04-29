@@ -52,7 +52,7 @@ public class LoginClient {
                 userNameFound = Boolean.parseBoolean(input);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return;
             }
 
@@ -117,6 +117,11 @@ public class LoginClient {
                     //sends the new username to the server to check if it does not match up with an existing username
                     String newUsername = JOptionPane.showInputDialog(null, "Please enter a username:",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    if (newUsername == null) {
+                        reader.close();
+                        writer.close();
+                        return;
+                    }
                     writer.write(newUsername);
                     writer.println();
                     writer.flush();
@@ -143,12 +148,23 @@ public class LoginClient {
                     //sends the new password to the server to check if it does not match up with an existing username
                     String newPassword = JOptionPane.showInputDialog(null, "Please enter a password (5 characters only):",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
+                    if (newPassword == null) {
+                        writer.close();
+                        reader.close();
+                        return;
+                    }
                     writer.write(newPassword);
                     writer.println();
                     writer.flush();
                     String input = reader.readLine();
                     //if the password is invalid or matches up with existing one, then have the user try again
-                    passwordSuccess = Boolean.parseBoolean(input);
+                    try {
+                        passwordSuccess = Boolean.parseBoolean(input);
+                    } catch (Exception e) {
+                        reader.close();
+                        writer.close();
+                        return;
+                    }
                     if (!passwordSuccess) {
                         JOptionPane.showConfirmDialog(null,"Error, this password is invalid." +
                                 " Try again.","Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
