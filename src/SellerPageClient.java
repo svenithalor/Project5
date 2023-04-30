@@ -172,8 +172,7 @@ public class SellerPageClient {
      * @author Christina Joslin
      */
     public int displayMainMenu(PrintWriter writer, BufferedReader reader) throws IOException {
-        //Creates a dropdown menu for the buyer to scroll through the menu options
-        //Just an idea for how the dropdown can be implemented
+        UserInfo.readUsers();
         JPanel panel = new JPanel();
         JLabel label1 = new JLabel("Select an option: ");
         panel.add(label1);
@@ -222,6 +221,23 @@ public class SellerPageClient {
                         if (this.checkValidID(tempID)) {
                             Bike tempBike = this.getBikeWithID(tempID);
                             tempBike.setQuantity(tempBike.getQuantity() + tempQuant);
+                            //updates the UserInfo in its entirety
+                            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+                            for (Seller s: tempSellers) {
+                                if (s.getUsername().equals(name)) {
+                                    ArrayList<Bike> tempInventory = s.getInventory();
+                                    for (Bike b: tempInventory) {
+                                        if (b.getId() == tempID) {
+                                            b.setQuantity(b.getQuantity() + tempQuant);
+                                        }
+                                    }
+                                    s.setInventory(tempInventory);
+                                }
+                            }
+                            UserInfo.setSellers(tempSellers);
+                            UserInfo.writeUsers();
+                            UserInfo.readUsers();
+
                         } else {
                             JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
                             JOptionPane.ERROR_MESSAGE);
@@ -245,6 +261,16 @@ public class SellerPageClient {
                     if (success) {
                         Bike tempBike = bdg.getBike();
                         inventory.add(tempBike);
+                        ArrayList<Seller> tempSellers = UserInfo.getSellers();
+                        for (Seller s: tempSellers) {
+                            if (s.getUsername().equals(name)) {
+                                s.setInventory(inventory);
+                            }
+                        }
+                        UserInfo.setSellers(tempSellers);
+                        UserInfo.writeUsers();
+                        UserInfo.readUsers();
+
                     }
                     
                 }
@@ -269,6 +295,7 @@ public class SellerPageClient {
                     if (this.checkValidID(tempID)) {
                         Bike tempBike = this.getBikeWithID(tempID);
                         tempBike.setQuantity(tempBike.getQuantity() - tempQuant);
+
                     } else {
                         JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
                         JOptionPane.ERROR_MESSAGE);
@@ -371,6 +398,7 @@ public class SellerPageClient {
                 if (success) {
                     JOptionPane.showMessageDialog(null, "Successfully saved data. Exiting now...", "Boilermaker Bikes", 
                         JOptionPane.INFORMATION_MESSAGE);
+                    UserInfo.writeUsers();
                 } else {
                     JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
                     JOptionPane.ERROR_MESSAGE);

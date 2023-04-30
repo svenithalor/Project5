@@ -1,7 +1,8 @@
 username: Bob
 password: bambi
-Bob.inventory blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,8,1078
+Bob.inventory blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,11,1078
 Bob.inventory black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,20,1081
+Bob.inventory red,25,299.99,MountainBike,false,This bike is cool,Bob,1,1099
 **********
 username: BikesAreCool
 password: funD3
