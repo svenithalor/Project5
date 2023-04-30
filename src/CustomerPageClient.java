@@ -340,7 +340,7 @@ public class CustomerPageClient {
         do {
             try {
                 stillAvailable = Boolean.parseBoolean(reader.readLine());
-                System.out.println("still available? " + stillAvailable);
+                //System.out.println("still available? " + stillAvailable);
             } catch (Exception e) {
                 //System.out.println("Error under checkoutBikes");
                 return;

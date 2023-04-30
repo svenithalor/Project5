@@ -591,7 +591,7 @@ public class CustomerPageServer {
                    // System.out.println("Purchased bike ID " + pb);
                     if (pb.getId() == bike.getId()) {
                         bike.setQuantity(bike.getQuantity() - pb.getQuantity());
-                        System.out.println(bike.getQuantity());
+                        //System.out.println(bike.getQuantity());
                     }
                 }
             }

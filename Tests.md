@@ -33,6 +33,7 @@ is not on the listing page (and thus, is not in any seller's inventory) the bike
 
 ## Test 4: User Shopping Cart - Delete 
 ### Author Christina J
+### Steps 
 1) Follow steps 1-2 from Test 4 (again, you should see a bike with model name Pan Ame Mountain in your cart) 
 2) Select "Delete" and a dropdown menu will display containing the items in your shopping cart. 
 3) Select the bike with the model name "PanAme Mountain" and click "Ok". 
@@ -59,7 +60,9 @@ Expected Result: You should be able to successfully log in to your previous acco
 your previous session. 
 
 ## Test 6: User Shopping Cart - 2 Buyers Checking Out The Same Item
-1. Login as two separate users (Username: cJoslin password: cmj32 and username: c9sug password: cmj45). 
+### Author: Christina J 
+### Steps: 
+1. Login as two separate buyers (Username: cJoslin password: cmj32 and username: c9sug password: cmj45). 
 2. For one user, click on "review cart" => "add", and then buy the maximum quantity of bikes 
 available for a specific model (e.g. if 7 bikes are in stock then buy all 7). Do the same for the 
 other user (note that you can also add an item by going to "View all available bikes" then using the dropdown
@@ -73,7 +76,50 @@ because the item is now out of stock. When they click "add", they should also se
 longer has that bike model listed as an option since it's stock is 0. 
 
 
-## Test 5: User Seller Page 
+## Test 7: 1 Buyer and 1 Seller Adding on to an Existing Bike
+### Author: Christina J
 ### Steps: 
-TODO 
+1) Login as two separate users - buyer (username: c9sug password: cmj45 OR you can simply create a new buyer account). 
+and seller (username: BikesAreCool password: funD3). 
+2) Once you have successfully logged in, go to the seller menu first. Select "add a bike" => "add to existing quantity"
+and type in the bike ID 1078 (this is the Firmstrong Model) and type any quantity of bikes (e.g. 5). Once you are finished, 
+select "OK" and you will be returned back to the seller menu. 
+3) On the buyer side, navigate to the listing page and then click the "back to home" button (note that you may have to repeat 
+this twice due to the slight delay in the values updating). On the seller side click "view bikes"
+
+Expected result: Both the buyer and seller will see that the Firmstrong model has been incremented in quantity by the amount 
+entered in step 2. 
+
+###Important Note* The same test can be used to check when the seller is deleting the quantity of an existing bike. 
+
+
+##Test 8: 1 Buyer and 1 Seller Adding a New Bike
+### Author Christina J
+### Steps:
+1) Login as two separate users - buyer (username: c9sug password: cmj45 OR you can simply create a new buyer account).
+   and seller (username: BikesAreCool password: funD3).
+2) Once you have successfully logged in, go to the seller menu first. Select "add a bike" => say NO to "add to existing quantity". 
+Use the following information for your new bike:
+
+Bike ID: 1099
+ModelName: PandaBike
+Color: black
+Wheel Size: 25
+Price: 299.99
+New or Used: true
+Description: This bike is cool. 
+Quantity: 1
+
+3) Select "OK" and you will be returned back to the seller menu.
+4) On the buyer side, navigate to the listing page and then click the "back to home" button (note that you may have to repeat
+   this twice due to the slight delay in the values updating). On the seller side click "view bikes"
+
+Expected Result: Both the buyer and seller should see the new bike appear in their inventory (seller) or on the listing page (buyer)
+
+
+
+
+
+
+
 
