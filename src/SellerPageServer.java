@@ -152,6 +152,7 @@ public class SellerPageServer {
             UserInfo.setSellers(sellers);
             UserInfo.setBikes(allBikes);
             UserInfo.writeUsers();
+            UserInfo.readUsers();
         } catch (Exception e) {
             return false;
         }
