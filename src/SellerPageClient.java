@@ -295,22 +295,45 @@ public class SellerPageClient {
                     if (this.checkValidID(tempID)) {
                         Bike tempBike = this.getBikeWithID(tempID);
                         tempBike.setQuantity(tempBike.getQuantity() - tempQuant);
-                        //updates the UserInfo in its entirety
-                        ArrayList<Seller> tempSellers = UserInfo.getSellers();
-                        for (Seller s: tempSellers) {
-                            if (s.getUsername().equals(name)) {
-                                ArrayList<Bike> tempInventory = s.getInventory();
-                                for (Bike b: tempInventory) {
-                                    if (b.getId() == tempID) {
-                                        b.setQuantity(b.getQuantity() - tempQuant);
+
+                        if ((tempBike.getQuantity() - tempQuant) > 0) {
+                            //updates the UserInfo in its entirety
+                            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+                            for (Seller s: tempSellers) {
+                                if (s.getUsername().equals(name)) {
+                                    ArrayList<Bike> tempInventory = s.getInventory();
+                                    for (Bike b: tempInventory) {
+                                        if (b.getId() == tempID) {
+                                            b.setQuantity(b.getQuantity() - tempQuant);
+                                        }
                                     }
+                                    s.setInventory(tempInventory);
                                 }
-                                s.setInventory(tempInventory);
                             }
+                            UserInfo.setSellers(tempSellers);
+                            UserInfo.writeUsers();
+                            UserInfo.readUsers();
+
+                        } else {
+                            //removes inventory that is less than 0
+                            ArrayList<Seller> tempSellers = UserInfo.getSellers();
+                            for (Seller s: tempSellers) {
+                                if (s.getUsername().equals(name)) {
+                                    ArrayList<Bike> tempInventory = s.getInventory();
+                                    for (Bike b: tempInventory) {
+                                        if (b.getId() == tempID) {
+                                            tempInventory.remove(b);
+                                            break;
+                                        }
+                                    }
+                                    s.setInventory(tempInventory);
+                                }
+                            }
+                            UserInfo.setSellers(tempSellers);
+                            UserInfo.writeUsers();
+                            UserInfo.readUsers();
                         }
-                        UserInfo.setSellers(tempSellers);
-                        UserInfo.writeUsers();
-                        UserInfo.readUsers();
+
 
                     } else {
                         JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
