@@ -534,7 +534,8 @@ public class CustomerPageServer {
      */
     public void checkout(PrintWriter writer) {
         UserInfo.readUsers();
-        /********
+
+         /********
          * Checks if all the bikes in the shopping cart still exist on the listing page
          */
         boolean stillAvailable = true; //saves whether or not all of the bikes are available for purchase
@@ -582,6 +583,17 @@ public class CustomerPageServer {
         writer.flush();
 
         if (stillAvailable) {
+            /*********
+             * Checks if the shopping cart is empty. If it is then return false
+             */
+            if (thisBuyer.getShoppingCart().size() == 0) {
+                //System.out.println("The shopping cart is empty");
+                writer.write("false");
+                writer.println();
+                writer.flush();
+                return;
+
+            }
             /******
              * Updates the listing Page and seller inventory
              */
@@ -614,16 +626,6 @@ public class CustomerPageServer {
 
 
             //System.out.println("Bike Listing Page - Post Checkout");
-            /*****
-             * Iterator<Bike> itr = tempBikes.iterator();
-             *                 for (Iterator<Bike> it = itr; it.hasNext(); ) {
-             *                     Bike i = it.next();
-             *                     if (i.getQuantity() == 0) {
-             *                         itr.remove();
-             *                     }
-             *                 }
-             */
-
 
             /*******
              * Moves everything in the shopping cart to the purchase history

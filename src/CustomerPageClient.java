@@ -362,6 +362,10 @@ public class CustomerPageClient {
                 JOptionPane.showMessageDialog(null, "Successful Checkout!",
                         "Boilermaker Bikes", JOptionPane.INFORMATION_MESSAGE);
 
+            } else {
+                String[] options = {"OK"};
+                JOptionPane.showOptionDialog(null, "There are no bikes in your shopping cart.",
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
             }
         } catch (Exception e) {
             //System.out.println("Error message under successfully completing the shopping cart.");
