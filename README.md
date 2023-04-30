@@ -11,9 +11,9 @@
 
 **********
 ## Submission Details
-Student 1 - Submitted report on Brightspace
+Sveni Thalor - Submitted report on Brightspace
 Christina Joslin - Submitted vocareum workspace 
-Student 3 - Submitted presentation 
+Christina Joslin - Submitted presentation 
 **********
 ## Description 
 
