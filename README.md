@@ -266,31 +266,85 @@ public void removeBike(PrintWriter writer,BufferedReader reader,CustomerPageServ
  
  -------------------------------------------
  ### SellerPageClient.java
-*Functionality* This class is TODO
-*Relationship To Other Classes* This class is TODO 
+*Functionality* A user is taken to this class if they log in as a seller. This class is primarily responsible for displaying the complex GUIs that listen for user input, as well as outputting the relevant information. 
+
+*Relationship To Other Classes* ControlFlowMenu will simply create a SellerPageClient object, with a seller passed in as an argument, and call the runSellerPageClient method. This method contains all the functionality for this file. It communicates via network I/O with SellerPageServer.
  
 *Fields*
- TODO
+name - the name of the seller object passed in
+inventory - the inventory of the seller passed in
+port - used for concurrency purposes
  
 *Constructors*
- TODO (if none, then just remove this portion) 
+ Creates an instance of SellerPageClient with parameters of name, inventory, and port. 
  
 *Methods*
+parseBike - Creates bike object from a string. Useful for passing information back and forth between Client and Server.
+
+parsePurchasedBike - same as parseBike, but accounts for some new fields in PurchasedBike
+
+sendArrayList - converts an ArrayList of Bikes into a string. This is just about always followed up with writing it to seller side.
+
+recieveArrayList - undoes the sendArrayList function. Used to recive input from the reader
+
+recievePurchasedBike - same as above, but with Purchased Bikes.
+
+main - obsolete method, was used for testing Seller Page on its own.
+
+runSellerPageClient - runs displayMainMenu in a do while loop, until the user decides to exit out.
+
+displayMainMenu - all the functionality of the program. displays all GUIs, and writes updated seller information into UserInfo.sellers, where all the data is written to a file when the program ends.
+
+basicViewOnly - used when the result of a user input is just displaying some bikes
+
+basicViewPurchasedBikes - same as above, but with purchased bikes
+
+viewAnalytics - a variation of basicViewOnly, but displays potential revenue seller's bikes in customer carts if they were to buy them.
+
+checkValidID - checks if argument maps to an ID of a bike in the seller's inventory
+
+getBikeWithID - returns the bike in the seller inventory corresponding to the argument ID passed in. Assumes that ID is valid, hence this function is only called when checkValidID returns true.
  
 TODO 
 -------------------------------------------------
  ### SellerPageServer.java
  
-*Functionality* This class is TODO
-*Relationship To Other Classes* This class is TODO 
+*Functionality* Takes input from SellerPageClient and does the relevant "processing", then sends the output back to SellerPageClient. 
+*Relationship To Other Classes* This class is linked with SellerPageClient via network I/O, and therefore by port number as well. In ControlFlowMenu, runSellerPageClient and run() in SellerPageServer are called at the same time. 
  
 *Fields*
- TODO
+name - the name of the seller object passed in
+inventory - the inventory of the seller passed in
+port - used for concurrency purposes
  
 *Constructors*
- TODO (if none, then just remove this portion) 
+ Creates an instance of SellerPageClient with parameters of name, inventory, and port.  
  
 *Methods*
+
+getName - returns name field
+
+getInventory - returns inventory field
+
+setInventory - sets inventory field to the argument passed in
+
+parseBike - identical to SellerPageClient
+
+parsePurchasedBike - identical to SellerPageClient
+
+sendArrayList - identical to SellerPageClient
+
+sendPurchasedBikes - identical to SellerPageClient
+
+recieveArrayList - identical to SellerPageClient
+
+searchBike - takes a search term argument (taken from user input in the client side), and searches all bikes in the seller inventory based on a string match in any one of the following: color, description, model name, or ID.
+
+deleteAccount - Removes the Seller from UserInfo.sellers, effectively erasing their data, since it will not be written into the file in between runs of the program. Immediately exits out of the program afterwards.
+
+exportInventory - allows seller to export their Inventory to a file. They are prompted to choose a directory via JFileChooser (in client), this filepath is given to the seller, where all the Bikes in their inventory are written to said file path via Bike.toNiceString().
+
+run - connects to the client with ServerSocket. Works concurrentlywith sellerClient threadwaits for the option input from server, then carries out the associated action.
  
 TODO
 ----------------------------------------------------
