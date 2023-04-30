@@ -714,12 +714,6 @@ public class CustomerPageServer {
         tempBuyers.set(UserInfo.getBuyerIndex(thisBuyer), thisBuyer);
         UserInfo.setBuyers(tempBuyers);
 
-        /**
-         * Testing only prints the current shopping cart of thisBuyer
-         */
-        for (PurchasedBike b : thisBuyer.getShoppingCart()) {
-            System.out.println(b.toNiceString());
-        }
         UserInfo.writeUsers();
         UserInfo.readUsers();
         //sends a message to the client confirming the successful deletes

@@ -572,7 +572,15 @@ public class CustomerPageClient {
         //creates a dropdown menu of items that the user can remove from their shopping cart
         String[] shoppingCartOptions = new String[S.getThisBuyer().getShoppingCart().size()];
         int i = 0;
-
+        /*****
+         * If there are not any items to delete, then display an error message
+         */
+        if (S.getThisBuyer().getShoppingCart().size() == 0) {
+            String[] options = {"OK"};
+            JOptionPane.showOptionDialog(null, "There are no items to remove.",
+                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+            return;
+        }
         /********
          * Iterates through the available bikes in the shopping cart database and displays them to the user
          */
