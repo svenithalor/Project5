@@ -215,10 +215,34 @@ public boolean checkBikeQuantity(String input, int bikeId, boolean inCart, int c
 @param cartIndex the index of the bike to be added or removed out from the shopping cart
 @return true if the quantity is valid (meets the conditions above) and false if the quantity is not valid (does not meet the conditions above)
  
+public static ArrayList<Bike> sortByPrice(ArrayList<Bike> bikes)
+**Description** This method sorts the bikes from lowest to highest price
+@param bikes the ArrayList of bikes to sort
+@return the sorted arraylist 
+
+public static ArrayList<Bike> sortByQuantity(ArrayList<Bike> bikes)
+**Description** This method sorts the bikes from lowest to highest quantity
+@param bikes the ArrayList of bikes to sort
+@return the sorted arraylist 
+
+public static ArrayList<Bike> search(String searchTerm, ArrayList<Bike> bikes)
+**Description** This method returns the matches for a given search term
+@param searchTerm the search query to look for
+@param bikes the ArrayList being searched through
+@return the arraylist of matches
+
+public static boolean getPurchaseHistory(String path, String username)
+**Description** This method saves the user's purchase history to a file
+@param path the file path to save to 
+@param username the buyer's username
+@return a boolean representing whether or not it was successfully saved
  
- TODO... 
- 
- 
+ public static boolean deleteAccount(String confirm, String user, int buyerIndex)
+ **Descriptoin** This method saves the user's purchase history to a file
+ @param confirm the string the user entered to confirm their username
+ @param user the buyer's username
+ @param buyerIndex the index in the buyers arraylist of the buyer
+ @return a boolean representing whether it was successfully deleted
  
  -------------------------------------------
 ### CustomerPageClient.java 
@@ -237,6 +261,11 @@ public int displayMainMenu(PrintWriter writer, BufferedReader reader) throws IOE
 **Description** This method displays the customer page menu to the user and returns the menu item that they selected
 @param writer to write the choice made by the buyer to the server
 @param reader to close the BufferedReader in the event that the buyer exits out of the menu
+@return the menu item selected by the user
+
+public int displayBikesMenu(String bikeNames) 
+**Description** This method displays the view bikes menu to the user and returns the menu item that they selected
+@param bikeNames: the string representation of all the bike names to display in the menu
 @return the menu item selected by the user
 
 public String displayShoppingCartMenu(CustomerPageServer S)
