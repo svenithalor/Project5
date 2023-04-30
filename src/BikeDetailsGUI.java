@@ -25,7 +25,7 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
 
         // Create the panel and add the labels and text fields
         JPanel panel = new JPanel(new GridLayout(9, 2));
-        panel.add(new JLabel("Name:"));
+        panel.add(new JLabel("Model Name:"));
         panel.add(nameField);
         panel.add(new JLabel("Wheel Size:"));
         panel.add(wheelSizeField);
@@ -37,7 +37,7 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         panel.add(descriptionField);
         panel.add(new JLabel("ID Number:"));
         panel.add(idField);
-        panel.add(new JLabel("Used or New:"));
+        panel.add(new JLabel("Used or New (true or false):"));
         panel.add(usedOrNoField);
         panel.add(new JLabel("Quantity:"));
         panel.add(quantityField);
