@@ -2,9 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.CountDownLatch;
-
+/***************
+ *The BikeDetailsGUI lass contains the GUI for the seller page
+ *
+ * @author Aditya, lab sec 4427
+ * @version 4/27/2023
+ */
 public class BikeDetailsGUI extends JComponent implements Runnable {
-    private JTextField nameField, wheelSizeField, colorField, priceField, descriptionField, idField, usedOrNoField, quantityField, sellerNameField;
+    private JTextField nameField, wheelSizeField, colorField, priceField, descriptionField, idField,
+            usedOrNoField, quantityField, sellerNameField;
     private Bike result;
     private CountDownLatch latch;
     private boolean success;
@@ -50,7 +56,8 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
             try {
                 result = this.sendBike();
             } catch(Exception nfe) {
-                JOptionPane.showMessageDialog(null, "At least one of the components is invalid. No action was taken.", "Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "At least one of the components is invalid. "
+                               + "No action was taken.", "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
                 this.success = false;
             } 
@@ -109,7 +116,8 @@ public class BikeDetailsGUI extends JComponent implements Runnable {
         try {
             latch.await();
         } catch (InterruptedException ie) {
-            JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+            JOptionPane.showMessageDialog(null, "Error in fetching bike data.",
+                    "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
         }
         

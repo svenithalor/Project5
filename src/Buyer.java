@@ -14,7 +14,8 @@ public class Buyer {
     private String username; //stores the username of this buyer
     private String password; //stores the password of this buyer
 
-    public Buyer(String username,String password, ArrayList<PurchasedBike> shoppingCart, ArrayList<PurchasedBike> purchaseHistory) {
+    public Buyer(String username,String password, ArrayList<PurchasedBike> shoppingCart,
+                 ArrayList<PurchasedBike> purchaseHistory) {
         this.username = username;
         this.password= password;
         //if the initial shopping cart is null, then set the arraylist to empty

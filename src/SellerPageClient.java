@@ -8,7 +8,12 @@ import java.net.*;
 import java.text.CompactNumberFormat;
 import java.util.concurrent.CountDownLatch;
 
-
+/***************
+ *The SellerPageClient class displays the GUI for the seller page
+ *
+ * @author Aditya, lab sec 4427
+ * @version 4/27/2023
+ */
 public class SellerPageClient {
     // fields
     private String name;
@@ -103,9 +108,12 @@ public class SellerPageClient {
     // This method is only for testing seller page on its own
     public static void main(String[] args) {
         
-        String bike1 = "blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding,Bob,10,1078";
-        String bike2 = "black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use it for daily commuting,Bob,20,1081";
-        String bike3 = "red,25,329.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle and will never rust,BikesAreCool,2,1080";
+        String bike1 = "blue,26,299.99,Firmstrong Urban,false,single-speed cruiser bike for easy relaxed riding," +
+                "Bob,10,1078";
+        String bike2 = "black,24,329.99,Hiland Road Bike Shimano,true,designed for people who like to ride or use " +
+                "it for daily commuting,Bob,20,1081";
+        String bike3 = "red,25,329.99,Royce Union RMY,false,the durable lightweight aluminum frame is easy to handle "
+               + "and will never rust,BikesAreCool,2,1080";
         
 
         ArrayList<Bike> inv = new ArrayList<>();
@@ -123,7 +131,8 @@ public class SellerPageClient {
     
     public void runSellerPageClient(String rName, ArrayList<Bike> rInventory) {
         try {
-            SellerPageClient C = new SellerPageClient(rName, rInventory,port); //creates an object to be used to navigate the menu
+            SellerPageClient C = new SellerPageClient(rName, rInventory,port); //creates an object to be used to
+            // navigate the menu
             Socket socket = new Socket("localhost", port);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -200,7 +209,8 @@ public class SellerPageClient {
             } else if (option == 2) {
                 
                 
-                int response = JOptionPane.showConfirmDialog(null, "Are you updating the stock of an existing bike?", 
+                int response = JOptionPane.showConfirmDialog(null, "Are you updating the stock " +
+                                "of an existing bike?",
                     "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
                 if (response == 0) {
                     CountDownLatch latch = new CountDownLatch(1);
@@ -209,7 +219,8 @@ public class SellerPageClient {
                     try {
                         latch.await();
                     } catch (InterruptedException ie) {
-                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.",
+                                "Boilermaker Bikes",
                             JOptionPane.ERROR_MESSAGE);
                         
                     }
@@ -239,7 +250,8 @@ public class SellerPageClient {
                             UserInfo.readUsers();
 
                         } else {
-                            JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                            JOptionPane.showMessageDialog(null, "ID not found",
+                                    "Boilermaker Bikes",
                             JOptionPane.ERROR_MESSAGE);
 
                         }
@@ -254,7 +266,8 @@ public class SellerPageClient {
                     try {
                         latch.await();
                     } catch (InterruptedException ie) {
-                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                        JOptionPane.showMessageDialog(null, "Error in fetching bike data.",
+                                "Boilermaker Bikes",
                             JOptionPane.ERROR_MESSAGE);
                     }
                     boolean success = bdg.returnSuccess();
@@ -283,7 +296,8 @@ public class SellerPageClient {
                 try {
                     latch.await();
                 } catch (InterruptedException ie) {
-                    JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+                    JOptionPane.showMessageDialog(null, "Error in fetching bike data.",
+                            "Boilermaker Bikes",
                         JOptionPane.ERROR_MESSAGE);
                     
                 }
@@ -336,7 +350,8 @@ public class SellerPageClient {
 
 
                     } else {
-                        JOptionPane.showMessageDialog(null, "ID not found", "Boilermaker Bikes",
+                        JOptionPane.showMessageDialog(null, "ID not found",
+                                "Boilermaker Bikes",
                         JOptionPane.ERROR_MESSAGE);
 
                     }
@@ -362,7 +377,8 @@ public class SellerPageClient {
                             matches = recieveArrayList(matchesString);
                             basicViewOnly(matches);
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "No matches found!", "Boilermaker Bikes",
+                            JOptionPane.showMessageDialog(null, "No matches found!",
+                                    "Boilermaker Bikes",
                             JOptionPane.ERROR_MESSAGE);
                         }
                         
@@ -382,10 +398,12 @@ public class SellerPageClient {
                boolean deleted = Boolean.parseBoolean(deletedString);
 
                if (deleted) {
-                JOptionPane.showMessageDialog(null, "Account Successfully deleted.", "Boilermaker Bikes", 
+                JOptionPane.showMessageDialog(null, "Account Successfully deleted.",
+                        "Boilermaker Bikes",
                     JOptionPane.INFORMATION_MESSAGE);
                } else {
-                JOptionPane.showMessageDialog(null, "An Error Occurred.", "Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "An Error Occurred.",
+                        "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
                }
                 
@@ -394,7 +412,8 @@ public class SellerPageClient {
                 String cCarts = reader.readLine();
 
                 if (cCarts.length() == 0) {
-                    JOptionPane.showMessageDialog(null, "No Bikes Found.", "Boilermaker Bikes",
+                    JOptionPane.showMessageDialog(null, "No Bikes Found.",
+                            "Boilermaker Bikes",
                         JOptionPane.ERROR_MESSAGE);
                 } else {
                     ArrayList<PurchasedBike> customerCarts = recievePurchasedBikes(cCarts);
@@ -413,10 +432,12 @@ public class SellerPageClient {
                 try {
                     analytics = recievePurchasedBikes(analyticsString);
                 } catch (ArrayIndexOutOfBoundsException fjlsdkjf) {
-                    JOptionPane.showMessageDialog(null, "No customers are interested in your bikes", "CS180 HW11",
+                    JOptionPane.showMessageDialog(null, "No customers are interested" +
+                                    " in your bikes", "CS180 HW11",
                     JOptionPane.ERROR_MESSAGE);
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "An error occured. No Action was taken.", "CS180 HW11",
+                    JOptionPane.showMessageDialog(null, "An error occured." +
+                                    " No Action was taken.", "CS180 HW11",
                     JOptionPane.ERROR_MESSAGE);
                     success = false;
                 }
@@ -435,11 +456,13 @@ public class SellerPageClient {
                 boolean success = Boolean.parseBoolean(strSuccess);
 
                 if (success) {
-                    JOptionPane.showMessageDialog(null, "Successfully saved data. Exiting now...", "Boilermaker Bikes", 
+                    JOptionPane.showMessageDialog(null, "Successfully saved data. " +
+                                    "Exiting now...", "Boilermaker Bikes",
                         JOptionPane.INFORMATION_MESSAGE);
                     UserInfo.writeUsers();
                 } else {
-                    JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
+                    JOptionPane.showMessageDialog(null, "An error occured." +
+                                    " No action was taken.", "Boilermaker Bikes",
                     JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -491,10 +514,12 @@ public class SellerPageClient {
             boolean success = Boolean.parseBoolean(strSuccess);
 
             if (success) {
-                JOptionPane.showMessageDialog(null, "Successfully saved data. Exiting now...", "Boilermaker Bikes", 
+                JOptionPane.showMessageDialog(null, "Successfully saved data." +
+                                " Exiting now...", "Boilermaker Bikes",
                     JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "An error occured. No action was taken.", "Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "An error occured. " +
+                                "No action was taken.", "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
             }
 

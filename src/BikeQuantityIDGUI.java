@@ -1,7 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.CountDownLatch;
-
+/***************
+ *The BikeQuantityGUI class contains the GUI for the seller page
+ *
+ * @author Aditya, lab sec 4427
+ * @version 4/27/2023
+ */
 public class BikeQuantityIDGUI extends JComponent implements Runnable {
     
     private JPanel option2No;
@@ -30,7 +35,8 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
             try {
                 this.sendIDandQuantity();
             } catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(null, "Invalid ID or Quantity.", "Boilermaker Bikes",
+                JOptionPane.showMessageDialog(null, "Invalid ID or Quantity.",
+                        "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
                 this.success = false;
             }
@@ -84,7 +90,8 @@ public class BikeQuantityIDGUI extends JComponent implements Runnable {
         try {
             latch.await();
         } catch (InterruptedException ie) {
-            JOptionPane.showMessageDialog(null, "Error in fetching bike data.", "Boilermaker Bikes",
+            JOptionPane.showMessageDialog(null, "Error in fetching bike data.",
+                    "Boilermaker Bikes",
                 JOptionPane.ERROR_MESSAGE);
             
         }

@@ -174,8 +174,10 @@ public class UserInfo {
                     //creates a buyer object to add to the database
                     Buyer buyer = new Buyer(username, password, shoppingCart, purchaseHistory);
                     buyers.add(buyer);
-                    shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user to read in a new user
-                    purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user to read in a new user
+                    shoppingCart = new ArrayList<>(); //clears the shopping cart of the current user to
+                    // read in a new user
+                    purchaseHistory = new ArrayList<>(); //clears the purchasing history of the current user
+                    // to read in a new user
 
                 }
 

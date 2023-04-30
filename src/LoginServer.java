@@ -42,7 +42,8 @@ public class LoginServer {
         /*********
          * Iterates through the entire database of buyers or sellers and checks if the username already exists.
          * If it DOES exist, then send true to the client and have them check their password next. If it DOES NOT exist,
-         * then send false to the client which will prompt them to create a new account with a unique username and password
+         * then send false to the client which will prompt them to create a new account with a unique username and
+         * password
          */
         do {
             //reads the username entered by the user
@@ -125,7 +126,8 @@ public class LoginServer {
                 /********
                  * sets up a new username for the user
                  */
-                boolean userNameSuccess = false; //keeps track of if the buyer or seller successfully created a new account
+                boolean userNameSuccess = false; //keeps track of if the buyer or seller successfully created a
+                // new account
                 String newUserName = ""; //keeps track of the new username entered to create an account
                 do {
                     newUserName = reader.readLine();
@@ -208,8 +210,8 @@ public class LoginServer {
     }
 
     /********
-     * This method checks if the password entered by a new user is 5 characters and does NOT match with a password already
-     * in the buyer or seller database
+     * This method checks if the password entered by a new user is 5 characters and does NOT match with a password
+     * already in the buyer or seller database
      * @param userType whether the user is a buyer or a seller
      * @param password the user entered password
      * @param writer tells the client if the user entered password is true (valid) or false (invalid)
@@ -300,7 +302,8 @@ public class LoginServer {
      */
     public static String run(int port) {
 
-        String userInfo = ""; //stores the current index of the user in the database and the type of user they are (buyer or seller)
+        String userInfo = ""; //stores the current index of the user in the database and the type of user they are
+        // (buyer or seller)
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             Socket socket = serverSocket.accept(); //waits until the client connects

@@ -28,8 +28,10 @@ public class CustomerPageClient {
             int repeat = 1;
 
             do {
-                CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be used to display GUI
-                CustomerPageServer S = new CustomerPageServer(buyer); //creates a CustomerPage object to be used for processing
+                CustomerPageClient C = new CustomerPageClient();  //creates a CustomerPage object to be
+                // used to display GUI
+                CustomerPageServer S = new CustomerPageServer(buyer); //creates a CustomerPage object to be
+                // used for processing
 
                 String bikeNames = reader.readLine();
                 String[] bikeNamesArray = bikeNames.substring(1, bikeNames.length() - 1).split(",");
@@ -66,8 +68,10 @@ public class CustomerPageClient {
                                     bikeDescription += "\n" + reader.readLine();
                                     bikeDescription += "\n" + reader.readLine();
                                     String[] buttons = {"Go back", "Add to cart"};
-                                    int option = JOptionPane.showOptionDialog(null, bikeDescription, "Boilermaker Bikes",
-                                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, buttons, null);
+                                    int option = JOptionPane.showOptionDialog(null, bikeDescription,
+                                            "Boilermaker Bikes",
+                                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                                            buttons, null);
                                     if (option == 0 || option == -1) {
                                         writer.write("false");
                                         writer.println();
@@ -85,7 +89,8 @@ public class CustomerPageClient {
                                     String sortedBikeInfo = reader.readLine();
                                     choice2 = C.displayBikesMenu(sortedBikeInfo);
                                     if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
-                                        String[] sortedBikesArray = sortedBikeInfo.substring(1, sortedBikeInfo.length() - 1).split(",");
+                                        String[] sortedBikesArray = sortedBikeInfo.substring(1,
+                                                sortedBikeInfo.length() - 1).split(",");
                                         String sortedChoice = sortedBikesArray[choice2].strip();
                                         for (int i = 0; i < bikeNamesArray.length; i++) {
                                             if (sortedChoice.equals(bikeNamesArray[i].strip())) {
@@ -105,7 +110,8 @@ public class CustomerPageClient {
                                     if (!result.equals("-1")) {
                                         choice2 = C.displayBikesMenu(result);
                                         if (choice2 != -2 && choice2 != -3 && choice2 != -1 && choice2 != -4) {
-                                            String[] matchesArray = result.substring(1, result.length() - 1).split(",");
+                                            String[] matchesArray = result.substring(1,
+                                                    result.length() - 1).split(",");
                                             String matchChoice = matchesArray[choice2].strip();
                                             for (int i = 0; i < bikeNamesArray.length; i++) {
                                                 if (matchChoice.equals(bikeNamesArray[i].strip())) {
@@ -175,7 +181,8 @@ public class CustomerPageClient {
                             writer.flush();
                             String deleted = reader.readLine();
                             if (deleted.equals("true")) {
-                                JOptionPane.showMessageDialog(null, "Account deleted successfully!");
+                                JOptionPane.showMessageDialog(null,
+                                        "Account deleted successfully!");
                                 repeat = 0;
                             } else if (deleted.equals("false")) {
                                 JOptionPane.showMessageDialog(null, "Try again!");
@@ -348,9 +355,11 @@ public class CustomerPageClient {
             if (stillAvailable) {
                 break;
             }
-            int choice = JOptionPane.showConfirmDialog(null, "Error. One or more bikes in your cart are " +
+            int choice = JOptionPane.showConfirmDialog(null, "Error. " +
+                    "One or more bikes in your cart are " +
                     "unavailable.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.OK_OPTION) {
+            if (choice == JOptionPane.CLOSED_OPTION || choice == JOptionPane.CANCEL_OPTION ||
+                    choice == JOptionPane.OK_OPTION) {
                 return;
             }
         } while (!stillAvailable);
@@ -365,7 +374,8 @@ public class CustomerPageClient {
             } else {
                 String[] options = {"OK"};
                 JOptionPane.showOptionDialog(null, "There are no bikes in your shopping cart.",
-                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                        null, options, options[0]);
             }
         } catch (Exception e) {
             //System.out.println("Error message under successfully completing the shopping cart.");
@@ -379,7 +389,8 @@ public class CustomerPageClient {
      * @param writer writes the user input to the server
      * @param reader reads either true or false from the server indicating it the process was a success or not
      * @param buttonType if the user is adding a bike from the shoppingCart, then a dropdown menu is first displayed to
-     * select a specific bike. If the user is adding a bike from its description then it will simply ask for the quantity to be added
+     * select a specific bike. If the user is adding a bike from its description then it will simply ask
+     *for the quantity to be added
      * @author Christina Joslin
      */
     public void addBike(PrintWriter writer, BufferedReader reader,String buttonType) {
@@ -394,7 +405,8 @@ public class CustomerPageClient {
                  */
                 if (UserInfo.getBikes().size() == 0 ) {
                     String[] options = {"OK"};
-                    JOptionPane.showOptionDialog(null, "There are no bikes available for purchase.",
+                    JOptionPane.showOptionDialog(null, "There are no bikes available" +
+                                    " for purchase.",
                             "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null,
                             options, options[0]);
                     return;
@@ -404,7 +416,8 @@ public class CustomerPageClient {
                     listingPageOptions[i] = b.toNiceString();
                     i++;
                 }
-                String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose Bike to Add", "Boilermaker Bikes",
+                String bikeMessage = (String) JOptionPane.showInputDialog(null,
+                        "Choose Bike to Add", "Boilermaker Bikes",
                         JOptionPane.PLAIN_MESSAGE, null, listingPageOptions, listingPageOptions[0]);
                 //System.out.println(bikeMessage);
                 //if the user does not choose an option then set the bike message to null
@@ -443,8 +456,8 @@ public class CustomerPageClient {
             }
 
             /************
-             * Checks if the bikeID is already in the shopping cart. If it is already there, then just have the buyer add
-             * on to the existing quantity
+             * Checks if the bikeID is already in the shopping cart. If it is already there, then just have the
+             * buyer add on to the existing quantity
              */
             boolean inCart;
             String input = "";
@@ -465,8 +478,8 @@ public class CustomerPageClient {
                 String quantity = "";
                 boolean validQuantity;
                 do {
-                    quantity = JOptionPane.showInputDialog(null, "This bike is already in your " +
-                                    "shopping cart. Enter bike quantity to add: ",
+                    quantity = JOptionPane.showInputDialog(null, "This bike is already in your "
+                                   + "shopping cart. Enter bike quantity to add: ",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     //System.out.println("Entered quantity: " + quantity);
                     writer.write(quantity);
@@ -520,7 +533,9 @@ public class CustomerPageClient {
                         break;
                     }
 
-                    int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity. Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    int choice = JOptionPane.showConfirmDialog(null, "Invalid bike quantity." +
+                            " Please try again.", "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.ERROR_MESSAGE);
                     //allows the user to exit at any point using exit button
 
                     if (choice == JOptionPane.CLOSED_OPTION) {
@@ -529,7 +544,8 @@ public class CustomerPageClient {
 
                 } while (true);
                 //asks the user if they would like bike  added to their total
-                int x = JOptionPane.showConfirmDialog(null, "Would you like one-time $50 bike in a tree " +
+                int x = JOptionPane.showConfirmDialog(null, "Would you like one-time " +
+                                "$50 bike in a tree " +
                                 "insurance?",
                         "Boilermaker Bikes",
                         JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -556,7 +572,8 @@ public class CustomerPageClient {
             if (success) {
                 String[] options = {"OK"};
                 JOptionPane.showOptionDialog(null, "Bike successfully added!",
-                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        null, options, options[0]);
                 break;
             }
 
@@ -582,7 +599,8 @@ public class CustomerPageClient {
         if (S.getThisBuyer().getShoppingCart().size() == 0) {
             String[] options = {"OK"};
             JOptionPane.showOptionDialog(null, "There are no items to remove.",
-                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, options, options[0]);
             return;
         }
         /********
@@ -592,7 +610,8 @@ public class CustomerPageClient {
             shoppingCartOptions[i] = b.shoppingCartToString();
             i++;
         }
-        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose an Item to Remove", "Boilermaker Bikes",
+        String bikeMessage = (String) JOptionPane.showInputDialog(null, "Choose an" +
+                        " Item to Remove", "Boilermaker Bikes",
                 JOptionPane.PLAIN_MESSAGE, null, shoppingCartOptions, shoppingCartOptions[0]);
         //System.out.println("Bike message" + bikeMessage);
         //if the user does not choose an option then set the bike message to null

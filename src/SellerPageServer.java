@@ -5,8 +5,13 @@ import javax.swing.tree.ExpandVetoException;
 
 import java.util.ArrayList;
 import java.lang.StringBuilder;
+/***************
+ *The SellerPageServer class contains the data processing of the seller page
+ *
+ * @author Aditya, lab sec 4427
+ * @version 4/27/2023
+ */
 public class SellerPageServer {
-
     // fields
     private String name;
     private ArrayList<Bike> inventory;
@@ -116,8 +121,10 @@ public class SellerPageServer {
 
         String t = term.toLowerCase();
         for (Bike b : inventory) {
-            if (b.getColor().toLowerCase().contains(t.toLowerCase()) || b.getModelName().toLowerCase().contains(t.toLowerCase())
-                || b.getDescription().toLowerCase().contains(t.toLowerCase()) || Integer.toString(b.getId()).toLowerCase().contains(t.toLowerCase())) {
+            if (b.getColor().toLowerCase().contains(t.toLowerCase()) ||
+                    b.getModelName().toLowerCase().contains(t.toLowerCase())
+                || b.getDescription().toLowerCase().contains(t.toLowerCase()) ||
+                    Integer.toString(b.getId()).toLowerCase().contains(t.toLowerCase())) {
                     matches.add(b);
                 }
         }
@@ -174,10 +181,12 @@ public class SellerPageServer {
             pw.close();
             return true;
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "File not found!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -210,7 +219,8 @@ public class SellerPageServer {
                 inv = recieveArrayList(sellerInventory);
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                JOptionPane.showMessageDialog(null, "New Seller? Get started by adding your first bike!", 
+                JOptionPane.showMessageDialog(null, "New Seller? " +
+                                "Get started by adding your first bike!",
                 "Boilermaker Bikes - Seller Page", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -278,9 +288,12 @@ public class SellerPageServer {
 
                     } else if (option == 6) {
                         // BELOW CODE IS FOR TESTING SELLERPAGE ALONE
-                        String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking cruiser bike,test,1,false,1090";
-                        String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable design and classic color matching,test,2,false,1101";
-                        String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
+                        String testb1 = "green,24,209.99,209.99,JoyStar,false, Is a class looking " +
+                                "cruiser bike,test,1,false,1090";
+                        String testb2 = "pink,20,189.99,189.99,RoyalBaby Stargirl,false,Fashionable " +
+                                "design and classic color matching,test,2,false,1101";
+                        String testb3 = "green,26,1499.00,1499.00,VNUVCOE Electric Bike,false,Normal " +
+                                "Bike Mode & Pedal Assist Mode,BikesAreCool,1,false,2102";
 
                         ArrayList<PurchasedBike> bruh = new ArrayList<>();
 

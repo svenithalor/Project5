@@ -5,7 +5,8 @@ import java.net.*;
 import java.util.*;
 
 /**************
- * The CustomerPageServer class handles the processing involved with the buyer experience such as adding and deleting items
+ * The CustomerPageServer class handles the processing involved with the buyer experience such as adding and deleting
+ * items
  * from the buyer's shopping cart, checking out the buyer's shopping cart (moving all items to their purchase history
  * and updating the inventory and listing page accordingly), searching by modelName as well as sorting by quantity/price,
  * exporting purchase history to a file of the buyer's choice, deleting the buyer's account, as well as saving all
@@ -98,12 +99,16 @@ public class CustomerPageServer {
                                 switch (choice1) {
                                     default: // writing description of selected bike
                                         Bike chosenBike = UserInfo.getBikes().get(choice1);
-                                        writer.println(String.format("Name: %s | $%.2f | %d inches", chosenBike.getModelName(), chosenBike.getPrice(), chosenBike.getWheelSize()));
-                                        writer.println(String.format("Used: %b | Seller: %s | ID: %d", chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
+                                        writer.println(String.format("Name: %s | $%.2f | %d inches",
+                                                chosenBike.getModelName(), chosenBike.getPrice(),
+                                                chosenBike.getWheelSize()));
+                                        writer.println(String.format("Used: %b | Seller: %s | ID: %d",
+                                                chosenBike.isUsed(), chosenBike.getSellerName(), chosenBike.getId()));
                                         writer.println(String.format("Description: %s", chosenBike.getDescription()));
                                         writer.flush();
 
-                                        //If the user wants to add the item to their cart, then take them to the addBike method
+                                        //If the user wants to add the item to their cart, then take them to
+                                        // the addBike method
                                         Boolean toCart = Boolean.parseBoolean(reader.readLine());
                                         if (toCart) {
                                             //System.out.println("Hello World!");
@@ -121,7 +126,8 @@ public class CustomerPageServer {
                                         ArrayList<String> sortedNames = new ArrayList<>();
                                         for (Bike bike : quantitySorted) {
                                             String format = "%s | $%.2f | Quantity: %d";
-                                            sortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
+                                            sortedNames.add(String.format(format, bike.getModelName(),
+                                                    bike.getPrice(), bike.getQuantity()));
                                         }
                                         writer.println(sortedNames);
                                         writer.flush();
@@ -132,7 +138,8 @@ public class CustomerPageServer {
                                         ArrayList<String> priceSortedNames = new ArrayList<>();
                                         for (Bike bike : priceSorted) {
                                             String format = "%s | $%.2f | Quantity: %d";
-                                            priceSortedNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
+                                            priceSortedNames.add(String.format(format, bike.getModelName(),
+                                                    bike.getPrice(), bike.getQuantity()));
                                         }
                                         writer.println(priceSortedNames);
                                         writer.flush();
@@ -148,7 +155,8 @@ public class CustomerPageServer {
                                         if (matches != null) {
                                             for (Bike bike : matches) {
                                                 String format = "%s | $%.2f | Quantity: %d";
-                                                matchNames.add(String.format(format, bike.getModelName(), bike.getPrice(), bike.getQuantity()));
+                                                matchNames.add(String.format(format, bike.getModelName(),
+                                                        bike.getPrice(), bike.getQuantity()));
                                             }
                                             writer.println(matchNames);
                                             writer.flush();
@@ -287,10 +295,12 @@ public class CustomerPageServer {
             pw.close();
             return true;
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "File not found!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "An error occurred! Try again", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -315,7 +325,7 @@ public class CustomerPageServer {
      */
 
     /*******
-     * This method allows the buyer to run the shopping cart page and select from this menu to add a bike, delete a bike,
+     * This method allows the buyer to run the shopping cart page and select from this menu to add a bike, delete bike,
      * checkout items, or return back to home
      * @param reader waits for the button pressed by the buyer
      * @param writer allows the server to communicate with the client as they are traversing the shopping cart
@@ -361,7 +371,7 @@ public class CustomerPageServer {
     /*************
      * This method allows the buyer to add a bike from the shopping cart page.
      * @param reader saves the user input for processing
-     * @param writer informs the client class if the user input is valid/invalid and or the process of adding a bike was
+     * @param writer informs the client class if the user input is valid/invalid and or the process of adding  bike was
      * successful
      * @author Christina Joslin
      */
@@ -381,8 +391,8 @@ public class CustomerPageServer {
 
 
         /*******
-         * Searches for the bike ID in the existing shopping cart. If it is already in the cart AND is on hte listing page
-         * then simply request that the buyer add to the quantity they entered
+         * Searches for the bike ID in the existing shopping cart. If it is already in the cart AND is on
+         * the listing page then simply request that the buyer add to the quantity they entered
          */
         boolean inCart = false;
         int bikeIndex = -1; //saves the bikeId that you want to add on to in the shopping cart
@@ -477,7 +487,8 @@ public class CustomerPageServer {
             //saves the quantity entered
             int quantity = Integer.parseInt(q);
 
-            double finalPrice; //saves the price (including quantity and insurance that the user wants to purchase a bike)
+            double finalPrice; //saves the price (including quantity and insurance that the user wants to
+            // purchase a bike)
 
 
             /********
@@ -525,10 +536,10 @@ public class CustomerPageServer {
     }
 
     /**********
-     * This method first checks if all the bikes in the shopping cart are still available on the listing page. If this is true,
-     * then all the bikes in the shopping cart are put into the purchase history and the quantity remaining of the bikes for sale
-     * (the bikes on the listing page and in the seller inventories) is updated accordingly. If this is false, then an error
-     * message is displayed
+     * This method first checks if all the bikes in the shopping cart are still available on the listing page.
+     * If this is true,then all the bikes in the shopping cart are put into the purchase history and the
+     * quantity remaining of the bikes for sale (the bikes on the listing page and in the seller inventories) is
+     * updated accordingly. If this is false, then an error message is displayed
      * @param writer write to the client that the checkout has or has not successfully taken place
      * @author Christina Joslin
      */
@@ -554,7 +565,8 @@ public class CustomerPageServer {
                 } else {
                     stillAvailable = true;
                     /*****
-                     * If the quantity of this bike in the listing page equals zero, then remove it from the listing page altogether
+                     * If the quantity of this bike in the listing page equals zero, then remove it from the
+                     * listing page altogether
                      * and return stillAvailable as false
                      */
                     if (b.getQuantity() == 0) {
@@ -770,7 +782,8 @@ public class CustomerPageServer {
                     //System.out.println("The bike quantity equals zero");
                     return false;
                 }
-                //if the quantity available of this bike id is less than the quantity they want to purchase, return false
+                //if the quantity available of this bike id is less than the quantity they want to purchase,
+                // return false
                 if (b.getQuantity() < purchaseQuantity) {
                     //System.out.println("The purchase quantity is greater than the bike quantity available");
                     //System.out.println("Purchase Quantity: " + purchaseQuantity);

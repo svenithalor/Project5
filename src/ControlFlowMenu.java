@@ -15,10 +15,12 @@ public class ControlFlowMenu {
     private static Buyer thisBuyer; //the current buyer navigating Boilermaker Bikes
     private static Seller thisSeller; //the current seller navigating Boilermaker Bikes
     private static String[] options = {"OK"}; //the ok button displayed when the user receives an error message
-    private static final int[] localPorts = {4242,2323,4590,9876,1023,1002,1526,1345,1987,2903,2145,3145}; //the local ports available for each thread to navigate to
+    private static final int[] localPorts = {4242,2323,4590,9876,1023,1002,1526,1345,1987,2903,2145,3145};
+    //the local ports available for each thread to navigate to
 
     /******
-     * This method checks if one of the listed ports are still available. If it is then pass it to the next server-client network
+     * This method checks if one of the listed ports are still available. If it is then pass it to the
+     * next server-client network
      * io connection.
      * @return the next available port for a thread to use
      * @author Christina Joslin
@@ -53,7 +55,8 @@ public class ControlFlowMenu {
             public void run() {
                 String userInfo = LoginServer.run(currentPort);
 
-                //converts the information from the user login into their current index in the database and the user type (buyer or seller)
+                //converts the information from the user login into their current index in the database
+                // and the user type (buyer or seller)
                 String[] parts = userInfo.split(",");
                 try {
                     userIndex = Integer.parseInt(parts[0]);
@@ -100,8 +103,10 @@ public class ControlFlowMenu {
 
                 } catch (Exception e) {
                     String[] options = {"OK"};
-                    JOptionPane.showOptionDialog(null, "Login cancelled. Exiting Boilermaker Bikes.",
-                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                    JOptionPane.showOptionDialog(null, "Login cancelled. " +
+                                    "Exiting Boilermaker Bikes.",
+                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                            null, options, options[0]);
 
                 }
 
@@ -113,7 +118,8 @@ public class ControlFlowMenu {
                 //opens up the seller page server
                 Thread sellerServer = new Thread() {
                     public void run() {
-                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(), thisSeller.getInventory(),sellerPort);
+                        SellerPageServer S = new SellerPageServer(thisSeller.getUsername(),
+                                thisSeller.getInventory(),sellerPort);
                         S.run();
                     }
                 };
@@ -125,14 +131,16 @@ public class ControlFlowMenu {
                 } catch (Exception e) {
                     String[] options = {"OK"};
                     JOptionPane.showOptionDialog(null, "Exiting Boilermaker Bikes.",
-                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                            "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                            null, options, options[0]);
 
                 }
 
             }
         } else {
             JOptionPane.showOptionDialog(null, "Exiting Boilermaker Bikes.",
-                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                    "Boilermaker Bikes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, options, options[0]);
         }
 
 

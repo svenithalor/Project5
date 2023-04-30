@@ -62,9 +62,11 @@ public class LoginClient {
              * prompt the user to create an account
              */
             if (userNameFound) {
-                boolean passwordFound = false; //keeps track of if the user enter the correct password corresponding to their username
+                boolean passwordFound = false; //keeps track of if the user enter the correct password corresponding
+                // to their username
                 do {
-                    String password = JOptionPane.showInputDialog(null,"Please enter your password (5 characters only)","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
+                    String password = JOptionPane.showInputDialog(null,"Please enter your " +
+                            "password (5 characters only)","Boilermaker Bikes",JOptionPane.QUESTION_MESSAGE);
 
                     //allow the user to user the exit button
                     if (password == null) {
@@ -88,8 +90,8 @@ public class LoginClient {
                        JOptionPane.INFORMATION_MESSAGE);
                 return;
             } else {
-                int newAccount = JOptionPane.showConfirmDialog(null, "User not found. Would you" +
-                        " like to create a new account?", "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
+                int newAccount = JOptionPane.showConfirmDialog(null, "User not found. Would you"
+                        + " like to create a new account?", "Boilermaker Bikes", JOptionPane.YES_NO_OPTION);
 
                 if (newAccount == JOptionPane.NO_OPTION || newAccount == JOptionPane.CLOSED_OPTION) {
                     JOptionPane.showMessageDialog(null, "Thank you for visiting Boilermaker " +
@@ -116,7 +118,8 @@ public class LoginClient {
 
                 do {
                     //sends the new username to the server to check if it does not match up with an existing username
-                    String newUsername = JOptionPane.showInputDialog(null, "Please enter a username:",
+                    String newUsername = JOptionPane.showInputDialog(null, "Please enter a" +
+                                    " username:",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     if (newUsername == null) {
                         reader.close();
@@ -147,7 +150,8 @@ public class LoginClient {
 
                 do {
                     //sends the new password to the server to check if it does not match up with an existing username
-                    String newPassword = JOptionPane.showInputDialog(null, "Please enter a password (5 characters only):",
+                    String newPassword = JOptionPane.showInputDialog(null, "Please enter a " +
+                                    "password (5 characters only):",
                             "Boilermaker Bikes", JOptionPane.QUESTION_MESSAGE);
                     if (newPassword == null) {
                         writer.close();
@@ -192,7 +196,8 @@ public class LoginClient {
      * @author Duoli
      */
     public static boolean userLogout() {
-        int choice = JOptionPane.showConfirmDialog(null, "Confirm logout?", "Boilermaker Bikes",
+        int choice = JOptionPane.showConfirmDialog(null, "Confirm logout?", "Boilermaker" +
+                        " Bikes",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (choice == JOptionPane.OK_OPTION) {

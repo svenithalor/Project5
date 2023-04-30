@@ -15,7 +15,8 @@ public class Bike {
     private int quantity; //the quantity of this bike
     private int id; //the 4 digit unique id of this bike
 
-    public Bike(String color, int wheelSize, double price, String modelName, boolean used, String description, String sellerName, int quantity,int id) {
+    public Bike(String color, int wheelSize, double price, String modelName, boolean used, String description,
+                String sellerName, int quantity,int id) {
         this.color = color;
         this.wheelSize = wheelSize;
         this.price = price;
@@ -149,7 +150,8 @@ public class Bike {
      * @return String containing only some attributes, with spacing, etc
      */
     public String toNiceString() {
-        String vtr = String.format("ID: %d | Name: %s | Price: $%.2f | Wheel size: %d | Quantity: %d", id,modelName, price,
+        String vtr = String.format("ID: %d | Name: %s | Price: $%.2f | Wheel size: %d | Quantity: %d",
+                id,modelName, price,
             wheelSize, quantity);
         return vtr;
     }
