@@ -206,6 +206,7 @@ public class LoginClient {
     /**********
      * This connects the login client with the login server
      * @param port number being used by the login server
+     * @author Christina Joslin
      */
     public static void run(int port) {
         try {

@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 
 /**************
- * The CustomerPageSever class handles the processing involved with the buyer experience such as adding and deleting items
+ * The CustomerPageServer class handles the processing involved with the buyer experience such as adding and deleting items
  * from the buyer's shopping cart, checking out the buyer's shopping cart (moving all items to their purchase history
  * and updating the inventory and listing page accordingly), searching by modelName as well as sorting by quantity/price,
  * exporting purchase history to a file of the buyer's choice, deleting the buyer's account, as well as saving all
