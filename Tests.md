@@ -43,7 +43,20 @@ will no longer display the PanAme Mountain Bike.
 ## Test 5: User Shopping Cart - new User information saved 
 ### Author Christina J
 ### Steps
-1.
+1. Select user type as buyer. Enter a unique username (e.g. Hannah). You should receive a message asking if you would like to create a new account since the username
+given was not recognized. Click "yes". 
+2. Reenter the unique username Hannah and then enter a 5 character unique password (note that if your password does not 
+meet these requirements you will receive an error message and be prompted to reenter a password). 
+3. A message that says "account successfullly created" will appear. You will then reenter the username and password you
+were entered previous and now be able to access the buyer page. 
+4. Add several bikes to your shopping cart by either navigating to "view cart"
+ => "add" or to "view available bikes" => dropdown menu selection => "view bike" 
+5. Return to your homepage and press the "x" button. You should not see an information message 
+confirming that you would like to logout. Press "yes" and the program will end. 
+6. Rerun the ControlFlowMenu and select your user type as "buyer". Enter the same username and password information as before.
+
+Expected Result: You should be able to successfully log in to your previous account and see all the changes you made from 
+your previous session. 
 
 ## Test 6: User Shopping Cart - 2 Buyers Checking Out The Same Item
 1. Login as two separate users (Username: cJoslin password: cmj32 and username: c9sug password: cmj45). 
