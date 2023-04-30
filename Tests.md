@@ -108,7 +108,7 @@ Wheel Size: 25
 Price: 299.99
 New or Used: true
 Description: This bike is cool. 
-Quantity: 1
+Quantity: 6
 
 3) Select "OK" and you will be returned back to the seller menu.
 4) On the buyer side, navigate to the listing page and then click the "back to home" button (note that you may have to repeat
@@ -116,6 +116,15 @@ Quantity: 1
 
 Expected Result: Both the buyer and seller should see the new bike appear in their inventory (seller) or on the listing page (buyer)
 
+## Test 9: 1 Buyer and 1 Seller Checkout and Seller Analytics 
+### Author: Christina J
+### Steps:
+1) Follow steps 1-4 outlined in test 8. 
+2) On the buyer side, go to "view shopping cart" => "add" => and select the PandaBike model to add to your shopping cart.
+Insert a quantity of 2 to purchase with NO bike-in-a-tree insurance (so the total price should be 599.98). 
+3) click "checkout" and your shopping cart should now be empty. Navigate to the seller page and click "view analytics". 
+
+Expected Result: The seller should now see the purchase made by the buyer of 2 PandaBikes. 
 
 
 
