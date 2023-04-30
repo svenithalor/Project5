@@ -12,7 +12,8 @@
 **********
 ## Submission Details
 Student 1 - Submitted report on Brightspace
-Student 2 - Submitted vocareum workspace 
+Christina Joslin - Submitted vocareum workspace 
+Student 3 - Submitted presentation 
 **********
 ## Description 
 
